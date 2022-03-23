@@ -9,7 +9,6 @@
     "start": "sirv public --no-clear --port 5000"
   },
   "dependencies": {
-    "@types/uuid": "^8.3.4",
     "color": "^4.2.1",
     "eventemitter3": "^4.0.7",
     "hotkeys-js": "^3.8.7",
@@ -21,6 +20,7 @@
     "@rollup/plugin-typescript": "^8.0.0",
     "@types/color": "^3.0.3",
     "@types/pixi.js": "^5.0.0",
+    "@types/uuid": "^8.3.4",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
