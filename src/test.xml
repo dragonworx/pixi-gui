@@ -5,6 +5,7 @@
         width="500"
         height="500"
         container="#main"
+        resizeTo="#main"
         debug="true"
         deferInit="true"
         sharp="true"
@@ -73,9 +74,9 @@
                 </Column>
                 <Container
                         id="foo"
-                        paddingTop="10"
-                        anchorLeft="1"
-                        originX="1"
+                        padding="10"
+                        anchorLeft="0.7"
+                        anchorRight="1"
                         size="100"
                         anchorBottom="0.25"
                         >

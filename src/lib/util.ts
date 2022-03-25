@@ -1,3 +1,5 @@
+import Color from 'color';
+
 export function debounce(
   func: (...args: any[]) => any,
   wait: number = 50,
@@ -83,4 +85,11 @@ export function objectEquals(x: any, y: any): boolean {
       return objectEquals(x[i], y[i]);
     })
   );
+}
+
+export function randomColor() {
+  const r = Math.round(Math.random() * 255);
+  const g = Math.round(Math.random() * 255);
+  const b = Math.round(Math.random() * 255);
+  return Color.rgb(r, g, b);
 }

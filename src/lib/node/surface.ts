@@ -5,6 +5,7 @@ import { GeometryUpdate } from 'src/lib/node/box';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import BoxContainer from 'src/lib/node/container';
 import { log } from '../log';
+import { randomColor } from '../util';
 
 export default class Surface extends BoxContainer {
   apperance: Appearance;
@@ -46,10 +47,6 @@ export default class Surface extends BoxContainer {
       return;
     }
 
-    if (updateType.indexOf(GeometryUpdate.Size) > -1) {
-      this.render();
-    }
-
     if (updateType.indexOf(GeometryUpdate.Padding) > -1) {
       this.render();
     }
@@ -61,6 +58,7 @@ export default class Surface extends BoxContainer {
     log(this, 'render');
 
     if (this.apperance.fill?.type === 'solid') {
+      this.apperance.fill.color = randomColor().hex();
       painter
         .beginFill(this.apperance.fill?.color!)
         .drawRect(0, 0, this.width, this.height)

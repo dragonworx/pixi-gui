@@ -259,20 +259,18 @@ export default class Box extends Node {
         ' ' +
         JSON.stringify(this.geometry.size)
     );
+
     if (updateType.indexOf(GeometryUpdate.Size) > -1) {
       this.forEach<Box>(node => node.performLayout());
     }
+
     if (updateType.indexOf(GeometryUpdate.Padding) > -1) {
       this.applyLayout();
     }
-  }
 
-  getMargin() {
-    return this.geometry.margin;
-  }
-
-  getPadding() {
-    return this.geometry.padding;
+    if (updateType.indexOf(GeometryUpdate.Anchor) > -1) {
+      this.performLayout();
+    }
   }
 
   /** Getters */

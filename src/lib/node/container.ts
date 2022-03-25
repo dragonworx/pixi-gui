@@ -73,7 +73,10 @@ export default class BoxContainer extends Box {
       return;
     }
 
-    if (updateType.indexOf(GeometryUpdate.Size) > -1) {
+    if (
+      updateType.indexOf(GeometryUpdate.Size) > -1 ||
+      updateType.indexOf(GeometryUpdate.Anchor) > -1
+    ) {
       this.render();
       this.updateMaskSize();
     }
@@ -153,7 +156,7 @@ export default class BoxContainer extends Box {
       .lineStyle('cyan', 1, 0.5)
       .drawRect(...this.localContentBounds.toArray())
       .lineStyle('yellow', 1, 0.5)
-      .drawRect(...this.localMarginBounds.toArray());
+      .drawRect(...this.localMarginBounds.expand(-1, -1).toArray());
 
     if (_idSprite) {
       _idSprite.x = this.width / 2;
