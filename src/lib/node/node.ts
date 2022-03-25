@@ -78,9 +78,9 @@ export default class Node extends EventEmitter {
     }
   }
 
-  addChild(node: Node, deferInit: boolean = false) {
+  addChild(node: Node, autoInitialise: boolean = true) {
     node.setParent(this);
-    if (!deferInit) {
+    if (autoInitialise) {
       node.init();
     }
   }

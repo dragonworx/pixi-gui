@@ -79,6 +79,9 @@
                         anchorRight="1"
                         size="100"
                         anchorBottom="0.25"
+                        layout="wrap"
+                        alignH="center"
+                        alignV="center"
                         >
                         <Element
                                 fillColor="blue"

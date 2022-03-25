@@ -237,7 +237,7 @@ export default class Document extends Node {
     if (!this._debugGrid && enabled) {
       const sprite = this.createDebugGrid();
       this.app.stage.addChildAt(sprite, 0);
-      this.app.stage.alpha = 0.65;
+      this.app.stage.alpha = 0.5;
     } else if (this._debugGrid && !enabled) {
       this.app.stage.alpha = 1;
       this.app.stage.removeChild(this._debugGrid);

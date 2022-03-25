@@ -48,6 +48,21 @@ for (let j = 0; j < 4; j++) {
 
 row.setParent(blue);
 
+const foo = doc.getNodeById('foo');
+
+for (let i = 0; i < 10; i++) {
+  const element = new Element();
+  element.id = String(i + 1);
+  element.width = randSize();
+  element.height = randSize();
+  element.marginLeft = 10;
+  element.marginRight = 20;
+  element.marginTop = 10;
+  element.marginBottom = 20;
+  element.fillColor = colors[i % colors.length];
+  foo.addChild(element, false);
+}
+
 doc.init();
 
 console.log(doc);
