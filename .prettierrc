@@ -1,9 +1,6 @@
 {
-  "svelteSortOrder": "options-scripts-markup-styles",
-  "svelteStrictMode": true,
-  "svelteBracketNewLine": false,
-  "svelteAllowShorthand": false,
-  "svelteIndentScriptAndStyle": false,
+  "trailingComma": "es5",
+  "tabWidth": 2,
   "singleQuote": true,
   "arrowParens": "avoid"
 }

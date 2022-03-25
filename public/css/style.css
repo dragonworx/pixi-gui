@@ -1,0 +1,48 @@
+/* :root {
+  --view-size: 80%;
+} */
+
+/* @font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Mukta-Regular.ttf') format('truetype');
+} */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+
+  /* font-family: Mukta-Regular, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif; */
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 12px;
+  overflow: hidden;
+  position: relative;
+  /* background: radial-gradient(
+      52.27% 24.31% at -2.27% 78.32%,
+      rgba(64, 26, 146, 0.2) 0%,
+      rgba(122, 60, 255, 0) 100%
+    ),
+    rgba(10, 9, 18, 0.98); */
+  background-color: #222;
+  height: 100%;
+  width: 100%;
+}
+
+#main {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

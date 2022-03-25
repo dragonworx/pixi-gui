@@ -86,8 +86,6 @@ export default abstract class FlowLayout extends Layout {
     cells.forEach(cell =>
       this.alignCell(cell, hAlign, vAlign, this.getOrientation())
     );
-
-    this.postApply();
   }
 
   abstract wrap(cell: Cell, position: Position): void;

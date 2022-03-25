@@ -1,15 +1,13 @@
-import { Application } from 'pixi.js';
+import { Application, Texture, TilingSprite } from 'pixi.js';
 import Box from 'src/lib/node/box';
-import Grid from 'src/lib/display/grid';
+import DebugGrid from 'src/lib/display/debugGrid';
 import Node from 'src/lib/node/node';
+import Container from 'src/lib/node/container';
 import { Setter } from 'src/lib/parser';
 import Renderer from 'src/lib/display/renderer';
 import Theme, { getTheme, defaultTheme } from 'src/lib/theme/theme';
-import { debounce } from 'src/lib/util';
-import { settings, filters } from 'pixi.js';
+import { settings } from 'pixi.js';
 import { log } from '../log';
-
-const resizeDelayMs = 0;
 
 export interface DocumentOptions {
   app?: Application;
@@ -25,10 +23,11 @@ export default class Document extends Node {
   private _container?: HTMLElement;
   private _theme?: Partial<Theme>; // todo: partial or required?
   private _observer?: ResizeObserver;
-  private _debugGrid?: Grid;
+  private _debugGridSprite?: TilingSprite;
   private _deferInit: boolean;
   private _debug: boolean;
   private _sharp: boolean;
+  private _resizeToElement?: HTMLElement;
 
   static setters(): Setter[] {
     return [
@@ -85,13 +84,17 @@ export default class Document extends Node {
     this._sharp = true;
   }
 
+  init() {
+    this.sharp = this._sharp;
+    // this.debug = this._debug;
+
+    super.init();
+  }
+
   onInit() {
     if (!this._container) {
       console.error('Document was initialised without a container');
     }
-
-    this.sharp = this._sharp;
-    this.debug = this._debug;
   }
 
   performLayout() {
@@ -99,27 +102,25 @@ export default class Document extends Node {
     this.forEach<Box>(node => node.performLayout());
   }
 
+  render() {
+    this.walk(node => {
+      if (node instanceof Container) {
+        node.render();
+      }
+    });
+  }
+
   observeResizeOn(element: HTMLElement) {
     if (element) {
       if (this._observer) {
         this._observer.disconnect();
       }
-      this._observer = new ResizeObserver(
-        debounce(this.onContainerResize, resizeDelayMs)
-      );
+      this._observer = new ResizeObserver(this.onContainerResize);
       this._observer.observe(element);
+      this._resizeToElement = element;
 
-      // window.onresize = () => {
-      //   const bounds = element.getBoundingClientRect();
-      //   if (bounds.width !== this.width || bounds.height !== this.height) {
-      //     this.resize(bounds.width, bounds.height);
-      //   }
-      // };
-
-      setTimeout(() => {
-        const bounds = element.getBoundingClientRect();
-        this.resize(bounds.width, bounds.height);
-      }, 0);
+      const bounds = element.getBoundingClientRect();
+      this.resize(bounds.width, bounds.height);
     }
   }
 
@@ -133,8 +134,9 @@ export default class Document extends Node {
   resize(width: number, height: number) {
     log(this, 'resize', { width, height });
     this.app.renderer.resize(width, height);
-    if (this._debugGrid) {
-      this._debugGrid.resize(this.width, this.height);
+    if (this._debugGridSprite) {
+      this._debugGridSprite.width = width;
+      this._debugGridSprite.height = height;
     }
     this.performLayout();
     this.app.render();
@@ -144,11 +146,22 @@ export default class Document extends Node {
     if (this._observer) {
       this._observer.disconnect();
     }
+    delete this._resizeToElement;
     delete this._observer;
   }
 
   getTheme() {
     return this._theme;
+  }
+
+  createDebugSprite() {
+    const grid = new DebugGrid();
+    this._debugGridSprite = new TilingSprite(
+      Texture.from(grid.canvas),
+      this.width,
+      this.height
+    );
+    return this._debugGridSprite;
   }
 
   get className() {
@@ -221,15 +234,18 @@ export default class Document extends Node {
   }
 
   set debug(enabled: boolean) {
-    if (!this._debugGrid && enabled) {
-      this._debugGrid = new Grid(this.width, this.height);
-      this.app.stage.addChild(this._debugGrid);
+    if (!this._debugGridSprite && enabled) {
+      const sprite = this.createDebugSprite();
+      this.app.stage.addChildAt(sprite, 0);
       this.app.stage.alpha = 0.65;
-    } else if (this._debugGrid && !enabled) {
+    } else if (this._debugGridSprite && !enabled) {
       this.app.stage.alpha = 1;
-      this.app.stage.removeChild(this._debugGrid);
+      this.app.stage.removeChild(this._debugGridSprite);
+      this._debugGridSprite = undefined;
     }
     this._debug = enabled;
+    this.walk(node => node.onDebugChange(enabled));
+    this.render();
   }
 
   set deferInit(defer: boolean) {

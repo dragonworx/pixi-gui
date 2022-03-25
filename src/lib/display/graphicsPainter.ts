@@ -1,7 +1,7 @@
 import Color from 'color';
 import { Graphics } from 'pixi.js';
 
-const correction = 0.5;
+const correction = 0;
 export const px = (value: number) => value + correction;
 
 export default class GraphicsPainter {
@@ -49,6 +49,7 @@ export default class GraphicsPainter {
     if (closePath) {
       graphics.closePath();
     }
+    return this;
   }
 
   clear() {

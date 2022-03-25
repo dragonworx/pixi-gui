@@ -8,8 +8,6 @@ import { log } from '../log';
 
 export default class Surface extends BoxContainer {
   apperance: Appearance;
-  graphics: Graphics;
-  painter: GraphicsPainter;
 
   static setters(): Setter[] {
     return [
@@ -30,16 +28,6 @@ export default class Surface extends BoxContainer {
     super();
 
     this.apperance = this.defaultAppearance();
-
-    const graphics = (this.graphics = new Graphics());
-
-    this.painter = new GraphicsPainter(graphics);
-  }
-
-  onInit() {
-    super.onInit();
-
-    this.container.addChildAt(this.graphics, 0);
   }
 
   defaultAppearance(): Appearance {
@@ -67,26 +55,19 @@ export default class Surface extends BoxContainer {
     }
   }
 
-  render() {
-    const { painter, debugPainter, hasSize, hasDocument } = this;
-
-    if (!hasSize || !painter || !hasDocument) {
-      return;
-    }
+  paintBackground() {
+    const { painter } = this;
 
     log(this, 'render');
 
     if (this.apperance.fill?.type === 'solid') {
       painter
-        .uncache()
-        .clear()
         .beginFill(this.apperance.fill?.color!)
         .drawRect(0, 0, this.width, this.height)
-        .endFill()
-        .cache();
+        .endFill();
     }
 
-    super.render();
+    super.paintBackground();
   }
 
   /** Setters */

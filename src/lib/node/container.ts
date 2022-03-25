@@ -1,4 +1,4 @@
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Sprite } from 'pixi.js';
 import Box, { GeometryUpdate } from 'src/lib/node/box';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import Canvas2DPainter from '../display/canvas2DPainter';
@@ -8,10 +8,11 @@ import { log } from '../log';
 export default class BoxContainer extends Box {
   container: Container;
   childContainer: Container;
-  debugGraphics: Graphics;
-  debugPainter: GraphicsPainter;
+  graphics: Graphics;
+  painter: GraphicsPainter;
   mask: Graphics;
   _clip: boolean;
+  _idSprite?: Sprite;
 
   static setters(): Setter[] {
     return [
@@ -29,9 +30,9 @@ export default class BoxContainer extends Box {
     this.container = new Container();
     this.childContainer = new Container();
 
-    const debug = (this.debugGraphics = new Graphics());
+    const graphics = (this.graphics = new Graphics());
 
-    this.debugPainter = new GraphicsPainter(debug);
+    this.painter = new GraphicsPainter(graphics);
 
     this.mask = new Graphics();
     this._clip = false;
@@ -46,17 +47,12 @@ export default class BoxContainer extends Box {
 
     this.parentDisplayContainer.addChild(this.container);
 
+    this.container.addChild(this.graphics);
+
     this.container.addChild(this.childContainer);
 
     if (this.document.debug) {
-      this.container.addChild(this.debugGraphics);
-
-      const idSprite = Canvas2DPainter.createTextSprite(this.id, 'white');
-      idSprite.anchor.x = 0.5;
-      idSprite.anchor.y = 0.5;
-      idSprite.x = this.width / 2;
-      idSprite.y = this.height / 2;
-      this.container.addChild(idSprite);
+      this.createIdSprite();
     }
 
     this.updateContainerPosition();
@@ -67,6 +63,7 @@ export default class BoxContainer extends Box {
 
   removeFromParent(): void {
     this.parentDisplayContainer.removeChild(this.container);
+    super.removeFromParent();
   }
 
   onGeometryChanged(updateType: GeometryUpdate[]) {
@@ -77,6 +74,7 @@ export default class BoxContainer extends Box {
     }
 
     if (updateType.indexOf(GeometryUpdate.Size) > -1) {
+      this.render();
       this.updateMaskSize();
     }
 
@@ -107,30 +105,68 @@ export default class BoxContainer extends Box {
     this.container.y = bounds.top;
   }
 
-  render() {
-    const { debugPainter, hasSize, hasDocument } = this;
+  createIdSprite() {
+    const idSprite = (this._idSprite = Canvas2DPainter.createTextSprite(
+      this.id,
+      'white'
+    ));
+    idSprite.anchor.x = 0.5;
+    idSprite.anchor.y = 0.5;
+    this.container.addChildAt(idSprite, this.container.children.length);
+  }
 
-    if (!hasSize || !hasDocument) {
+  render() {
+    const { painter, hasSize, hasDocument, _hasInit } = this;
+
+    if (!hasSize || !hasDocument || !_hasInit) {
       return;
     }
 
     log(this, 'render');
 
+    painter.uncache().clear();
+
+    this.paintBackground();
+
     if (this.document.debug) {
-      debugPainter
-        .uncache()
-        .clear()
-        .beginFill('#999', 0.3)
+      this.paintDebug();
+    }
+
+    painter.cache();
+  }
+
+  paintBackground() {
+    const { painter } = this;
+
+    if (this.document.debug) {
+      painter
+        .beginFill('#999', 0.2)
         .drawRect(0, 0, this.width, this.height)
-        .endFill()
-        .lineStyle('cyan', 1, 0.5)
-        .drawRect.apply(debugPainter, this.localContentBounds.toArray())
-        .lineStyle('yellow', 1, 0.5)
-        .drawRect.apply(
-          debugPainter,
-          this.localMarginBounds.expand(-3, -3).toArray()
-        )
-        .cache();
+        .endFill();
+    }
+  }
+
+  paintDebug() {
+    const { painter, _idSprite } = this;
+
+    painter
+      .lineStyle('cyan', 1, 0.5)
+      .drawRect(...this.localContentBounds.toArray())
+      .lineStyle('yellow', 1, 0.5)
+      .drawRect(...this.localMarginBounds.toArray());
+
+    if (_idSprite) {
+      _idSprite.x = this.width / 2;
+      _idSprite.y = this.height / 2;
+    }
+  }
+
+  onDebugChange(debug: boolean): void {
+    if (!debug && this._idSprite) {
+      this.container.removeChild(this._idSprite);
+      delete this._idSprite;
+    } else if (debug && !this._idSprite) {
+      this.createIdSprite();
     }
   }
 

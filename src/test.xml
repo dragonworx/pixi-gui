@@ -1,67 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="test.xsd"?>
+<?xml-model href="schema.xsd"?>
 <Document
-                id="document"
-                width="500"
-                height="500"
-                container="#main"
-                debug="true"
-                deferInit="true"
-                sharp="true">
+        id="document"
+        width="500"
+        height="500"
+        container="#main"
+        debug="true"
+        deferInit="true"
+        sharp="true"
+        >
         <Container
-                        id="blue"
-                        clip="false"
-                        anchorLeft="0.1"
-                        anchorTop="0.1"
-                        anchorRight="0.9"
-                        anchorBottom="0.9"
-                        paddingLeft="10">
+                id="blue"
+                clip="false"
+                anchorLeft="0.1"
+                anchorTop="0.1"
+                anchorRight="0.9"
+                anchorBottom="0.9"
+                paddingLeft="10"
+                >
                 <Column
-                                id="supblock"
-                                alignH="center"
-                                anchorTop="1"
-                                anchorLeft="1"
-                                originY="1"
-                                originX="1">
+                        id="supblock"
+                        alignH="center"
+                        anchor="bottomRight"
+                        >
                         <Row
-                                        id="sub1"
-                                        alignV="center"
+                                id="sub1"
+                                alignV="center"
+                                marginRight="20"
+                                marginBottom="50"
+                                >
+                                <Element
+                                        id="a"
+                                        fillColor="red"
+                                        width="20"
+                                        height="20"
+                                        />
+                                <Element
+                                        id="b"
+                                        fillColor="blue"
+                                        width="20"
+                                        height="50"
                                         marginRight="10"
-                                        marginBottom="50">
+                                        />
                                 <Element
-                                                id="a"
-                                                fillColor="red"
-                                                width="20"
-                                                height="20" />
-                                <Element
-                                                id="b"
-                                                fillColor="red"
-                                                width="20"
-                                                height="50"
-                                                marginRight="10" />
-                                <Element
-                                                id="c"
-                                                fillColor="red"
-                                                width="20"
-                                                height="20" />
+                                        id="c"
+                                        fillColor="green"
+                                        width="20"
+                                        height="20"
+                                        />
                         </Row>
                         <Row id="sub2">
                                 <Element
-                                                id="d"
-                                                fillColor="green"
-                                                width="20"
-                                                height="20" />
+                                        id="d"
+                                        fillColor="green"
+                                        width="20"
+                                        height="20"
+                                        />
                                 <Element
-                                                id="e"
-                                                fillColor="green"
-                                                width="20"
-                                                height="20" />
+                                        id="e"
+                                        fillColor="red"
+                                        width="20"
+                                        height="20"
+                                        marginRight="10"
+                                        />
                                 <Element
-                                                id="f"
-                                                fillColor="green"
-                                                width="20"
-                                                height="20" />
+                                        id="f"
+                                        fillColor="blue"
+                                        width="20"
+                                        height="20"
+                                        />
                         </Row>
                 </Column>
+                <Container
+                        id="foo"
+                        paddingTop="10"
+                        anchorLeft="1"
+                        originX="1"
+                        size="100"
+                        anchorBottom="0.25"
+                        >
+                        <Element
+                                fillColor="blue"
+                                id="Xxx"
+                                size="30"
+                                anchor="leftCenter"
+                                />
+                </Container>
         </Container>
 </Document>

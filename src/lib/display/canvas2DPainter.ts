@@ -42,6 +42,12 @@ export default class Canvas2DPainter {
     return Sprite.from(Texture.from(canvas));
   }
 
+  clear(width: number, height: number, color: string = 'transparent') {
+    this.ctx.fillStyle = 'transparent';
+    this.fillRect(0, 0, width, height);
+    return this;
+  }
+
   fillRect(x: number, y: number, w: number, h: number) {
     this.ctx.fillRect(px(x), px(y), px(w), px(h));
     return this;
@@ -55,6 +61,10 @@ export default class Canvas2DPainter {
   fillColor(color: string) {
     this.ctx.fillStyle = color;
     return this;
+  }
+
+  strokeStyle(color: string, lineWidth: number = 1) {
+    return this.strokeColor(color).lineWidth(lineWidth);
   }
 
   strokeColor(color: string) {
@@ -74,6 +84,7 @@ export default class Canvas2DPainter {
     ctx.lineTo(px(x2), px(y2));
     ctx.stroke();
     ctx.closePath();
+    return this;
   }
 
   drawText(text: string, x: number, y: number) {

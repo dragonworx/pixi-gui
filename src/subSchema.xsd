@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:include schemaLocation="schema.xsd" />
+        <!-- Attributes -->
+        <xs:complexType name="FooAttr">
+                <xs:sequence>
+                        <xs:any
+                                processContents="lax"
+                                namespace="##any"
+                                minOccurs="0"
+                                maxOccurs="unbounded"
+                                />
+                </xs:sequence>
+                <xs:attribute
+                        name="foo"
+                        type="xs:string"
+                        />
+        </xs:complexType>
+
+        <!-- Elements -->
+
+        <xs:element
+                name="Foo"
+                type="FooAttr"
+                />
+</xs:schema>

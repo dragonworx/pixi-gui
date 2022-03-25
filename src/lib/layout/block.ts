@@ -61,7 +61,7 @@ export default class Block extends BoxContainer {
       size.height = _layout!.cells[0].rect.height;
 
       this.applyAnchors();
-      this.render();
+      // this.render();
     }
   }
 

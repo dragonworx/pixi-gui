@@ -1,22 +1,28 @@
 import Document from 'src/lib/node/document';
 import { Setter } from 'src/lib/parser';
 import { log } from 'src/lib/log';
+import { EventEmitter } from 'eventemitter3';
 
 let nextId = 0;
 
 export type NodeParent = Node | Document | undefined;
 
-export default class Node {
-  children: Node[];
+export default class Node extends EventEmitter {
   parent: NodeParent;
+  children: Node[];
 
-  private _id: string;
+  _id: string;
+  _hasInit: boolean;
 
   static setters(): Setter[] {
     return [
       {
         name: 'id',
         type: 'string',
+      },
+      {
+        name: 'size',
+        type: 'number',
       },
       {
         name: 'width',
@@ -30,7 +36,10 @@ export default class Node {
   }
 
   constructor() {
+    super();
+
     this._id = String(nextId++);
+    this._hasInit = false;
     this.children = [];
   }
 
@@ -39,6 +48,7 @@ export default class Node {
   }
 
   init() {
+    this._hasInit = true;
     if (this.shouldInitBeforeChildren()) {
       log(this, 'init');
       this.onInit();
@@ -68,9 +78,11 @@ export default class Node {
     }
   }
 
-  addChild(node: Node) {
+  addChild(node: Node, deferInit: boolean = false) {
     node.setParent(this);
-    node.init();
+    if (!deferInit) {
+      node.init();
+    }
   }
 
   removeChild(node: Node) {
@@ -115,6 +127,8 @@ export default class Node {
   toString() {
     return this.id;
   }
+
+  onDebugChange(debug: boolean) {}
 
   /** Getters */
 
@@ -174,5 +188,18 @@ export default class Node {
   /** Setters */
   set id(value: string) {
     this._id = value;
+  }
+
+  set width(value: number) {
+    // do nothing, for subclasses
+  }
+
+  set height(value: number) {
+    // do nothing, for subclasses
+  }
+
+  set size(value: number) {
+    this.width = value;
+    this.height = value;
   }
 }

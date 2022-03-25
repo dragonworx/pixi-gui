@@ -3,11 +3,10 @@ import Node from 'src/lib/node/node';
 import Rectangle from 'src/lib/rectangle';
 import { Setter } from 'src/lib/parser';
 import Document from 'src/lib/node/document';
-import Layout, { LayoutAlign, LayoutType } from 'src/lib/layout/layout';
+import Layout, { LayoutAlign, LayoutType, Anchor } from 'src/lib/layout/layout';
 import WrapLayout from 'src/lib/layout/wrap';
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
-import CenterLayout from 'src/lib/layout/center';
 import { log } from '../log';
 
 export enum GeometryUpdate {
@@ -47,6 +46,10 @@ export default class Box extends Node {
     return [
       ...super.setters(),
       {
+        name: 'origin',
+        type: 'number',
+      },
+      {
         name: 'originX',
         type: 'number',
       },
@@ -60,6 +63,10 @@ export default class Box extends Node {
       },
       {
         name: 'y',
+        type: 'number',
+      },
+      {
+        name: 'padding',
         type: 'number',
       },
       {
@@ -79,6 +86,10 @@ export default class Box extends Node {
         type: 'number',
       },
       {
+        name: 'margin',
+        type: 'number',
+      },
+      {
         name: 'marginLeft',
         type: 'number',
       },
@@ -93,6 +104,26 @@ export default class Box extends Node {
       {
         name: 'marginBottom',
         type: 'number',
+      },
+      {
+        name: 'anchor',
+        type: 'string',
+        values: [
+          'top',
+          'left',
+          'right',
+          'bottom',
+          'topLeft',
+          'topRight',
+          'bottomLeft',
+          'bottomRight',
+          'topCenter',
+          'bottomCenter',
+          'leftCenter',
+          'rightCenter',
+          'fill',
+          'center',
+        ],
       },
       {
         name: 'anchorLeft',
@@ -170,7 +201,7 @@ export default class Box extends Node {
     log(this, 'applyAnchors');
     const {
       geometry: { anchor },
-      parentLocalBounds,
+      parentLocalContentBounds: parentLocalBounds,
       bounds,
     } = this;
 
@@ -368,20 +399,8 @@ export default class Box extends Node {
     return this.geometry.size.height;
   }
 
-  get padding() {
-    return this.geometry.padding;
-  }
-
-  get margin() {
-    return this.geometry.margin;
-  }
-
-  get anchor() {
-    return this.geometry.anchor;
-  }
-
   get isAnchored() {
-    const { anchor } = this;
+    const { anchor } = this.geometry;
     return (
       anchor.left !== undefined ||
       anchor.top !== undefined ||
@@ -391,6 +410,11 @@ export default class Box extends Node {
   }
 
   /** Setters */
+  set origin(value: number) {
+    this.originX = value;
+    this.originY = value;
+  }
+
   set originX(value: number) {
     const {
       geometry: { origin },
@@ -451,6 +475,13 @@ export default class Box extends Node {
     }
   }
 
+  set padding(value: number) {
+    this.paddingLeft = value;
+    this.paddingTop = value;
+    this.paddingRight = value;
+    this.paddingBottom = value;
+  }
+
   set paddingLeft(value: number) {
     const {
       geometry: { padding },
@@ -503,6 +534,13 @@ export default class Box extends Node {
     }
   }
 
+  set margin(value: number) {
+    this.marginLeft = value;
+    this.marginTop = value;
+    this.marginRight = value;
+    this.marginBottom = value;
+  }
+
   set marginLeft(value: number) {
     const {
       geometry: { margin },
@@ -549,6 +587,75 @@ export default class Box extends Node {
         GeometryUpdate.Margin,
         GeometryUpdate.MarginBottom,
       ]);
+    }
+  }
+
+  set anchor(anchor: Anchor) {
+    const { geometry } = this;
+    geometry.origin.x = 0;
+    geometry.origin.y = 0;
+    geometry.anchor = {};
+    if (anchor === 'top') {
+      this.anchorTop = 0;
+      this.anchorLeft = 0;
+      this.anchorRight = 1;
+    } else if (anchor === 'left') {
+      this.anchorTop = 0;
+      this.anchorLeft = 0;
+      this.anchorBottom = 1;
+    } else if (anchor === 'right') {
+      this.originX = 1;
+      this.anchorTop = 0;
+      this.anchorLeft = 1;
+      this.anchorBottom = 1;
+    } else if (anchor === 'bottom') {
+      this.originY = 1;
+      this.anchorTop = 1;
+      this.anchorLeft = 0;
+      this.anchorRight = 1;
+    } else if (anchor === 'topLeft') {
+      this.anchorLeft = 0;
+      this.anchorTop = 0;
+    } else if (anchor === 'topRight') {
+      this.originX = 1;
+      this.anchorLeft = 1;
+      this.anchorTop = 0;
+    } else if (anchor === 'bottomLeft') {
+      this.originY = 1;
+      this.anchorLeft = 0;
+      this.anchorTop = 1;
+    } else if (anchor === 'bottomRight') {
+      this.originX = 1;
+      this.originY = 1;
+      this.anchorLeft = 1;
+      this.anchorTop = 1;
+    } else if (anchor === 'topCenter') {
+      this.originX = 0.5;
+      this.anchorLeft = 0.5;
+      this.anchorTop = 0;
+    } else if (anchor === 'bottomCenter') {
+      this.originX = 0.5;
+      this.originY = 1;
+      this.anchorLeft = 0.5;
+      this.anchorTop = 1;
+    } else if (anchor === 'leftCenter') {
+      this.originY = 0.5;
+      this.anchorLeft = 0;
+      this.anchorTop = 0.5;
+    } else if (anchor === 'rightCenter') {
+      this.originX = 1;
+      this.originY = 0.5;
+      this.anchorLeft = 1;
+      this.anchorTop = 0.5;
+    } else if (anchor === 'fill') {
+      this.anchorLeft = 0;
+      this.anchorTop = 0;
+      this.anchorRight = 1;
+      this.anchorBottom = 1;
+    } else if (anchor === 'center') {
+      this.origin = 0.5;
+      this.anchorTop = 0.5;
+      this.anchorLeft = 0.5;
     }
   }
 
@@ -614,8 +721,6 @@ export default class Box extends Node {
       this._layout = new VerticalLayout(this);
     } else if (type === 'vertical-reverse') {
       this._layout = new VerticalLayout(this, true);
-    } else if (type === 'center') {
-      this._layout = new CenterLayout(this);
     } else {
       throw new Error(`Layout type "${type} is undefined`);
     }

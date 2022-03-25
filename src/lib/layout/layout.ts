@@ -8,12 +8,27 @@ export type LayoutType =
   | 'vertical'
   | 'vertical-reverse'
   | 'horizontal'
-  | 'horizontal-reverse'
-  | 'center';
+  | 'horizontal-reverse';
 
 export type LayoutAlign = 'start' | 'center' | 'end';
 
 export type Orientation = 'vertical' | 'horizontal';
+
+export type Anchor =
+  | 'left'
+  | 'top'
+  | 'right'
+  | 'bottom'
+  | 'topLeft'
+  | 'topRight'
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'topCenter'
+  | 'bottomCenter'
+  | 'leftCenter'
+  | 'rightCenter'
+  | 'fill'
+  | 'center';
 
 export type Cell = {
   rect: Rectangle;
@@ -47,18 +62,4 @@ export default abstract class Layout {
   }
 
   abstract perform(hAlign: LayoutAlign, vAlign: LayoutAlign): void;
-
-  postApply() {
-    // setTimeout(() => {
-    //   // debug render
-    //   const { cells } = this;
-    //   const node = this.root as any;
-    //   cells.forEach(({ rect }) => {
-    //     node.painter
-    //       .strokeColor('#666')
-    //       .strokeRect(rect.left, rect.top, rect.width, rect.height);
-    //   });
-    //   node.updateTexture();
-    // }, 0);
-  }
 }
