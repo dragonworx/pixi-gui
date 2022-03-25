@@ -1,15 +1,15 @@
-import Parser from './lib/parser';
-import Element from './lib/node/element';
-import { queryParam } from './lib/util';
-import Row from './lib/layout/row';
-import Column from './lib/layout/column';
-import { enableLog } from './lib/log';
+import Parser from '../lib/parser';
+import Element from '../lib/node/element';
+import { queryParam } from '../lib/util';
+import Row from '../lib/layout/row';
+import Column from '../lib/layout/column';
+import { enableLog } from '../lib/log';
 
 // enableLog();
 
 // @ts-ignore
-import xml from './test.xml';
-import { dump } from './lib/log';
+import xml from './genisis.xml';
+import { dump } from '../lib/log';
 
 const doc = Parser.fromXmlString(xml);
 const win = window as any;

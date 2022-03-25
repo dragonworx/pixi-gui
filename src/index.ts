@@ -1,1 +1,1 @@
-import './demo'
+import './tests/genisis';

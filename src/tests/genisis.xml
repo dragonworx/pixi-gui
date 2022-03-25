@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="schema.xsd"?>
+<?xml-model href="../schema.xsd"?>
 <Document
         id="document"
         width="500"
@@ -33,42 +33,36 @@
                                 <Element
                                         id="a"
                                         fillColor="red"
-                                        width="20"
-                                        height="20"
+                                        size="20"
                                         />
                                 <Element
                                         id="b"
                                         fillColor="blue"
-                                        width="20"
-                                        height="50"
+                                        size="20"
                                         marginRight="10"
                                         />
                                 <Element
                                         id="c"
                                         fillColor="green"
-                                        width="20"
-                                        height="20"
+                                        size="20"
                                         />
                         </Row>
                         <Row id="sub2">
                                 <Element
                                         id="d"
                                         fillColor="green"
-                                        width="20"
-                                        height="20"
+                                        size="20"
                                         />
                                 <Element
                                         id="e"
                                         fillColor="red"
-                                        width="20"
-                                        height="20"
+                                        size="20"
                                         marginRight="10"
                                         />
                                 <Element
                                         id="f"
                                         fillColor="blue"
-                                        width="20"
-                                        height="20"
+                                        size="20"
                                         />
                         </Row>
                 </Column>
@@ -80,8 +74,7 @@
                         size="100"
                         anchorBottom="0.25"
                         layout="wrap"
-                        alignH="center"
-                        alignV="center"
+                        clip="true"
                         >
                         <Element
                                 fillColor="blue"
