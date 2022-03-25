@@ -20,14 +20,14 @@ export default class Document extends Node {
   readonly renderer: Renderer;
   readonly app: Application;
 
-  private _container?: HTMLElement;
-  private _theme?: Partial<Theme>; // todo: partial or required?
-  private _observer?: ResizeObserver;
-  private _debugGridSprite?: TilingSprite;
-  private _deferInit: boolean;
-  private _debug: boolean;
-  private _sharp: boolean;
-  private _resizeToElement?: HTMLElement;
+  protected _container?: HTMLElement;
+  protected _theme?: Partial<Theme>; // todo: partial or required?
+  protected _observer?: ResizeObserver;
+  protected _debugGrid?: TilingSprite;
+  protected _deferInit: boolean;
+  protected _debug: boolean;
+  protected _sharp: boolean;
+  protected _resizeToElement?: HTMLElement;
 
   static setters(): Setter[] {
     return [
@@ -134,9 +134,9 @@ export default class Document extends Node {
   resize(width: number, height: number) {
     log(this, 'resize', { width, height });
     this.app.renderer.resize(width, height);
-    if (this._debugGridSprite) {
-      this._debugGridSprite.width = width;
-      this._debugGridSprite.height = height;
+    if (this._debugGrid) {
+      this._debugGrid.width = width;
+      this._debugGrid.height = height;
     }
     this.performLayout();
     this.app.render();
@@ -154,14 +154,14 @@ export default class Document extends Node {
     return this._theme;
   }
 
-  createDebugSprite() {
+  createDebugGrid() {
     const grid = new DebugGrid();
-    this._debugGridSprite = new TilingSprite(
+    this._debugGrid = new TilingSprite(
       Texture.from(grid.canvas),
       this.width,
       this.height
     );
-    return this._debugGridSprite;
+    return this._debugGrid;
   }
 
   get className() {
@@ -234,14 +234,14 @@ export default class Document extends Node {
   }
 
   set debug(enabled: boolean) {
-    if (!this._debugGridSprite && enabled) {
-      const sprite = this.createDebugSprite();
+    if (!this._debugGrid && enabled) {
+      const sprite = this.createDebugGrid();
       this.app.stage.addChildAt(sprite, 0);
       this.app.stage.alpha = 0.65;
-    } else if (this._debugGridSprite && !enabled) {
+    } else if (this._debugGrid && !enabled) {
       this.app.stage.alpha = 1;
-      this.app.stage.removeChild(this._debugGridSprite);
-      this._debugGridSprite = undefined;
+      this.app.stage.removeChild(this._debugGrid);
+      this._debugGrid = undefined;
     }
     this._debug = enabled;
     this.walk(node => node.onDebugChange(enabled));

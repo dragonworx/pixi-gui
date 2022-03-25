@@ -11,8 +11,8 @@ export default class Node extends EventEmitter {
   parent: NodeParent;
   children: Node[];
 
-  _id: string;
-  _hasInit: boolean;
+  protected _id: string;
+  protected _hasInit: boolean;
 
   static setters(): Setter[] {
     return [

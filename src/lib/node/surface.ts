@@ -53,7 +53,7 @@ export default class Surface extends BoxContainer {
   }
 
   paintBackground() {
-    const { painter } = this;
+    const { _painter: painter } = this;
 
     log(this, 'render');
 

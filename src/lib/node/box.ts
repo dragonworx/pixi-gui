@@ -38,9 +38,10 @@ export enum GeometryUpdate {
 
 export default class Box extends Node {
   geometry: Geometry;
-  _layout?: Layout;
-  _alignH: LayoutAlign;
-  _alignV: LayoutAlign;
+
+  protected _layout?: Layout;
+  protected _alignH: LayoutAlign;
+  protected _alignV: LayoutAlign;
 
   static setters(): Setter[] {
     return [

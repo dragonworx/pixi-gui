@@ -9,10 +9,11 @@ export default class BoxContainer extends Box {
   container: Container;
   childContainer: Container;
   graphics: Graphics;
-  painter: GraphicsPainter;
-  mask: Graphics;
-  _clip: boolean;
-  _idSprite?: Sprite;
+
+  protected _painter: GraphicsPainter;
+  protected _mask: Graphics;
+  protected _clip: boolean;
+  protected _idSprite?: Sprite;
 
   static setters(): Setter[] {
     return [
@@ -32,9 +33,9 @@ export default class BoxContainer extends Box {
 
     const graphics = (this.graphics = new Graphics());
 
-    this.painter = new GraphicsPainter(graphics);
+    this._painter = new GraphicsPainter(graphics);
 
-    this.mask = new Graphics();
+    this._mask = new Graphics();
     this._clip = false;
   }
 
@@ -87,7 +88,7 @@ export default class BoxContainer extends Box {
   }
 
   updateMaskSize() {
-    const { mask } = this;
+    const { _mask: mask } = this;
 
     mask.clear();
     mask.beginFill(0xffffff);
@@ -119,7 +120,7 @@ export default class BoxContainer extends Box {
   }
 
   render() {
-    const { painter, hasSize, hasDocument, _hasInit } = this;
+    const { _painter: painter, hasSize, hasDocument, _hasInit } = this;
 
     if (!hasSize || !hasDocument || !_hasInit) {
       return;
@@ -139,7 +140,7 @@ export default class BoxContainer extends Box {
   }
 
   paintBackground() {
-    const { painter } = this;
+    const { _painter: painter } = this;
 
     if (this.document.debug) {
       painter
@@ -150,7 +151,7 @@ export default class BoxContainer extends Box {
   }
 
   paintDebug() {
-    const { painter, _idSprite } = this;
+    const { _painter: painter, _idSprite } = this;
 
     painter
       .lineStyle('cyan', 1, 0.5)
@@ -194,7 +195,7 @@ export default class BoxContainer extends Box {
   /** Setter */
   set clip(shouldClip: boolean) {
     // todo: fix up
-    const { container, mask } = this;
+    const { container, _mask: mask } = this;
     this._clip = shouldClip;
     if (shouldClip) {
       this.updateMaskSize();
