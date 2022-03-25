@@ -49,6 +49,10 @@ export default abstract class FlowLayout extends Layout {
     }
 
     children.forEach(node => {
+      if (node.isAnchored) {
+        return;
+      }
+
       const {
         geometry: { position },
       } = node;
