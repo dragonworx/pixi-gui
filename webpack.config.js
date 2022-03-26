@@ -23,7 +23,7 @@ module.exports = function (env, argv) {
             use: ['style-loader', 'css-loader'],
           },
           {
-            test: /\.xml$/i,
+            test: /\.xml|\.xsd$/i,
             use: 'raw-loader',
           },
         ],
