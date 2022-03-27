@@ -225,11 +225,7 @@ export default class Document extends Node {
     this._theme = theme;
   }
 
-  set resizeTo(cssSelector: string) {
-    const element = document.querySelector(cssSelector);
-    if (!element || !(element instanceof HTMLElement)) {
-      throw new Error(`Resize element for selector "${cssSelector}" not found`);
-    }
+  set resizeTo(element: HTMLElement) {
     this.observeResizeOn(element);
   }
 

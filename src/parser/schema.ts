@@ -6,7 +6,12 @@ export interface XsdSimpleType {
   values: string[];
 }
 
-export type AttributeType = 'string' | 'number' | 'boolean' | 'simpleType';
+export type AttributeType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'color'
+  | 'simpleType';
 
 export interface XsdAttribute {
   name: string;
@@ -42,8 +47,6 @@ export default class XmlSchema {
     this.parseSimpleTypes(doc);
     this.parseComplexTypes(doc);
     this.parseElements(doc);
-
-    debugger;
   }
 
   private parseSimpleTypes(doc: Document) {
@@ -158,6 +161,10 @@ export default class XmlSchema {
       }
       fn(child);
     });
+  }
+
+  getElement(name: string) {
+    return this.elements.get(name);
   }
 
   private getElementAttributes(element: XsdElement) {

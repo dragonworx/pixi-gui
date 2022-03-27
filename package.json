@@ -7,7 +7,9 @@
     "build": "webpack --config webpack.config.js",
     "build:watch": "webpack --config webpack.config.js --watch",
     "serve": "http-server ./public -p 80",
-    "dev": "webpack serve"
+    "dev": "webpack serve",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "color": "^4.2.1",
@@ -17,11 +19,14 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
+    "@babel/preset-typescript": "^7.16.7",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@types/color": "^3.0.2",
+    "@types/jest": "^27.4.1",
     "@types/pixi.js": "^5.0.0",
     "css-loader": "^6.4.0",
     "http-server": "^0.12.3",
+    "jest": "^27.5.1",
     "prettier": "^2.3.2",
     "raw-loader": "^4.0.2",
     "style-loader": "^3.3.0",

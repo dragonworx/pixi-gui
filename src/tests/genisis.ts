@@ -1,4 +1,4 @@
-import Parser from '../lib/parser';
+import Parser from '../parser/parser';
 import Element from '../lib/node/element';
 import { queryParam } from '../lib/util';
 import Row from '../lib/layout/row';
