@@ -1,87 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../schema.xsd"?>
-<Document
-        id="document"
-        width="500"
-        height="500"
-        container="#main"
-        resizeTo="#main"
-        debug="true"
-        deferInit="true"
-        sharp="true"
-        >
-        <Container
-                id="blue"
-                clip="false"
-                anchorLeft="0.1"
-                anchorTop="0.1"
-                anchorRight="0.9"
-                anchorBottom="0.9"
-                paddingLeft="10"
-                >
-                <Column
-                        id="supblock"
-                        alignH="center"
-                        anchor="bottomRight"
-                        >
-                        <Row
-                                id="sub1"
-                                alignV="center"
-                                marginRight="20"
-                                marginBottom="50"
-                                >
-                                <Element
-                                        id="a"
-                                        fillColor="red"
-                                        size="20"
-                                        />
-                                <Element
-                                        id="b"
-                                        fillColor="blue"
-                                        size="20"
-                                        marginRight="10"
-                                        />
-                                <Element
-                                        id="c"
-                                        fillColor="green"
-                                        size="20"
-                                        />
+<Document id="document" width="500" height="500" container="#main" resizeTo="#main" debug="true" deferInit="true" sharp="true">
+        <Container id="blue" clip="false" fixtureLeft="0.1" fixtureTop="0.1" fixtureRight="0.9" fixtureBottom="0.9" paddingLeft="10">
+                <Column id="supblock" alignH="center" fixture="bottomRight">
+                        <Row id="sub1" alignV="center" marginRight="20" marginBottom="50">
+                                <Element id="a" fillColor="red" size="20" />
+                                <Element id="b" fillColor="blue" size="20" marginRight="10" />
+                                <Element id="c" fillColor="green" size="20" />
                         </Row>
                         <Row id="sub2">
-                                <Element
-                                        id="d"
-                                        fillColor="green"
-                                        size="20"
-                                        />
-                                <Element
-                                        id="e"
-                                        fillColor="red"
-                                        size="20"
-                                        marginRight="10"
-                                        />
-                                <Element
-                                        id="f"
-                                        fillColor="blue"
-                                        size="20"
-                                        />
+                                <Element id="d" fillColor="green" size="20" />
+                                <Element id="e" fillColor="red" size="20" marginRight="10" />
+                                <Element id="f" fillColor="blue" size="20" />
                         </Row>
                 </Column>
-                <Container
-                        id="foo"
-                        padding="10"
-                        anchorLeft="0.7"
-                        anchorRight="1"
-                        size="100"
-                        anchorBottom="0.25"
-                        layout="wrap"
-                        clip="true"
-                        >
-                        <Element
-                                fillColor="blue"
-                                id="Xxx"
-                                size="30"
-                                anchor="leftCenter"
-                                />
+                <Container id="foo" padding="10" fixtureLeft="0.7" fixtureRight="1" size="100" fixtureBottom="0.25" layout="wrap" clip="true">
+                        <Element fillColor="blue" id="Xxx" size="30" fixture="leftCenter" />
                 </Container>
         </Container>
 </Document>

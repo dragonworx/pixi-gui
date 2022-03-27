@@ -8,7 +8,7 @@ A professional and feature rich UI library built on top of PixiJS. _(Actual yet 
 
 **Beta Ready:**
 
-- Box Model: Position, Size, Padding, Margin, Anchors
+- Box Model: Position, Size, Padding, Margin, Fixtures
 - Container: Nesting, Clipping
 - Layout: Flow, Block (Row, Column)
 - XML Parsing: Declaritive creation of UI

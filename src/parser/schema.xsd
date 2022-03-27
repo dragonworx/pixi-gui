@@ -34,7 +34,7 @@
                 </xs:restriction>
         </xs:simpleType>
 
-        <xs:simpleType name="anchor">
+        <xs:simpleType name="fixture">
                 <xs:restriction base="xs:string">
                         <xs:enumeration value="left" />
                         <xs:enumeration value="top" />
@@ -107,11 +107,11 @@
                                 <xs:attribute name="paddingTop" type="xs:decimal" />
                                 <xs:attribute name="paddingRight" type="xs:decimal" />
                                 <xs:attribute name="paddingBottom" type="xs:decimal" />
-                                <xs:attribute name="anchor" type="anchor" />
-                                <xs:attribute name="anchorLeft" type="xs:decimal" />
-                                <xs:attribute name="anchorTop" type="xs:decimal" />
-                                <xs:attribute name="anchorRight" type="xs:decimal" />
-                                <xs:attribute name="anchorBottom" type="xs:decimal" />
+                                <xs:attribute name="fixture" type="fixture" />
+                                <xs:attribute name="fixtureLeft" type="xs:decimal" />
+                                <xs:attribute name="fixtureTop" type="xs:decimal" />
+                                <xs:attribute name="fixtureRight" type="xs:decimal" />
+                                <xs:attribute name="fixtureBottom" type="xs:decimal" />
                                 <xs:attribute name="layout" type="layout" />
                                 <xs:attribute name="alignH" type="align" />
                                 <xs:attribute name="alignV" type="align" />

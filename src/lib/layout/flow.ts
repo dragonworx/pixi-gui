@@ -49,7 +49,7 @@ export default abstract class FlowLayout extends Layout {
     }
 
     children.forEach(node => {
-      if (node.isAnchored) {
+      if (node.hasFixture) {
         return;
       }
 

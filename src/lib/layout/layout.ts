@@ -14,7 +14,7 @@ export type LayoutAlign = 'start' | 'center' | 'end';
 
 export type Orientation = 'vertical' | 'horizontal';
 
-export type Anchor =
+export type Fixture =
   | 'left'
   | 'top'
   | 'right'

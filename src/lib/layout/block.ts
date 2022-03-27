@@ -43,7 +43,7 @@ export default class Block extends BoxContainer {
       size.width = _layout!.cells[0].rect.width;
       size.height = _layout!.cells[0].rect.height;
 
-      this.applyAnchors();
+      this.applyFixtures();
       // this.render();
     }
   }

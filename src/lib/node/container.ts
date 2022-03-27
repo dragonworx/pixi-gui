@@ -65,7 +65,7 @@ export default class BoxContainer extends Box {
 
     if (
       updateType.indexOf(GeometryUpdate.Size) > -1 ||
-      updateType.indexOf(GeometryUpdate.Anchor) > -1
+      updateType.indexOf(GeometryUpdate.Fixture) > -1
     ) {
       this.render();
       this.updateMaskSize();

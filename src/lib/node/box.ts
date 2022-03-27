@@ -2,7 +2,11 @@ import { Geometry } from 'src/lib/display/style';
 import Node from 'src/lib/node/node';
 import Rectangle from 'src/lib/rectangle';
 import Document from 'src/lib/node/document';
-import Layout, { LayoutAlign, LayoutType, Anchor } from 'src/lib/layout/layout';
+import Layout, {
+  LayoutAlign,
+  LayoutType,
+  Fixture,
+} from 'src/lib/layout/layout';
 import WrapLayout from 'src/lib/layout/wrap';
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
@@ -28,11 +32,11 @@ export enum GeometryUpdate {
   MarginTop = 'MarginTop',
   MarginRight = 'MarginRight',
   MarginBottom = 'MarginBottom',
-  Anchor = 'Anchor',
-  AnchorLeft = 'AnchorLeft',
-  AnchorTop = 'AnchorTop',
-  AnchorRight = 'AnchorRight',
-  AnchorBottom = 'AnchorBottom',
+  Fixture = 'Fixture',
+  FixtureLeft = 'FixtureLeft',
+  FixtureTop = 'FixtureTop',
+  FixtureRight = 'FixtureRight',
+  FixtureBottom = 'FixtureBottom',
 }
 
 export default class Box extends Node {
@@ -58,7 +62,7 @@ export default class Box extends Node {
       size: { width: 0, height: 0 },
       margin: { left: 0, top: 0, right: 0, bottom: 0 },
       padding: { left: 0, top: 0, right: 0, bottom: 0 },
-      anchor: {},
+      fixture: {},
     };
   }
 
@@ -68,28 +72,31 @@ export default class Box extends Node {
 
   performLayout() {
     log(this, 'performLayout');
-    this.applyAnchors();
+    this.applyFixtures();
     this.applyLayout();
   }
 
-  applyAnchors() {
-    log(this, 'applyAnchors');
+  applyFixtures() {
+    log(this, 'applyFixtures');
     const {
-      geometry: { anchor },
+      geometry: { fixture },
       parentLocalContentBounds: parentLocalBounds,
       bounds,
     } = this;
 
-    if (anchor.left !== undefined) {
-      const { x } = parentLocalBounds.globalPointFromFractional(anchor.left, 0);
+    if (fixture.left !== undefined) {
+      const { x } = parentLocalBounds.globalPointFromFractional(
+        fixture.left,
+        0
+      );
 
       bounds.setLeft(x);
       this.x = bounds.left;
     }
 
-    if (anchor.right !== undefined) {
+    if (fixture.right !== undefined) {
       const { x } = parentLocalBounds.globalPointFromFractional(
-        anchor.right,
+        fixture.right,
         0
       );
 
@@ -97,17 +104,17 @@ export default class Box extends Node {
       this.width = bounds.width;
     }
 
-    if (anchor.top !== undefined) {
-      const { y } = parentLocalBounds.globalPointFromFractional(0, anchor.top);
+    if (fixture.top !== undefined) {
+      const { y } = parentLocalBounds.globalPointFromFractional(0, fixture.top);
 
       bounds.setTop(y);
       this.y = bounds.top;
     }
 
-    if (anchor.bottom !== undefined) {
+    if (fixture.bottom !== undefined) {
       const { y } = parentLocalBounds.globalPointFromFractional(
         0,
-        anchor.bottom
+        fixture.bottom
       );
 
       bounds.setBottom(y);
@@ -143,7 +150,7 @@ export default class Box extends Node {
       this.applyLayout();
     }
 
-    if (updateType.indexOf(GeometryUpdate.Anchor) > -1) {
+    if (updateType.indexOf(GeometryUpdate.Fixture) > -1) {
       this.performLayout();
     }
   }
@@ -155,7 +162,7 @@ export default class Box extends Node {
         position: { x, y },
         size: { width, height },
         margin,
-        anchor,
+        fixture,
       },
       offsetX,
       offsetY,
@@ -163,12 +170,12 @@ export default class Box extends Node {
     } = this;
 
     const leftOffset =
-      (typeof anchor.left === 'number' ? 0 : parentLocalContentBounds.left) -
+      (typeof fixture.left === 'number' ? 0 : parentLocalContentBounds.left) -
       offsetX +
       margin.left;
 
     const topOffset =
-      (typeof anchor.top === 'number' ? 0 : parentLocalContentBounds.top) -
+      (typeof fixture.top === 'number' ? 0 : parentLocalContentBounds.top) -
       offsetY +
       margin.top;
 
@@ -272,13 +279,13 @@ export default class Box extends Node {
     return this.geometry.size.height;
   }
 
-  get isAnchored() {
-    const { anchor } = this.geometry;
+  get hasFixture() {
+    const { fixture } = this.geometry;
     return (
-      anchor.left !== undefined ||
-      anchor.top !== undefined ||
-      anchor.right !== undefined ||
-      anchor.bottom !== undefined
+      fixture.left !== undefined ||
+      fixture.top !== undefined ||
+      fixture.right !== undefined ||
+      fixture.bottom !== undefined
     );
   }
 
@@ -463,120 +470,123 @@ export default class Box extends Node {
     }
   }
 
-  set anchor(anchor: Anchor) {
+  set fixture(fixture: Fixture) {
     const { geometry } = this;
     geometry.origin.x = 0;
     geometry.origin.y = 0;
-    geometry.anchor = {};
-    if (anchor === 'top') {
-      this.anchorTop = 0;
-      this.anchorLeft = 0;
-      this.anchorRight = 1;
-    } else if (anchor === 'left') {
-      this.anchorTop = 0;
-      this.anchorLeft = 0;
-      this.anchorBottom = 1;
-    } else if (anchor === 'right') {
+    geometry.fixture = {};
+    if (fixture === 'top') {
+      this.fixtureTop = 0;
+      this.fixtureLeft = 0;
+      this.fixtureRight = 1;
+    } else if (fixture === 'left') {
+      this.fixtureTop = 0;
+      this.fixtureLeft = 0;
+      this.fixtureBottom = 1;
+    } else if (fixture === 'right') {
       this.originX = 1;
-      this.anchorTop = 0;
-      this.anchorLeft = 1;
-      this.anchorBottom = 1;
-    } else if (anchor === 'bottom') {
+      this.fixtureTop = 0;
+      this.fixtureLeft = 1;
+      this.fixtureBottom = 1;
+    } else if (fixture === 'bottom') {
       this.originY = 1;
-      this.anchorTop = 1;
-      this.anchorLeft = 0;
-      this.anchorRight = 1;
-    } else if (anchor === 'topLeft') {
-      this.anchorLeft = 0;
-      this.anchorTop = 0;
-    } else if (anchor === 'topRight') {
+      this.fixtureTop = 1;
+      this.fixtureLeft = 0;
+      this.fixtureRight = 1;
+    } else if (fixture === 'topLeft') {
+      this.fixtureLeft = 0;
+      this.fixtureTop = 0;
+    } else if (fixture === 'topRight') {
       this.originX = 1;
-      this.anchorLeft = 1;
-      this.anchorTop = 0;
-    } else if (anchor === 'bottomLeft') {
+      this.fixtureLeft = 1;
+      this.fixtureTop = 0;
+    } else if (fixture === 'bottomLeft') {
       this.originY = 1;
-      this.anchorLeft = 0;
-      this.anchorTop = 1;
-    } else if (anchor === 'bottomRight') {
+      this.fixtureLeft = 0;
+      this.fixtureTop = 1;
+    } else if (fixture === 'bottomRight') {
       this.originX = 1;
       this.originY = 1;
-      this.anchorLeft = 1;
-      this.anchorTop = 1;
-    } else if (anchor === 'topCenter') {
+      this.fixtureLeft = 1;
+      this.fixtureTop = 1;
+    } else if (fixture === 'topCenter') {
       this.originX = 0.5;
-      this.anchorLeft = 0.5;
-      this.anchorTop = 0;
-    } else if (anchor === 'bottomCenter') {
+      this.fixtureLeft = 0.5;
+      this.fixtureTop = 0;
+    } else if (fixture === 'bottomCenter') {
       this.originX = 0.5;
       this.originY = 1;
-      this.anchorLeft = 0.5;
-      this.anchorTop = 1;
-    } else if (anchor === 'leftCenter') {
+      this.fixtureLeft = 0.5;
+      this.fixtureTop = 1;
+    } else if (fixture === 'leftCenter') {
       this.originY = 0.5;
-      this.anchorLeft = 0;
-      this.anchorTop = 0.5;
-    } else if (anchor === 'rightCenter') {
+      this.fixtureLeft = 0;
+      this.fixtureTop = 0.5;
+    } else if (fixture === 'rightCenter') {
       this.originX = 1;
       this.originY = 0.5;
-      this.anchorLeft = 1;
-      this.anchorTop = 0.5;
-    } else if (anchor === 'fill') {
-      this.anchorLeft = 0;
-      this.anchorTop = 0;
-      this.anchorRight = 1;
-      this.anchorBottom = 1;
-    } else if (anchor === 'center') {
+      this.fixtureLeft = 1;
+      this.fixtureTop = 0.5;
+    } else if (fixture === 'fill') {
+      this.fixtureLeft = 0;
+      this.fixtureTop = 0;
+      this.fixtureRight = 1;
+      this.fixtureBottom = 1;
+    } else if (fixture === 'center') {
       this.origin = 0.5;
-      this.anchorTop = 0.5;
-      this.anchorLeft = 0.5;
+      this.fixtureTop = 0.5;
+      this.fixtureLeft = 0.5;
     }
   }
 
-  set anchorTop(value: number) {
+  set fixtureTop(value: number) {
     const {
-      geometry: { anchor },
+      geometry: { fixture },
     } = this;
-    if (anchor.top !== value) {
-      anchor.top = value;
-      this.onGeometryChanged([GeometryUpdate.Anchor, GeometryUpdate.AnchorTop]);
-    }
-  }
-
-  set anchorLeft(value: number) {
-    const {
-      geometry: { anchor },
-    } = this;
-    if (anchor.left !== value) {
-      anchor.left = value;
+    if (fixture.top !== value) {
+      fixture.top = value;
       this.onGeometryChanged([
-        GeometryUpdate.Anchor,
-        GeometryUpdate.AnchorLeft,
+        GeometryUpdate.Fixture,
+        GeometryUpdate.FixtureTop,
       ]);
     }
   }
 
-  set anchorRight(value: number) {
+  set fixtureLeft(value: number) {
     const {
-      geometry: { anchor },
+      geometry: { fixture },
     } = this;
-    if (anchor.right !== value) {
-      anchor.right = value;
+    if (fixture.left !== value) {
+      fixture.left = value;
       this.onGeometryChanged([
-        GeometryUpdate.Anchor,
-        GeometryUpdate.AnchorRight,
+        GeometryUpdate.Fixture,
+        GeometryUpdate.FixtureLeft,
       ]);
     }
   }
 
-  set anchorBottom(value: number) {
+  set fixtureRight(value: number) {
     const {
-      geometry: { anchor },
+      geometry: { fixture },
     } = this;
-    if (anchor.bottom !== value) {
-      anchor.bottom = value;
+    if (fixture.right !== value) {
+      fixture.right = value;
       this.onGeometryChanged([
-        GeometryUpdate.Anchor,
-        GeometryUpdate.AnchorBottom,
+        GeometryUpdate.Fixture,
+        GeometryUpdate.FixtureRight,
+      ]);
+    }
+  }
+
+  set fixtureBottom(value: number) {
+    const {
+      geometry: { fixture },
+    } = this;
+    if (fixture.bottom !== value) {
+      fixture.bottom = value;
+      this.onGeometryChanged([
+        GeometryUpdate.Fixture,
+        GeometryUpdate.FixtureBottom,
       ]);
     }
   }

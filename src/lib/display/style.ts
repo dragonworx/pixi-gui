@@ -21,7 +21,7 @@ export interface Geometry {
   size: Size;
   margin: Sides;
   padding: Sides;
-  anchor: Partial<Sides>;
+  fixture: Partial<Sides>;
 }
 
 export type FillType = 'solid' | 'none';
