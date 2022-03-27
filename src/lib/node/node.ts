@@ -1,7 +1,6 @@
-import Document from 'src/lib/node/document';
-import { Setter } from 'src/lib/parser';
-import { log } from 'src/lib/log';
 import { EventEmitter } from 'eventemitter3';
+import Document from 'src/lib/node/document';
+import { log } from 'src/lib/log';
 
 let nextId = 0;
 
@@ -13,27 +12,6 @@ export default class Node extends EventEmitter {
 
   protected _id: string;
   protected _hasInit: boolean;
-
-  static setters(): Setter[] {
-    return [
-      {
-        name: 'id',
-        type: 'string',
-      },
-      {
-        name: 'size',
-        type: 'number',
-      },
-      {
-        name: 'width',
-        type: 'number',
-      },
-      {
-        name: 'height',
-        type: 'number',
-      },
-    ];
-  }
 
   constructor() {
     super();

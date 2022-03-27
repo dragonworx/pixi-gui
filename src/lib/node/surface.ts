@@ -1,29 +1,11 @@
-import { Graphics } from 'pixi.js';
 import { Appearance, FillType } from 'src/lib/display/style';
-import { Setter } from 'src/lib/parser';
 import { GeometryUpdate } from 'src/lib/node/box';
-import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import BoxContainer from 'src/lib/node/container';
+import { randomColor } from 'src/lib/util';
 import { log } from '../log';
-import { randomColor } from '../util';
 
 export default class Surface extends BoxContainer {
   apperance: Appearance;
-
-  static setters(): Setter[] {
-    return [
-      ...super.setters(),
-      {
-        name: 'fillType',
-        type: 'string',
-        values: ['solid', 'none'],
-      },
-      {
-        name: 'fillColor',
-        type: 'color',
-      },
-    ];
-  }
 
   constructor() {
     super();

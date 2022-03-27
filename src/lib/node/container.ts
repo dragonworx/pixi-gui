@@ -2,7 +2,6 @@ import { Container, Graphics, Sprite } from 'pixi.js';
 import Box, { GeometryUpdate } from 'src/lib/node/box';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import Canvas2DPainter from '../display/canvas2DPainter';
-import { Setter } from 'src/lib/parser';
 import { log } from '../log';
 
 export default class BoxContainer extends Box {
@@ -14,16 +13,6 @@ export default class BoxContainer extends Box {
   protected _mask: Graphics;
   protected _clip: boolean;
   protected _idSprite?: Sprite;
-
-  static setters(): Setter[] {
-    return [
-      ...super.setters(),
-      {
-        name: 'clip',
-        type: 'boolean',
-      },
-    ];
-  }
 
   constructor() {
     super();

@@ -1,12 +1,10 @@
-import { Application, Texture, TilingSprite } from 'pixi.js';
+import { Application, Texture, TilingSprite, settings } from 'pixi.js';
 import Box from 'src/lib/node/box';
 import DebugGrid from 'src/lib/display/debugGrid';
 import Node from 'src/lib/node/node';
 import Container from 'src/lib/node/container';
-import { Setter } from 'src/lib/parser';
 import Renderer from 'src/lib/display/renderer';
 import Theme, { getTheme, defaultTheme } from 'src/lib/theme/theme';
-import { settings } from 'pixi.js';
 import { log } from '../log';
 
 export interface DocumentOptions {
@@ -28,36 +26,6 @@ export default class Document extends Node {
   protected _debug: boolean;
   protected _sharp: boolean;
   protected _resizeToElement?: HTMLElement;
-
-  static setters(): Setter[] {
-    return [
-      ...super.setters(),
-      {
-        name: 'container',
-        type: 'selector',
-      },
-      {
-        name: 'theme',
-        type: 'string',
-      },
-      {
-        name: 'resizeTo',
-        type: 'string',
-      },
-      {
-        name: 'debug',
-        type: 'boolean',
-      },
-      {
-        name: 'deferInit',
-        type: 'boolean',
-      },
-      {
-        name: 'sharp',
-        type: 'boolean',
-      },
-    ];
-  }
 
   constructor(opts: DocumentOptions = {}) {
     super();

@@ -1,5 +1,5 @@
 import Block from 'src/lib/layout/block';
-import { Orientation } from './layout';
+import { Orientation } from 'src/lib/layout/layout';
 
 export default class Row extends Block {
   constructor() {

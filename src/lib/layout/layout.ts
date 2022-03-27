@@ -1,4 +1,4 @@
-import Box, { GeometryUpdate } from 'src/lib/node/box';
+import Box from 'src/lib/node/box';
 import Rectangle from 'src/lib/rectangle';
 import { log } from '../log';
 

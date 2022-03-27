@@ -1,7 +1,6 @@
 import { Geometry } from 'src/lib/display/style';
 import Node from 'src/lib/node/node';
 import Rectangle from 'src/lib/rectangle';
-import { Setter } from 'src/lib/parser';
 import Document from 'src/lib/node/document';
 import Layout, { LayoutAlign, LayoutType, Anchor } from 'src/lib/layout/layout';
 import WrapLayout from 'src/lib/layout/wrap';
@@ -42,131 +41,6 @@ export default class Box extends Node {
   protected _layout?: Layout;
   protected _alignH: LayoutAlign;
   protected _alignV: LayoutAlign;
-
-  static setters(): Setter[] {
-    return [
-      ...super.setters(),
-      {
-        name: 'origin',
-        type: 'number',
-      },
-      {
-        name: 'originX',
-        type: 'number',
-      },
-      {
-        name: 'originY',
-        type: 'number',
-      },
-      {
-        name: 'x',
-        type: 'number',
-      },
-      {
-        name: 'y',
-        type: 'number',
-      },
-      {
-        name: 'padding',
-        type: 'number',
-      },
-      {
-        name: 'paddingLeft',
-        type: 'number',
-      },
-      {
-        name: 'paddingRight',
-        type: 'number',
-      },
-      {
-        name: 'paddingTop',
-        type: 'number',
-      },
-      {
-        name: 'paddingBottom',
-        type: 'number',
-      },
-      {
-        name: 'margin',
-        type: 'number',
-      },
-      {
-        name: 'marginLeft',
-        type: 'number',
-      },
-      {
-        name: 'marginRight',
-        type: 'number',
-      },
-      {
-        name: 'marginTop',
-        type: 'number',
-      },
-      {
-        name: 'marginBottom',
-        type: 'number',
-      },
-      {
-        name: 'anchor',
-        type: 'string',
-        values: [
-          'top',
-          'left',
-          'right',
-          'bottom',
-          'topLeft',
-          'topRight',
-          'bottomLeft',
-          'bottomRight',
-          'topCenter',
-          'bottomCenter',
-          'leftCenter',
-          'rightCenter',
-          'fill',
-          'center',
-        ],
-      },
-      {
-        name: 'anchorLeft',
-        type: 'number',
-      },
-      {
-        name: 'anchorTop',
-        type: 'number',
-      },
-      {
-        name: 'anchorRight',
-        type: 'number',
-      },
-      {
-        name: 'anchorBottom',
-        type: 'number',
-      },
-      {
-        name: 'layout',
-        type: 'string',
-        values: [
-          'wrap',
-          'wrap-reverse',
-          'horizontal',
-          'horizontal-reverse',
-          'vertical',
-          'vertical-reverse',
-          'center',
-        ],
-      },
-      {
-        name: 'alignH',
-        type: 'string',
-        values: ['start', 'center', 'end'],
-      },
-      {
-        name: 'alignV',
-        type: 'string',
-        values: ['start', 'center', 'end'],
-      },
-    ];
-  }
 
   constructor() {
     super();
