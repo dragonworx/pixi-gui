@@ -308,6 +308,33 @@
                 </xs:complexContent>
         </xs:complexType>
 
+        <xs:complexType name="NineSliceImage">
+                <xs:complexContent>
+                        <xs:extension base="Image">
+                                <xs:attribute
+                                        name="leftEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="topEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="rightEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="bottomEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="edges"
+                                        type="xs:decimal"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
         <!-- Elements -->
 
         <xs:element
@@ -338,6 +365,11 @@
         <xs:element
                 name="Image"
                 type="Image"
+                />
+
+        <xs:element
+                name="NineSliceImage"
+                type="NineSliceImage"
                 />
 
         <!-- Document -->

@@ -1,4 +1,4 @@
-import { Loader, Sprite } from 'pixi.js';
+import { Container, Loader, Resource, Sprite, Texture } from 'pixi.js';
 import { GeometryUpdate } from './box';
 import Surface from './surface';
 
@@ -19,8 +19,9 @@ export default class ImageSurface extends Surface {
       loader.onComplete.add(() => {
         const texture = loader.resources[_src].texture;
         if (texture) {
-          const sprite = (this.sprite = Sprite.from(texture));
-          (sprite as any).id = 'image';
+          const sprite = (this.sprite = this.createSpriteFromTexture(
+            texture
+          ) as Sprite);
           this.container.addChildAt(sprite, 0);
           this.width = texture.width;
           this.height = texture.height;
@@ -31,6 +32,10 @@ export default class ImageSurface extends Surface {
       });
       loader.add(_src).load();
     }
+  }
+
+  createSpriteFromTexture(texture: Texture<Resource>): Container {
+    return Sprite.from(texture);
   }
 
   onGeometryChanged(updateType: GeometryUpdate[]): void {
@@ -51,6 +56,10 @@ export default class ImageSurface extends Surface {
       sprite.width = width;
       sprite.height = height;
     }
+  }
+
+  getSprite<T = Sprite>(): T {
+    return this.sprite as unknown as T;
   }
 
   get src() {

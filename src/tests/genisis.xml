@@ -19,11 +19,18 @@
                 padding="10"
                 >
                 <Fill fillColor="#333" />
+                <NineSliceImage
+                        id="nineslice"
+                        src="img/button.png"
+                        edges="25"
+                        fixture="fill"
+                        />
                 <Image
                         id="image"
                         src="img/test.png"
                         fixture="center"
                         />
+
                 <Column
                         id="supblock"
                         alignH="center"
