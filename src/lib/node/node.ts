@@ -6,6 +6,13 @@ let nextId = 0;
 
 export type NodeParent = Node | Document | undefined;
 
+export enum NodeEvent {
+  init = 'init',
+  parentSet = 'parentSet',
+  addedAsChild = 'addedAsChild',
+  removedAsChild = 'removedAsChild',
+}
+
 export default class Node extends EventEmitter {
   parent: NodeParent;
   children: Node[];
@@ -37,20 +44,27 @@ export default class Node extends EventEmitter {
       this.onInit();
     }
     log(this, 'init-end');
+    this.emit(NodeEvent.init);
   }
 
-  onInit() {}
+  onInit() {
+    // subclasses to override if needed
+  }
 
   setParent(node: Node) {
     this.parent = node;
     node.children.push(this);
+    this.emit(NodeEvent.parentSet, { parent: node });
+    this.emit(NodeEvent.addedAsChild, { parent: node });
   }
 
   removeFromParent() {
     if (this.parent) {
-      const index = this.parent.children.indexOf(this);
-      this.parent.children.splice(index, 1);
+      const parent = this.parent;
+      const index = parent.children.indexOf(this);
+      parent.children.splice(index, 1);
       delete this.parent;
+      this.emit(NodeEvent.removedAsChild, { parent });
     } else {
       throw new Error('Cannot remove node from undefined parent');
     }
@@ -103,6 +117,10 @@ export default class Node extends EventEmitter {
   }
 
   /** Getters */
+
+  get isReady() {
+    return this._hasInit && this.hasDocument;
+  }
 
   get className() {
     return (this as any).__proto__.constructor.name;

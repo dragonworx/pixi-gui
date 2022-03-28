@@ -1,7 +1,5 @@
-import { Container, Graphics, Sprite } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import Box, { GeometryUpdate } from 'src/lib/node/box';
-import GraphicsPainter from 'src/lib/display/graphicsPainter';
-import Canvas2DPainter from '../display/canvas2DPainter';
 import { log } from '../log';
 
 export default class DisplayContainer extends Box {
@@ -29,7 +27,7 @@ export default class DisplayContainer extends Box {
 
     this.updateContainerPosition();
     this.updateMaskSize();
-    // this.render();
+    this.render();
   }
 
   removeFromParent(): void {
@@ -40,7 +38,7 @@ export default class DisplayContainer extends Box {
   onGeometryChanged(updateType: GeometryUpdate[]) {
     super.onGeometryChanged(updateType);
 
-    if (!this.hasDocument) {
+    if (!this.isReady) {
       return;
     }
 
@@ -48,7 +46,6 @@ export default class DisplayContainer extends Box {
       updateType.indexOf(GeometryUpdate.Size) > -1 ||
       updateType.indexOf(GeometryUpdate.Fixture) > -1
     ) {
-      // this.render();
       this.updateMaskSize();
     }
 
@@ -56,6 +53,8 @@ export default class DisplayContainer extends Box {
       this.updateContainerPosition();
     }
   }
+
+  render() {}
 
   updateMaskSize() {
     const { _mask: mask } = this;

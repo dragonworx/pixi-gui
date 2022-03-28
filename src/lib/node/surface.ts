@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite } from 'pixi.js';
+import { Graphics } from 'pixi.js';
 import { Appearance, FillType } from 'src/lib/display/style';
 import { GeometryUpdate } from 'src/lib/node/box';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
@@ -23,7 +23,6 @@ export default class Surface extends DisplayContainer {
   onInit(): void {
     super.onInit();
     this.container.addChildAt(this._graphics, 0);
-    this.render();
   }
 
   defaultAppearance(): Appearance {
@@ -38,11 +37,18 @@ export default class Surface extends DisplayContainer {
   onGeometryChanged(updateType: GeometryUpdate[]) {
     super.onGeometryChanged(updateType);
 
-    if (!this.hasDocument) {
+    if (!this.isReady) {
       return;
     }
 
     if (updateType.indexOf(GeometryUpdate.Padding) > -1) {
+      this.render();
+    }
+
+    if (
+      updateType.indexOf(GeometryUpdate.Size) > -1 ||
+      updateType.indexOf(GeometryUpdate.Fixture) > -1
+    ) {
       this.render();
     }
   }

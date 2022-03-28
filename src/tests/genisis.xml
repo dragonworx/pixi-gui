@@ -12,17 +12,26 @@
         <Container
                 id="blue"
                 clip="false"
-                fixtureLeft="0.1"
-                fixtureTop="0.1"
+                marginTop="50"
+                marginLeft="50"
                 fixtureRight="0.9"
                 fixtureBottom="0.9"
                 padding="10"
                 >
+                <Element
+                        fillColor="#333"
+                        fixture="fill"
+                        />
                 <Column
                         id="supblock"
                         alignH="center"
                         fixture="bottomRight"
                         >
+                        <Element
+                                id="test"
+                                fillColor="#000"
+                                fixture="fill"
+                                />
                         <Row
                                 id="sub1"
                                 alignV="center"
@@ -73,8 +82,12 @@
                         size="100"
                         fixtureBottom="0.25"
                         layout="wrap"
-                        clip="true"
+                        clip="false"
                         >
+                        <Element
+                                fillColor="#ccc"
+                                fixture="fill"
+                                />
                         <Element
                                 fillColor="blue"
                                 id="Xxx"

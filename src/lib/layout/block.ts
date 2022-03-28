@@ -44,7 +44,12 @@ export default class Block extends DisplayContainer {
       size.height = _layout!.cells[0].rect.height;
 
       this.applyFixtures();
-      // this.render();
+
+      this.forEach(node => {
+        if (node instanceof DisplayContainer) {
+          node.performLayout();
+        }
+      });
     }
   }
 

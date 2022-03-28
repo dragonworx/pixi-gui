@@ -14,6 +14,7 @@ import { dump } from '../lib/log';
 
 const doc = Parser.fromXmlString(xml);
 const win = window as any;
+doc.stage.alpha = 0.75;
 
 const blue = doc.getNodeById<Element>('blue');
 win.blue = blue;
@@ -22,50 +23,50 @@ const colors = ['red', 'green', 'pink', 'yellow', 'grey', 'lime', 'salmon'];
 const randSize = () => Math.ceil(Math.random() * 4) * 10;
 
 const grid = Grid.createTilingSprite(1000, 1000);
-doc.app.stage.addChildAt(grid, 0);
+doc.stage.addChildAt(grid, 0);
 
 const row = new Row();
 row.id = 'row';
 
-for (let j = 0; j < 4; j++) {
-  const column = new Column();
-  column.reverse = true;
-  column.alignH = 'center';
-  column.id = 'column' + j;
+// for (let j = 0; j < 4; j++) {
+//   const column = new Column();
+//   column.reverse = true;
+//   column.alignH = 'center';
+//   column.id = 'column' + j;
 
-  for (let i = 0; i < queryParam('items', 8); i++) {
-    const element = new Element();
-    element.id = String(i + 1);
-    element.width = randSize();
-    element.height = randSize();
-    element.x = i * 10;
-    element.marginLeft = 10;
-    element.marginRight = 20;
-    element.marginTop = 10;
-    element.marginBottom = 20;
-    element.fillColor = colors[i % colors.length];
-    element.setParent(column);
-  }
+//   for (let i = 0; i < queryParam('items', 8); i++) {
+//     const element = new Element();
+//     element.id = String(i + 1);
+//     element.width = randSize();
+//     element.height = randSize();
+//     element.x = i * 10;
+//     element.marginLeft = 10;
+//     element.marginRight = 20;
+//     element.marginTop = 10;
+//     element.marginBottom = 20;
+//     element.fillColor = colors[i % colors.length];
+//     element.setParent(column);
+//   }
 
-  column.setParent(row);
-}
+//   column.setParent(row);
+// }
 
-row.setParent(blue);
+// row.setParent(blue);
 
-const foo = doc.getNodeById('foo');
+// const foo = doc.getNodeById('foo');
 
-for (let i = 0; i < 10; i++) {
-  const element = new Element();
-  element.id = String(i + 1);
-  element.width = randSize();
-  element.height = randSize();
-  element.marginLeft = 10;
-  element.marginRight = 20;
-  element.marginTop = 10;
-  element.marginBottom = 20;
-  element.fillColor = colors[i % colors.length];
-  foo.addChild(element, false);
-}
+// for (let i = 0; i < 10; i++) {
+//   const element = new Element();
+//   element.id = String(i + 1);
+//   element.width = randSize();
+//   element.height = randSize();
+//   element.marginLeft = 10;
+//   element.marginRight = 20;
+//   element.marginTop = 10;
+//   element.marginBottom = 20;
+//   element.fillColor = colors[i % colors.length];
+//   foo.addChild(element, false);
+// }
 
 doc.init();
 

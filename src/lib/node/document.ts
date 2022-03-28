@@ -1,9 +1,7 @@
 import { Application, settings } from 'pixi.js';
 import Box from 'src/lib/node/box';
 import Node from 'src/lib/node/node';
-import Container from 'src/lib/node/container';
 import Renderer from 'src/lib/display/renderer';
-import Theme, { getTheme, defaultTheme } from 'src/lib/theme/theme';
 import { log } from '../log';
 
 export interface DocumentOptions {
@@ -12,12 +10,16 @@ export interface DocumentOptions {
   deferInit?: boolean;
 }
 
+export enum DocumentEvent {
+  resize = 'resize',
+}
+
 export default class Document extends Node {
   readonly renderer: Renderer;
   readonly app: Application;
 
   protected _container?: HTMLElement;
-  protected _theme?: Partial<Theme>; // todo: partial or required?
+  protected _themeName?: string;
   protected _observer?: ResizeObserver;
   protected _deferInit: boolean;
   protected _sharp: boolean;
@@ -27,8 +29,6 @@ export default class Document extends Node {
     super();
 
     const { app, resizeTo } = opts;
-
-    this._theme = defaultTheme;
 
     this.app =
       app ||
@@ -59,11 +59,6 @@ export default class Document extends Node {
     }
   }
 
-  performLayout() {
-    log(this, 'performLayout');
-    this.forEach<Box>(node => node.performLayout());
-  }
-
   observeResizeOn(element: HTMLElement) {
     if (element) {
       if (this._observer) {
@@ -85,13 +80,6 @@ export default class Document extends Node {
     });
   };
 
-  resize(width: number, height: number) {
-    log(this, 'resize', { width, height });
-    this.app.renderer.resize(width, height);
-    this.performLayout();
-    this.app.render();
-  }
-
   unobserveResize() {
     if (this._observer) {
       this._observer.disconnect();
@@ -100,8 +88,17 @@ export default class Document extends Node {
     delete this._observer;
   }
 
-  getTheme() {
-    return this._theme;
+  resize(width: number, height: number) {
+    log(this, 'resize', { width, height });
+    this.app.renderer.resize(width, height);
+    this.emit(DocumentEvent.resize, { width, height });
+    this.performLayout();
+    this.app.render();
+  }
+
+  performLayout() {
+    log(this, 'performLayout');
+    this.forEach<Box>(node => node.performLayout());
   }
 
   get className() {
@@ -137,6 +134,10 @@ export default class Document extends Node {
     return this._sharp;
   }
 
+  get theme() {
+    return this._themeName;
+  }
+
   /** Setters */
   set width(value: number) {
     this.resize(value, this.height);
@@ -155,10 +156,8 @@ export default class Document extends Node {
     }
   }
 
-  set theme(name: string) {
-    // todo: known string, or update to theme object for setter/getter
-    const theme = getTheme(name);
-    this._theme = theme;
+  set theme(name: string | undefined) {
+    this._themeName = name;
   }
 
   set resizeTo(element: HTMLElement) {
