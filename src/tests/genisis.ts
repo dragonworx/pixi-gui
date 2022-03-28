@@ -67,18 +67,21 @@ for (let i = 0; i < 10; i++) {
   foo.addChild(element, false);
 }
 
-doc.deepInit();
+doc.preload(['img/button.png', 'img/test.png']).then(() => {
+  doc.init();
 
-const sprite = Sprite.from(Texture.from('img/button.png'));
-sprite.width = 100;
-sprite.height = 100;
-const custom = new CustomContainer();
-custom.object = sprite;
-custom.fixtureLeft = 0.25;
-custom.fixtureRight = 0.75;
-custom.originY = 0.5;
-custom.fixtureTop = 0.3;
-blue.addChild(custom);
+  const texture = doc.getTexture('img/button.png');
+  const sprite = Sprite.from(texture);
+  sprite.width = 100;
+  sprite.height = 100;
+  const custom = new CustomContainer();
+  custom.object = sprite;
+  custom.fixtureLeft = 0.25;
+  custom.fixtureRight = 0.75;
+  custom.originY = 0.5;
+  custom.fixtureTop = 0.3;
+  blue.addChild(custom);
+});
 
 console.log(doc);
 win.doc = doc;

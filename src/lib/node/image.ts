@@ -1,42 +1,32 @@
-import { Container, Loader, Resource, Sprite, Texture } from 'pixi.js';
+import { Container, Resource, Sprite, Texture } from 'pixi.js';
 import { GeometryUpdate } from 'src/lib/node/box';
 import Surface from 'src/lib/node/surface';
 
 export default class Image extends Surface {
   protected _src?: string;
   protected sprite?: Sprite;
-  protected loader: Loader;
-
-  constructor() {
-    super();
-    this.loader = new Loader();
-    this.loader.onComplete.add(this.onLoadComplete);
-  }
 
   private setSrc(src: string) {
-    const { loader } = this;
     if (this._src) {
       this.src = undefined;
     }
     this._src = src;
-    loader.reset().add(src).load();
-  }
 
-  onLoadComplete = () => {
-    const { loader, src } = this;
-    const texture = loader.resources[src!].texture;
-    if (texture) {
-      const sprite = (this.sprite = this.createSpriteFromTexture(
-        texture
-      ) as Sprite);
-      this.container.addChildAt(sprite, 0);
-      this.width = texture.width;
-      this.height = texture.height;
-      this.applyFixtures();
-      this.updateSpriteSize();
-      this.updateContainerPosition();
+    if (!this.isReady) {
+      return;
     }
-  };
+
+    const texture = this.document.getTexture(src);
+    const sprite = (this.sprite = this.createSpriteFromTexture(
+      texture
+    ) as Sprite);
+    this.container.addChildAt(sprite, 0);
+    this.width = texture.width;
+    this.height = texture.height;
+    this.applyFixtures();
+    this.updateSpriteSize();
+    this.updateContainerPosition();
+  }
 
   init() {
     super.init();

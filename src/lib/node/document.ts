@@ -1,6 +1,6 @@
-import { Application, settings } from 'pixi.js';
+import { Application, Loader, Resource, settings, Texture } from 'pixi.js';
 import Box from 'src/lib/node/box';
-import Node from 'src/lib/node/node';
+import Node, { NodeEvent } from 'src/lib/node/node';
 
 export interface DocumentOptions {
   app?: Application;
@@ -21,6 +21,7 @@ export default class Document extends Node {
   protected _deferInit: boolean;
   protected _sharp: boolean;
   protected _resizeToElement?: HTMLElement;
+  protected _textureCache: Map<string, Texture<Resource>>;
 
   constructor(opts: DocumentOptions = {}) {
     super();
@@ -38,20 +39,52 @@ export default class Document extends Node {
       this.observeResizeOn(resizeTo);
     }
 
+    this._textureCache = new Map();
     this._deferInit = false;
     this._sharp = true;
   }
 
   deepInit() {
-    this.sharp = this._sharp;
-
-    super.deepInit();
+    this.init();
   }
 
   init() {
     if (!this._htmlContainer) {
       console.error('Document was initialised without a container');
     }
+
+    this._hasInit = true;
+    this.sharp = this._sharp;
+    this.children.forEach(node => node.deepInit());
+    this.emit(NodeEvent.init);
+  }
+
+  preload(urls: string[]): Promise<void> {
+    const loader = new Loader();
+    urls.forEach(url => loader.add(url));
+    const promise = new Promise<void>((resolve, reject) => {
+      loader.onComplete.add(() => {
+        urls.forEach(url => {
+          const texture = loader.resources[url].texture;
+          console.log('Loaded ' + url);
+          if (texture) {
+            this._textureCache.set(url, texture);
+          } else {
+            reject(`Cannot load texture "${url}"`);
+          }
+        });
+        resolve();
+      });
+    });
+    loader.load();
+    return promise;
+  }
+
+  getTexture(url: string) {
+    if (!this._textureCache.has(url)) {
+      throw new Error(`Texture "${url}" not found`);
+    }
+    return this._textureCache.get(url)!;
   }
 
   observeResizeOn(element: HTMLElement) {
@@ -102,7 +135,10 @@ export default class Document extends Node {
     return this.app.stage;
   }
 
-  /** Getter */
+  get loader() {
+    return this.app.loader;
+  }
+
   get canvas() {
     return this.app.renderer.view;
   }
@@ -131,7 +167,6 @@ export default class Document extends Node {
     return this._themeName;
   }
 
-  /** Setters */
   set width(value: number) {
     this.resize(value, this.height);
   }
