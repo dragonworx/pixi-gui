@@ -11,7 +11,7 @@ import { dump } from '../lib/log';
 
 const doc = Parser.fromXmlString(xml);
 const win = window as any;
-doc.stage.alpha = 0.75;
+doc.stage.alpha = 0.5;
 
 const blue = doc.getNodeById<Element>('blue');
 win.blue = blue;

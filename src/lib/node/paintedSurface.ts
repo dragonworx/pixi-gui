@@ -17,6 +17,7 @@ export default abstract class PaintedSurface extends Surface {
     super.init();
 
     this.container.addChildAt(this.graphics, 0);
+    this.render();
   }
 
   render() {

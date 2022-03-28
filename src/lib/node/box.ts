@@ -45,13 +45,13 @@ export default class Box extends Node {
   constructor() {
     super();
 
-    this.geometry = Box.defaultGeometry();
+    this.geometry = this.defaultGeometry();
 
     this._alignH = 'start';
     this._alignV = 'start';
   }
 
-  static defaultGeometry(): Geometry {
+  defaultGeometry(): Geometry {
     return {
       origin: { x: 0, y: 0 },
       position: { x: 0, y: 0 },
@@ -90,6 +90,13 @@ export default class Box extends Node {
       this.x = bounds.left;
     }
 
+    if (fixture.top !== undefined) {
+      const { y } = parentLocalBounds.globalPointFromFractional(0, fixture.top);
+
+      bounds.setTop(y);
+      this.y = bounds.top;
+    }
+
     if (fixture.right !== undefined) {
       const { x } = parentLocalBounds.globalPointFromFractional(
         fixture.right,
@@ -98,13 +105,6 @@ export default class Box extends Node {
 
       bounds.setRight(x);
       this.width = bounds.width;
-    }
-
-    if (fixture.top !== undefined) {
-      const { y } = parentLocalBounds.globalPointFromFractional(0, fixture.top);
-
-      bounds.setTop(y);
-      this.y = bounds.top;
     }
 
     if (fixture.bottom !== undefined) {
@@ -126,16 +126,20 @@ export default class Box extends Node {
     }
   }
 
-  onGeometryChanged(updateType: GeometryUpdate[]) {
-    if (updateType.indexOf(GeometryUpdate.Size) > -1) {
+  protected hasUpdate(updates: GeometryUpdate[], type: GeometryUpdate) {
+    return updates.indexOf(type) > -1;
+  }
+
+  onGeometryChanged(updates: GeometryUpdate[]) {
+    if (this.hasUpdate(updates, GeometryUpdate.Size)) {
       this.forEach<Box>(node => node.updateLayout());
     }
 
-    if (updateType.indexOf(GeometryUpdate.Padding) > -1) {
+    if (this.hasUpdate(updates, GeometryUpdate.Padding)) {
       this.applyLayout();
     }
 
-    if (updateType.indexOf(GeometryUpdate.Fixture) > -1) {
+    if (this.hasUpdate(updates, GeometryUpdate.Fixture)) {
       this.updateLayout();
     }
   }

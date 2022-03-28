@@ -112,6 +112,10 @@ export default class Node extends EventEmitter {
     return this.className === className;
   }
 
+  debug(id: string) {
+    if (this.id === id) debugger;
+  }
+
   /** Getters */
 
   get isReady() {

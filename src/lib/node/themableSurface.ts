@@ -3,15 +3,15 @@ import PaintedSurface from 'src/lib/node/paintedSurface';
 import { randomColor } from 'src/lib/util';
 
 export default class ThemableSurface extends PaintedSurface {
-  apperance: Appearance;
+  appearance: Appearance;
 
   constructor() {
     super();
 
-    this.apperance = ThemableSurface.defaultAppearance();
+    this.appearance = this.defaultAppearance();
   }
 
-  static defaultAppearance(): Appearance {
+  defaultAppearance(): Appearance {
     return {
       fill: {
         type: 'solid',
@@ -23,12 +23,12 @@ export default class ThemableSurface extends PaintedSurface {
   protected paint() {
     const { painter } = this;
 
-    if (this.apperance.fill?.type === 'solid') {
-      this.apperance.fill.color =
-        this.apperance.fill.color || randomColor().hex();
+    if (this.appearance.fill?.type === 'solid') {
+      this.appearance.fill.color =
+        this.appearance.fill.color || randomColor().hex();
       painter
 
-        .beginFill(this.apperance.fill?.color!)
+        .beginFill(this.appearance.fill?.color!)
         .drawRect(0, 0, this.width, this.height)
         .endFill();
     }
@@ -36,8 +36,8 @@ export default class ThemableSurface extends PaintedSurface {
 
   set fillType(value: FillType) {
     const {
-      apperance,
-      apperance: { fill },
+      appearance: apperance,
+      appearance: { fill },
     } = this;
 
     if (fill) {
@@ -53,8 +53,8 @@ export default class ThemableSurface extends PaintedSurface {
 
   set fillColor(value: string) {
     const {
-      apperance,
-      apperance: { fill },
+      appearance: apperance,
+      appearance: { fill },
     } = this;
 
     if (fill) {

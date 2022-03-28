@@ -235,13 +235,26 @@
                 </xs:complexContent>
         </xs:complexType>
 
-        <xs:complexType name="Surface">
+        <xs:complexType name="DisplayContainer">
                 <xs:complexContent>
                         <xs:extension base="Box">
                                 <xs:attribute
                                         name="clip"
                                         type="xs:boolean"
                                         />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Surface">
+                <xs:complexContent>
+                        <xs:extension base="DisplayContainer" />
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="ThemableSurface">
+                <xs:complexContent>
+                        <xs:extension base="Surface">
                                 <xs:attribute
                                         name="fillColor"
                                         type="color"
@@ -256,13 +269,20 @@
 
         <xs:complexType name="Element">
                 <xs:complexContent>
-                        <xs:extension base="Surface" />
+                        <xs:extension base="ThemableSurface" />
                 </xs:complexContent>
         </xs:complexType>
 
+        <xs:complexType name="Fill">
+                <xs:complexContent>
+                        <xs:extension base="ThemableSurface" />
+                </xs:complexContent>
+        </xs:complexType>
+
+
         <xs:complexType name="Block">
                 <xs:complexContent>
-                        <xs:extension base="Surface">
+                        <xs:extension base="DisplayContainer">
                                 <xs:attribute
                                         name="reverse"
                                         type="xs:boolean"
@@ -273,7 +293,18 @@
 
         <xs:complexType name="RowCol">
                 <xs:complexContent>
-                        <xs:extension base="Surface" />
+                        <xs:extension base="Block" />
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Image">
+                <xs:complexContent>
+                        <xs:extension base="Surface">
+                                <xs:attribute
+                                        name="src"
+                                        type="xs:string"
+                                        />
+                        </xs:extension>
                 </xs:complexContent>
         </xs:complexType>
 
@@ -282,6 +313,11 @@
         <xs:element
                 name="Element"
                 type="Element"
+                />
+
+        <xs:element
+                name="Fill"
+                type="Fill"
                 />
 
         <xs:element
@@ -297,6 +333,11 @@
         <xs:element
                 name="Column"
                 type="RowCol"
+                />
+
+        <xs:element
+                name="Image"
+                type="Image"
                 />
 
         <!-- Document -->

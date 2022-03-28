@@ -18,9 +18,11 @@
                 fixtureBottom="0.9"
                 padding="10"
                 >
-                <Element
-                        fillColor="#333"
-                        fixture="fill"
+                <Fill fillColor="#333" />
+                <Image
+                        id="image"
+                        src="img/test.png"
+                        fixture="center"
                         />
                 <Column
                         id="supblock"
@@ -84,10 +86,7 @@
                         layout="wrap"
                         clip="false"
                         >
-                        <Element
-                                fillColor="#ccc"
-                                fixture="fill"
-                                />
+                        <Fill fillColor="pink" />
                         <Element
                                 fillColor="blue"
                                 id="Xxx"
