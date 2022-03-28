@@ -74,6 +74,10 @@ export default class Box extends Node {
   }
 
   protected applyFixtures() {
+    if (!this.isReady) {
+      return;
+    }
+
     const {
       geometry: { fixture },
       parentLocalContentBounds: parentLocalBounds,

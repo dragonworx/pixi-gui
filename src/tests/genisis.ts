@@ -4,10 +4,12 @@ import { queryParam } from '../lib/util';
 import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
 import Grid from '../lib/display/grid';
+import CustomContainer from '../lib/node/customContainer';
 
 // @ts-ignore
 import xml from './genisis.xml';
 import { dump } from '../lib/log';
+import { Sprite, Texture } from 'pixi.js';
 
 const doc = Parser.fromXmlString(xml);
 const win = window as any;
@@ -66,6 +68,17 @@ for (let i = 0; i < 10; i++) {
 }
 
 doc.deepInit();
+
+const sprite = Sprite.from(Texture.from('img/button.png'));
+sprite.width = 100;
+sprite.height = 100;
+const custom = new CustomContainer();
+custom.object = sprite;
+custom.fixtureLeft = 0.25;
+custom.fixtureRight = 0.75;
+custom.originY = 0.5;
+custom.fixtureTop = 0.3;
+blue.addChild(custom);
 
 console.log(doc);
 win.doc = doc;

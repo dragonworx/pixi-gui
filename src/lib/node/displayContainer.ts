@@ -26,6 +26,10 @@ export default class DisplayContainer extends Box {
   }
 
   protected updateContainerPosition() {
+    if (!this.isReady) {
+      return;
+    }
+
     const { bounds } = this;
 
     this.container.x = bounds.left;
