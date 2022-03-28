@@ -73,7 +73,6 @@ export default class DisplayContainer extends Box {
     }
   }
 
-  /** Getter */
   get clip() {
     return this._clip;
   }
@@ -91,7 +90,14 @@ export default class DisplayContainer extends Box {
     }
   }
 
-  /** Setter */
+  get alpha() {
+    return this.container.alpha;
+  }
+
+  get rotation() {
+    return this.container.angle;
+  }
+
   set clip(shouldClip: boolean) {
     // todo: fix up
     const { container, mask: mask } = this;
@@ -106,5 +112,13 @@ export default class DisplayContainer extends Box {
         container.mask = null;
       }
     }
+  }
+
+  set alpha(value: number) {
+    this.container.alpha = value;
+  }
+
+  set rotation(value: number) {
+    this.container.angle = value;
   }
 }

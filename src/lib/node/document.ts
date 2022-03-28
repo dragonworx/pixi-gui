@@ -67,7 +67,6 @@ export default class Document extends Node {
       loader.onComplete.add(() => {
         urls.forEach(url => {
           const texture = loader.resources[url].texture;
-          console.log('Loaded ' + url);
           if (texture) {
             this._textureCache.set(url, texture);
           } else {

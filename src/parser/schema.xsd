@@ -224,23 +224,20 @@
                 </xs:complexContent>
         </xs:complexType>
 
-        <xs:complexType name="Container">
-                <xs:complexContent>
-                        <xs:extension base="Box">
-                                <xs:attribute
-                                        name="clip"
-                                        type="xs:boolean"
-                                        />
-                        </xs:extension>
-                </xs:complexContent>
-        </xs:complexType>
-
         <xs:complexType name="DisplayContainer">
                 <xs:complexContent>
                         <xs:extension base="Box">
                                 <xs:attribute
                                         name="clip"
                                         type="xs:boolean"
+                                        />
+                                <xs:attribute
+                                        name="alpha"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="rotation"
+                                        type="xs:decimal"
                                         />
                         </xs:extension>
                 </xs:complexContent>
@@ -349,7 +346,7 @@
 
         <xs:element
                 name="Container"
-                type="Container"
+                type="DisplayContainer"
                 />
 
         <xs:element
