@@ -12,10 +12,10 @@
         <Container
                 id="blue"
                 clip="false"
-                marginTop="50"
-                marginLeft="50"
-                size="800"
-                fixture="center"
+                fixtureLeft="0.2"
+                fixtureTop="0.2"
+                fixtureRight="0.8"
+                fixtureBottom="0.8"
                 padding="10"
                 >
                 <Fill fillColor="#333" />
