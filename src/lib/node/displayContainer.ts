@@ -1,6 +1,5 @@
 import { Container, Graphics } from 'pixi.js';
 import Box, { GeometryUpdate } from 'src/lib/node/box';
-import { log } from '../log';
 
 export default class DisplayContainer extends Box {
   container: Container;
@@ -12,12 +11,29 @@ export default class DisplayContainer extends Box {
     super();
 
     this.container = new Container();
+
     this._mask = new Graphics();
     this._clip = false;
   }
 
-  onInit() {
-    super.onInit();
+  protected updateMaskSize() {
+    const { _mask: mask } = this;
+
+    mask.clear();
+    mask.beginFill(0xffffff);
+    mask.drawRect(0, 0, this.width, this.height);
+    mask.endFill();
+  }
+
+  protected updateContainerPosition() {
+    const { bounds } = this;
+
+    this.container.x = bounds.left;
+    this.container.y = bounds.top;
+  }
+
+  init() {
+    super.init();
 
     if (this._clip) {
       this.clip = true;
@@ -51,28 +67,6 @@ export default class DisplayContainer extends Box {
     if (updateType.indexOf(GeometryUpdate.Position) > -1) {
       this.updateContainerPosition();
     }
-  }
-
-  updateMaskSize() {
-    const { _mask: mask } = this;
-
-    mask.clear();
-    mask.beginFill(0xffffff);
-    mask.drawRect(0, 0, this.width, this.height);
-    mask.endFill();
-  }
-
-  updateContainerPosition() {
-    if (!this.hasParent) {
-      return;
-    }
-
-    log(this, 'updateSpriteBounds');
-
-    const { bounds } = this;
-
-    this.container.x = bounds.left;
-    this.container.y = bounds.top;
   }
 
   /** Getter */

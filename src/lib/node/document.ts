@@ -1,8 +1,6 @@
 import { Application, settings } from 'pixi.js';
 import Box from 'src/lib/node/box';
 import Node from 'src/lib/node/node';
-import Renderer from 'src/lib/display/renderer';
-import { log } from '../log';
 
 export interface DocumentOptions {
   app?: Application;
@@ -15,10 +13,9 @@ export enum DocumentEvent {
 }
 
 export default class Document extends Node {
-  readonly renderer: Renderer;
   readonly app: Application;
 
-  protected _container?: HTMLElement;
+  protected _htmlContainer?: HTMLElement;
   protected _themeName?: string;
   protected _observer?: ResizeObserver;
   protected _deferInit: boolean;
@@ -37,8 +34,6 @@ export default class Document extends Node {
         backgroundColor: 0,
       });
 
-    this.renderer = new Renderer();
-
     if (resizeTo) {
       this.observeResizeOn(resizeTo);
     }
@@ -47,14 +42,14 @@ export default class Document extends Node {
     this._sharp = true;
   }
 
-  init() {
+  deepInit() {
     this.sharp = this._sharp;
 
-    super.init();
+    super.deepInit();
   }
 
-  onInit() {
-    if (!this._container) {
+  init() {
+    if (!this._htmlContainer) {
       console.error('Document was initialised without a container');
     }
   }
@@ -89,7 +84,6 @@ export default class Document extends Node {
   }
 
   resize(width: number, height: number) {
-    log(this, 'resize', { width, height });
     this.app.renderer.resize(width, height);
     this.emit(DocumentEvent.resize, { width, height });
     this.performLayout();
@@ -97,8 +91,7 @@ export default class Document extends Node {
   }
 
   performLayout() {
-    log(this, 'performLayout');
-    this.forEach<Box>(node => node.performLayout());
+    this.forEach<Box>(node => node.updateLayout());
   }
 
   get className() {
@@ -127,7 +120,7 @@ export default class Document extends Node {
   }
 
   get container() {
-    return this._container;
+    return this._htmlContainer;
   }
 
   get sharp() {
@@ -149,7 +142,7 @@ export default class Document extends Node {
 
   set container(element: HTMLElement | undefined) {
     if (element) {
-      this._container = element;
+      this._htmlContainer = element;
       element.appendChild(this.canvas);
     } else {
       throw new Error(`Undefined container passed to Document`);

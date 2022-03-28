@@ -9,6 +9,10 @@ export default class Canvas2DPainter {
     this.ctx = this.canvas.getContext('2d')!;
   }
 
+  static isCanvasSupported() {
+    return document.createElement('canvas').getContext('2d') !== null;
+  }
+
   static createCanvas() {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;

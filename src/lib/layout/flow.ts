@@ -1,47 +1,46 @@
 import Box, { GeometryUpdate } from 'src/lib/node/box';
 import Rectangle from 'src/lib/rectangle';
 import { Position } from 'src/lib/display/style';
-import Layout, { Cell, LayoutAlign, Orientation } from 'src/lib/layout/layout';
+import AbstractLayout from 'src/lib/layout/layout';
+import { Cell, LayoutAlign, Direction } from 'src/lib/layout';
 
-export default abstract class FlowLayout extends Layout {
-  reverse: boolean;
-  x: number;
-  y: number;
+export default abstract class FlowLayout extends AbstractLayout {
+  protected _x: number;
+  protected _y: number;
 
   constructor(readonly root: Box, reverse: boolean = false) {
     super(root);
 
-    this.x = 0;
-    this.y = 0;
     this.reverse = reverse;
+    this._x = 0;
+    this._y = 0;
   }
 
-  getOrientation(): Orientation {
+  protected getDirection(): Direction {
     return 'horizontal';
   }
 
-  perform(hAlign: LayoutAlign, vAlign: LayoutAlign) {
-    const { root, contentBounds, cells } = this;
+  protected perform(hAlign: LayoutAlign, vAlign: LayoutAlign) {
+    const { root, contentBounds, cells: cells } = this;
 
     const left = contentBounds.left;
     const top = contentBounds.top;
 
-    this.x = 0;
-    this.y = 0;
+    this._x = 0;
+    this._y = 0;
 
     cells.length = 0;
     let cell: Cell | undefined;
 
     const newCell = () => {
       const row = {
-        rect: new Rectangle(this.x + left, this.y + top, 0, 0),
+        rect: new Rectangle(this._x + left, this._y + top, 0, 0),
         nodes: [],
       };
       cells.push(row);
       return row;
     };
 
-    // layout
     const children = [...root.children] as Box[];
 
     if (this.reverse) {
@@ -63,8 +62,8 @@ export default abstract class FlowLayout extends Layout {
 
       const originalBounds = node.bounds;
 
-      position.x = this.x;
-      position.y = this.y;
+      position.x = this._x;
+      position.y = this._y;
 
       let bounds = node.marginBounds;
 
@@ -86,30 +85,21 @@ export default abstract class FlowLayout extends Layout {
       }
     });
 
-    // align
     cells.forEach(cell =>
-      this.alignCell(cell, hAlign, vAlign, this.getOrientation())
+      this.alignCell(cell, hAlign, vAlign, this.getDirection())
     );
   }
 
-  abstract wrap(cell: Cell, position: Position): void;
-
-  abstract trackCell(cell: Cell, bounds: Rectangle): void;
-
-  abstract isValidBounds(bounds: Rectangle): boolean;
-
-  abstract move(bounds: Rectangle): void;
-
-  alignCell(
+  protected alignCell(
     cell: Cell,
     hAlign: LayoutAlign,
     vAlign: LayoutAlign,
-    orientation: 'horizontal' | 'vertical'
+    direction: 'horizontal' | 'vertical'
   ) {
     const { contentBounds } = this;
     const { rect, nodes } = cell;
 
-    if (orientation === 'horizontal') {
+    if (direction === 'horizontal') {
       let offset = 0;
 
       nodes.forEach(node => {
@@ -155,4 +145,9 @@ export default abstract class FlowLayout extends Layout {
       rect.translate(offset, 0);
     }
   }
+
+  protected abstract wrap(cell: Cell, position: Position): void;
+  protected abstract trackCell(cell: Cell, bounds: Rectangle): void;
+  protected abstract isValidBounds(bounds: Rectangle): boolean;
+  protected abstract move(bounds: Rectangle): void;
 }

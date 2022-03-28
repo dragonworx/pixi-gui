@@ -1,9 +1,8 @@
 import { Graphics } from 'pixi.js';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import Surface from 'src/lib/node/surface';
-import { log } from '../log';
 
-export default class PaintedSurface extends Surface {
+export default abstract class PaintedSurface extends Surface {
   protected _painter: GraphicsPainter;
   protected _graphics: Graphics;
 
@@ -14,8 +13,9 @@ export default class PaintedSurface extends Surface {
     this._painter = new GraphicsPainter(graphics);
   }
 
-  onInit() {
-    super.onInit();
+  init() {
+    super.init();
+
     this.container.addChildAt(this._graphics, 0);
   }
 
@@ -26,8 +26,6 @@ export default class PaintedSurface extends Surface {
       return;
     }
 
-    log(this, 'render');
-
     _painter.clear().uncache();
 
     this.paint();
@@ -35,5 +33,5 @@ export default class PaintedSurface extends Surface {
     _painter.cache();
   }
 
-  paint() {}
+  protected abstract paint(): void;
 }

@@ -1,39 +1,36 @@
 import HorizontalLayout from 'src/lib/layout/horizontal';
-import { Orientation } from 'src/lib/layout/layout';
+import { Direction } from 'src/lib/layout';
 import VerticalLayout from 'src/lib/layout/vertical';
-import DisplayContainer from 'src/lib/node/container';
-import { log } from '../log';
+import DisplayContainer from 'src/lib/node/displayContainer';
 
 export default class Block extends DisplayContainer {
-  _orientation: Orientation;
-  _reverse: boolean;
+  protected _direction: Direction;
+  protected _reverse: boolean;
 
   constructor() {
     super();
 
-    this._orientation = 'horizontal';
+    this._direction = 'horizontal';
     this._reverse = false;
   }
 
-  shouldInitBeforeChildren() {
+  protected shouldInitBeforeChildren() {
     return false;
   }
 
-  onInit() {
+  init() {
     this._layout =
-      this._orientation === 'horizontal'
+      this._direction === 'horizontal'
         ? new HorizontalLayout(this, this._reverse)
         : new VerticalLayout(this, this._reverse);
 
-    super.onInit();
+    super.init();
   }
 
-  performLayout(): void {
+  updateLayout(): void {
     const { _layout, _alignH, _alignV } = this;
 
     if (_layout && this.children.length) {
-      log(this, 'Block.performLayout');
-
       const {
         geometry: { size },
       } = this;
@@ -47,28 +44,27 @@ export default class Block extends DisplayContainer {
 
       this.forEach(node => {
         if (node instanceof DisplayContainer) {
-          node.performLayout();
+          node.updateLayout();
         }
       });
     }
   }
 
-  /** Getters */
   get layout() {
-    return this._orientation;
+    return this._direction;
   }
 
   get reverse() {
     return this._reverse;
   }
 
-  /** Setters */
-  set layout(orientation: Orientation) {
-    this._orientation = orientation;
+  set layout(direction: Direction) {
+    this._direction = direction;
   }
 
   set reverse(reverse: boolean) {
     this._reverse = reverse;
+
     if (this._layout) {
       this._layout.reverse = reverse;
     }

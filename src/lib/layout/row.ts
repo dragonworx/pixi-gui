@@ -1,14 +1,14 @@
 import Block from 'src/lib/layout/block';
-import { Orientation } from 'src/lib/layout/layout';
+import { Direction } from 'src/lib/layout';
 
 export default class Row extends Block {
   constructor() {
     super();
 
-    this._orientation = 'horizontal';
+    this._direction = 'horizontal';
   }
 
-  set orientation(value: Orientation) {
+  set direction(value: Direction) {
     if (value !== 'horizontal') {
       throw new Error('Row only uses horizontal layout');
     }

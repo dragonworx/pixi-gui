@@ -8,10 +8,10 @@ export default class ThemableSurface extends PaintedSurface {
   constructor() {
     super();
 
-    this.apperance = this.defaultAppearance();
+    this.apperance = ThemableSurface.defaultAppearance();
   }
 
-  defaultAppearance(): Appearance {
+  static defaultAppearance(): Appearance {
     return {
       fill: {
         type: 'solid',
@@ -20,7 +20,7 @@ export default class ThemableSurface extends PaintedSurface {
     };
   }
 
-  paint() {
+  protected paint() {
     const { _painter } = this;
 
     if (this.apperance.fill?.type === 'solid') {
@@ -34,12 +34,12 @@ export default class ThemableSurface extends PaintedSurface {
     }
   }
 
-  /** Setters */
   set fillType(value: FillType) {
     const {
       apperance,
       apperance: { fill },
     } = this;
+
     if (fill) {
       fill.type = value;
     } else {
@@ -56,6 +56,7 @@ export default class ThemableSurface extends PaintedSurface {
       apperance,
       apperance: { fill },
     } = this;
+
     if (fill) {
       fill.color = value;
     } else {

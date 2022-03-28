@@ -1,9 +1,9 @@
 import { GeometryUpdate } from 'src/lib/node/box';
-import DisplayContainer from 'src/lib/node/container';
+import DisplayContainer from 'src/lib/node/displayContainer';
 
 export default class Surface extends DisplayContainer {
-  onInit() {
-    super.onInit();
+  init() {
+    super.init();
 
     this.render();
   }

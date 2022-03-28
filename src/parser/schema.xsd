@@ -27,7 +27,7 @@
                 </xs:restriction>
         </xs:simpleType>
 
-        <xs:simpleType name="orientation">
+        <xs:simpleType name="direction">
                 <xs:restriction base="xs:string">
                         <xs:enumeration value="vertical" />
                         <xs:enumeration value="horizontal" />
@@ -64,25 +64,62 @@
         <!-- Attributes -->
         <xs:complexType name="Node">
                 <xs:sequence>
-                        <xs:any processContents="lax" namespace="##any" minOccurs="0" maxOccurs="unbounded" />
+                        <xs:any
+                                processContents="lax"
+                                namespace="##any"
+                                minOccurs="0"
+                                maxOccurs="unbounded"
+                                />
                 </xs:sequence>
-                <xs:attribute name="id" type="xs:string" />
-                <xs:attribute name="size" type="xs:decimal" />
-                <xs:attribute name="width" type="xs:decimal" />
-                <xs:attribute name="height" type="xs:decimal" />
+                <xs:attribute
+                        name="id"
+                        type="xs:string"
+                        />
+                <xs:attribute
+                        name="size"
+                        type="xs:decimal"
+                        />
+                <xs:attribute
+                        name="width"
+                        type="xs:decimal"
+                        />
+                <xs:attribute
+                        name="height"
+                        type="xs:decimal"
+                        />
         </xs:complexType>
 
         <xs:complexType name="Document">
                 <xs:complexContent>
                         <xs:extension base="Node">
                                 <xs:sequence>
-                                        <xs:any processContents="lax" namespace="##any" minOccurs="0" maxOccurs="unbounded" />
+                                        <xs:any
+                                                processContents="lax"
+                                                namespace="##any"
+                                                minOccurs="0"
+                                                maxOccurs="unbounded"
+                                                />
                                 </xs:sequence>
-                                <xs:attribute name="container" type="selector" />
-                                <xs:attribute name="resizeTo" type="selector" />
-                                <xs:attribute name="theme" type="xs:string" />
-                                <xs:attribute name="deferInit" type="xs:boolean" />
-                                <xs:attribute name="sharp" type="xs:boolean" />
+                                <xs:attribute
+                                        name="container"
+                                        type="selector"
+                                        />
+                                <xs:attribute
+                                        name="resizeTo"
+                                        type="selector"
+                                        />
+                                <xs:attribute
+                                        name="theme"
+                                        type="xs:string"
+                                        />
+                                <xs:attribute
+                                        name="deferInit"
+                                        type="xs:boolean"
+                                        />
+                                <xs:attribute
+                                        name="sharp"
+                                        type="xs:boolean"
+                                        />
                         </xs:extension>
 
                 </xs:complexContent>
@@ -91,29 +128,98 @@
         <xs:complexType name="Box">
                 <xs:complexContent>
                         <xs:extension base="Node">
-                                <xs:attribute name="origin" type="xs:decimal" />
-                                <xs:attribute name="originX" type="xs:decimal" />
-                                <xs:attribute name="originY" type="xs:decimal" />
-                                <xs:attribute name="x" type="xs:decimal" />
-                                <xs:attribute name="y" type="xs:decimal" />
-                                <xs:attribute name="margin" type="xs:decimal" />
-                                <xs:attribute name="marginLeft" type="xs:decimal" />
-                                <xs:attribute name="marginTop" type="xs:decimal" />
-                                <xs:attribute name="marginRight" type="xs:decimal" />
-                                <xs:attribute name="marginBottom" type="xs:decimal" />
-                                <xs:attribute name="padding" type="xs:decimal" />
-                                <xs:attribute name="paddingLeft" type="xs:decimal" />
-                                <xs:attribute name="paddingTop" type="xs:decimal" />
-                                <xs:attribute name="paddingRight" type="xs:decimal" />
-                                <xs:attribute name="paddingBottom" type="xs:decimal" />
-                                <xs:attribute name="fixture" type="fixture" />
-                                <xs:attribute name="fixtureLeft" type="xs:decimal" />
-                                <xs:attribute name="fixtureTop" type="xs:decimal" />
-                                <xs:attribute name="fixtureRight" type="xs:decimal" />
-                                <xs:attribute name="fixtureBottom" type="xs:decimal" />
-                                <xs:attribute name="layout" type="layout" />
-                                <xs:attribute name="alignH" type="align" />
-                                <xs:attribute name="alignV" type="align" />
+                                <xs:attribute
+                                        name="origin"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="originX"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="originY"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="x"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="y"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="margin"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="padding"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixture"
+                                        type="fixture"
+                                        />
+                                <xs:attribute
+                                        name="fixtureLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="layout"
+                                        type="layout"
+                                        />
+                                <xs:attribute
+                                        name="alignH"
+                                        type="align"
+                                        />
+                                <xs:attribute
+                                        name="alignV"
+                                        type="align"
+                                        />
                         </xs:extension>
                 </xs:complexContent>
         </xs:complexType>
@@ -121,7 +227,10 @@
         <xs:complexType name="Container">
                 <xs:complexContent>
                         <xs:extension base="Box">
-                                <xs:attribute name="clip" type="xs:boolean" />
+                                <xs:attribute
+                                        name="clip"
+                                        type="xs:boolean"
+                                        />
                         </xs:extension>
                 </xs:complexContent>
         </xs:complexType>
@@ -129,9 +238,18 @@
         <xs:complexType name="Surface">
                 <xs:complexContent>
                         <xs:extension base="Box">
-                                <xs:attribute name="clip" type="xs:boolean" />
-                                <xs:attribute name="fillColor" type="color" />
-                                <xs:attribute name="fillType" type="fillType" />
+                                <xs:attribute
+                                        name="clip"
+                                        type="xs:boolean"
+                                        />
+                                <xs:attribute
+                                        name="fillColor"
+                                        type="color"
+                                        />
+                                <xs:attribute
+                                        name="fillType"
+                                        type="fillType"
+                                        />
                         </xs:extension>
                 </xs:complexContent>
         </xs:complexType>
@@ -145,7 +263,10 @@
         <xs:complexType name="Block">
                 <xs:complexContent>
                         <xs:extension base="Surface">
-                                <xs:attribute name="reverse" type="xs:boolean" />
+                                <xs:attribute
+                                        name="reverse"
+                                        type="xs:boolean"
+                                        />
                         </xs:extension>
                 </xs:complexContent>
         </xs:complexType>
@@ -158,14 +279,29 @@
 
         <!-- Elements -->
 
-        <xs:element name="Element" type="Element" />
+        <xs:element
+                name="Element"
+                type="Element"
+                />
 
-        <xs:element name="Container" type="Container" />
+        <xs:element
+                name="Container"
+                type="Container"
+                />
 
-        <xs:element name="Row" type="RowCol" />
+        <xs:element
+                name="Row"
+                type="RowCol"
+                />
 
-        <xs:element name="Column" type="RowCol" />
+        <xs:element
+                name="Column"
+                type="RowCol"
+                />
 
         <!-- Document -->
-        <xs:element name="Document" type="Document" />
+        <xs:element
+                name="Document"
+                type="Document"
+                />
 </xs:schema>

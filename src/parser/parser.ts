@@ -5,7 +5,7 @@ import Element from 'src/lib/node/element';
 import Block from 'src/lib/layout/block';
 import Row from 'src/lib/layout/row';
 import Column from 'src/lib/layout/column';
-import DisplayContainer from 'src/lib/node/container';
+import DisplayContainer from 'src/lib/node/displayContainer';
 import XmlSchema, { XsdAttribute, XsdElement, XsdSimpleType } from './schema';
 
 export interface Setter {
@@ -45,7 +45,7 @@ export default class Parser {
     const xmlDoc = parser.parseFromString(xmlStr, 'application/xml');
     const doc = this.parseNode(xmlDoc.documentElement) as Document;
     if (!doc.deferInit) {
-      doc.init();
+      doc.deepInit();
     }
     return doc;
   }

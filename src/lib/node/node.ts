@@ -1,8 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import Document from 'src/lib/node/document';
-import { log } from 'src/lib/log';
 
-let nextId = 0;
+let _nextId = 0;
 
 export type NodeParent = Node | Document | undefined;
 
@@ -23,33 +22,30 @@ export default class Node extends EventEmitter {
   constructor() {
     super();
 
-    this._id = String(nextId++);
+    this._id = String(_nextId++);
     this._hasInit = false;
     this.children = [];
   }
 
-  shouldInitBeforeChildren() {
+  protected shouldInitBeforeChildren() {
     return true;
   }
 
-  init() {
+  deepInit() {
     this._hasInit = true;
+
     if (this.shouldInitBeforeChildren()) {
-      log(this, 'init');
-      this.onInit();
-      this.children.forEach(node => node.init());
+      this.init();
+      this.children.forEach(node => node.deepInit());
     } else {
-      this.children.forEach(node => node.init());
-      log(this, 'init');
-      this.onInit();
+      this.children.forEach(node => node.deepInit());
+      this.init();
     }
-    log(this, 'init-end');
+
     this.emit(NodeEvent.init);
   }
 
-  onInit() {
-    // subclasses to override if needed
-  }
+  init() {}
 
   setParent(node: Node) {
     this.parent = node;
@@ -73,7 +69,7 @@ export default class Node extends EventEmitter {
   addChild(node: Node, autoInitialise: boolean = true) {
     node.setParent(this);
     if (autoInitialise) {
-      node.init();
+      node.deepInit();
     }
   }
 

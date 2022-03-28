@@ -4,9 +4,6 @@ import { queryParam } from '../lib/util';
 import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
 import Grid from '../lib/display/grid';
-import { enableLog } from '../lib/log';
-
-// enableLog();
 
 // @ts-ignore
 import xml from './genisis.xml';
@@ -68,7 +65,7 @@ for (let i = 0; i < 10; i++) {
   foo.addChild(element, false);
 }
 
-doc.init();
+doc.deepInit();
 
 console.log(doc);
 win.doc = doc;

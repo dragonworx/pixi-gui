@@ -2,15 +2,11 @@ import { Geometry } from 'src/lib/display/style';
 import Node from 'src/lib/node/node';
 import Rectangle from 'src/lib/rectangle';
 import Document from 'src/lib/node/document';
-import Layout, {
-  LayoutAlign,
-  LayoutType,
-  Fixture,
-} from 'src/lib/layout/layout';
+import AbstractLayout from 'src/lib/layout/layout';
+import { LayoutAlign, LayoutType, Fixture } from 'src/lib/layout/';
 import WrapLayout from 'src/lib/layout/wrap';
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
-import { log } from '../log';
 
 export enum GeometryUpdate {
   Origin = 'Origin',
@@ -40,22 +36,22 @@ export enum GeometryUpdate {
 }
 
 export default class Box extends Node {
-  geometry: Geometry;
+  readonly geometry: Geometry;
 
-  protected _layout?: Layout;
+  protected _layout?: AbstractLayout;
   protected _alignH: LayoutAlign;
   protected _alignV: LayoutAlign;
 
   constructor() {
     super();
 
-    this.geometry = this.defaultGeometry();
+    this.geometry = Box.defaultGeometry();
 
     this._alignH = 'start';
     this._alignV = 'start';
   }
 
-  defaultGeometry(): Geometry {
+  static defaultGeometry(): Geometry {
     return {
       origin: { x: 0, y: 0 },
       position: { x: 0, y: 0 },
@@ -66,18 +62,18 @@ export default class Box extends Node {
     };
   }
 
-  onInit() {
-    this.performLayout();
+  init() {
+    super.init();
+
+    this.updateLayout();
   }
 
-  performLayout() {
-    log(this, 'performLayout');
+  updateLayout() {
     this.applyFixtures();
     this.applyLayout();
   }
 
-  applyFixtures() {
-    log(this, 'applyFixtures');
+  protected applyFixtures() {
     const {
       geometry: { fixture },
       parentLocalContentBounds: parentLocalBounds,
@@ -122,8 +118,7 @@ export default class Box extends Node {
     }
   }
 
-  applyLayout() {
-    log(this, 'applyLayout');
+  protected applyLayout() {
     const { _layout, _alignH, _alignV } = this;
 
     if (_layout && this.children.length) {
@@ -132,18 +127,8 @@ export default class Box extends Node {
   }
 
   onGeometryChanged(updateType: GeometryUpdate[]) {
-    log(
-      this,
-      'onGeometryChanged',
-      updateType.join(',') +
-        ' ' +
-        JSON.stringify(this.geometry.position) +
-        ' ' +
-        JSON.stringify(this.geometry.size)
-    );
-
     if (updateType.indexOf(GeometryUpdate.Size) > -1) {
-      this.forEach<Box>(node => node.performLayout());
+      this.forEach<Box>(node => node.updateLayout());
     }
 
     if (updateType.indexOf(GeometryUpdate.Padding) > -1) {
@@ -151,7 +136,7 @@ export default class Box extends Node {
     }
 
     if (updateType.indexOf(GeometryUpdate.Fixture) > -1) {
-      this.performLayout();
+      this.updateLayout();
     }
   }
 
@@ -608,7 +593,7 @@ export default class Box extends Node {
       throw new Error(`Layout type "${type} is undefined`);
     }
 
-    this.performLayout();
+    this.updateLayout();
   }
 
   set alignH(align: LayoutAlign) {
