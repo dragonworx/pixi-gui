@@ -16,7 +16,7 @@ export interface Position {
 }
 
 export interface Geometry {
-  origin: Position;
+  anchor: Position;
   position: Position;
   size: Size;
   margin: Sides;

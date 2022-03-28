@@ -129,15 +129,15 @@
                 <xs:complexContent>
                         <xs:extension base="Node">
                                 <xs:attribute
-                                        name="origin"
+                                        name="anchor"
                                         type="xs:decimal"
                                         />
                                 <xs:attribute
-                                        name="originX"
+                                        name="anchorX"
                                         type="xs:decimal"
                                         />
                                 <xs:attribute
-                                        name="originY"
+                                        name="anchorY"
                                         type="xs:decimal"
                                         />
                                 <xs:attribute

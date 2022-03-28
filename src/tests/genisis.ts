@@ -78,7 +78,7 @@ doc.preload(['img/button.png', 'img/test.png']).then(() => {
   custom.object = sprite;
   custom.fixtureLeft = 0.25;
   custom.fixtureRight = 0.75;
-  custom.originY = 0.5;
+  custom.anchorY = 0.5;
   custom.fixtureTop = 0.3;
   blue.addChild(custom);
 });

@@ -9,9 +9,9 @@ import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
 
 export enum GeometryUpdate {
-  Origin = 'Origin',
-  OriginX = 'OriginX',
-  OriginY = 'OriginY',
+  Anchor = 'Anchor',
+  AnchorX = 'AnchorX',
+  AnchorY = 'AnchorY',
   Position = 'Position',
   X = 'X',
   Y = 'Y',
@@ -53,7 +53,7 @@ export default class Box extends Node {
 
   defaultGeometry(): Geometry {
     return {
-      origin: { x: 0, y: 0 },
+      anchor: { x: 0, y: 0 },
       position: { x: 0, y: 0 },
       size: { width: 0, height: 0 },
       margin: { left: 0, top: 0, right: 0, bottom: 0 },
@@ -157,19 +157,19 @@ export default class Box extends Node {
         margin,
         fixture,
       },
-      offsetX,
-      offsetY,
+      originX,
+      originY,
       parentLocalContentBounds,
     } = this;
 
     const leftOffset =
       (typeof fixture.left === 'number' ? 0 : parentLocalContentBounds.left) -
-      offsetX +
+      originX +
       margin.left;
 
     const topOffset =
       (typeof fixture.top === 'number' ? 0 : parentLocalContentBounds.top) -
-      offsetY +
+      originY +
       margin.top;
 
     return new Rectangle(leftOffset + x, topOffset + y, width, height);
@@ -236,20 +236,20 @@ export default class Box extends Node {
     }
   }
 
+  get anchorX() {
+    return this.geometry.anchor.x;
+  }
+
+  get anchorY() {
+    return this.geometry.anchor.y;
+  }
+
   get originX() {
-    return this.geometry.origin.x;
+    return this.width * this.anchorX;
   }
 
   get originY() {
-    return this.geometry.origin.y;
-  }
-
-  get offsetX() {
-    return this.width * this.originX;
-  }
-
-  get offsetY() {
-    return this.height * this.originY;
+    return this.height * this.anchorY;
   }
 
   get x() {
@@ -283,28 +283,28 @@ export default class Box extends Node {
   }
 
   /** Setters */
-  set origin(value: number) {
-    this.originX = value;
-    this.originY = value;
+  set anchor(value: number) {
+    this.anchorX = value;
+    this.anchorY = value;
   }
 
-  set originX(value: number) {
+  set anchorX(value: number) {
     const {
-      geometry: { origin },
+      geometry: { anchor },
     } = this;
-    if (origin.x !== value) {
-      origin.x = value;
-      this.onGeometryChanged([GeometryUpdate.Origin, GeometryUpdate.OriginX]);
+    if (anchor.x !== value) {
+      anchor.x = value;
+      this.onGeometryChanged([GeometryUpdate.Anchor, GeometryUpdate.AnchorX]);
     }
   }
 
-  set originY(value: number) {
+  set anchorY(value: number) {
     const {
-      geometry: { origin },
+      geometry: { anchor },
     } = this;
-    if (origin.y !== value) {
-      origin.y = value;
-      this.onGeometryChanged([GeometryUpdate.Origin, GeometryUpdate.OriginY]);
+    if (anchor.y !== value) {
+      anchor.y = value;
+      this.onGeometryChanged([GeometryUpdate.Anchor, GeometryUpdate.AnchorY]);
     }
   }
 
@@ -465,8 +465,8 @@ export default class Box extends Node {
 
   set fixture(fixture: Fixture) {
     const { geometry } = this;
-    geometry.origin.x = 0;
-    geometry.origin.y = 0;
+    geometry.anchor.x = 0;
+    geometry.anchor.y = 0;
     geometry.fixture = {};
     if (fixture === 'top') {
       this.fixtureTop = 0;
@@ -477,12 +477,12 @@ export default class Box extends Node {
       this.fixtureLeft = 0;
       this.fixtureBottom = 1;
     } else if (fixture === 'right') {
-      this.originX = 1;
+      this.anchorX = 1;
       this.fixtureTop = 0;
       this.fixtureLeft = 1;
       this.fixtureBottom = 1;
     } else if (fixture === 'bottom') {
-      this.originY = 1;
+      this.anchorY = 1;
       this.fixtureTop = 1;
       this.fixtureLeft = 0;
       this.fixtureRight = 1;
@@ -490,34 +490,34 @@ export default class Box extends Node {
       this.fixtureLeft = 0;
       this.fixtureTop = 0;
     } else if (fixture === 'topRight') {
-      this.originX = 1;
+      this.anchorX = 1;
       this.fixtureLeft = 1;
       this.fixtureTop = 0;
     } else if (fixture === 'bottomLeft') {
-      this.originY = 1;
+      this.anchorY = 1;
       this.fixtureLeft = 0;
       this.fixtureTop = 1;
     } else if (fixture === 'bottomRight') {
-      this.originX = 1;
-      this.originY = 1;
+      this.anchorX = 1;
+      this.anchorY = 1;
       this.fixtureLeft = 1;
       this.fixtureTop = 1;
     } else if (fixture === 'topCenter') {
-      this.originX = 0.5;
+      this.anchorX = 0.5;
       this.fixtureLeft = 0.5;
       this.fixtureTop = 0;
     } else if (fixture === 'bottomCenter') {
-      this.originX = 0.5;
-      this.originY = 1;
+      this.anchorX = 0.5;
+      this.anchorY = 1;
       this.fixtureLeft = 0.5;
       this.fixtureTop = 1;
     } else if (fixture === 'leftCenter') {
-      this.originY = 0.5;
+      this.anchorY = 0.5;
       this.fixtureLeft = 0;
       this.fixtureTop = 0.5;
     } else if (fixture === 'rightCenter') {
-      this.originX = 1;
-      this.originY = 0.5;
+      this.anchorX = 1;
+      this.anchorY = 0.5;
       this.fixtureLeft = 1;
       this.fixtureTop = 0.5;
     } else if (fixture === 'fill') {
@@ -526,7 +526,7 @@ export default class Box extends Node {
       this.fixtureRight = 1;
       this.fixtureBottom = 1;
     } else if (fixture === 'center') {
-      this.origin = 0.5;
+      this.anchor = 0.5;
       this.fixtureTop = 0.5;
       this.fixtureLeft = 0.5;
     }

@@ -119,6 +119,7 @@ export default class DisplayContainer extends Box {
   }
 
   set rotation(value: number) {
+    // todo: this needs a rethink, container and elements inside don't share rotation at the monent
     this.container.angle = value;
   }
 }

@@ -60,7 +60,7 @@ export default abstract class FlowLayout extends AbstractLayout {
         cell = newCell();
       }
 
-      const originalBounds = node.bounds;
+      const anchoralBounds = node.bounds;
 
       position.x = this._x;
       position.y = this._y;
@@ -79,7 +79,7 @@ export default abstract class FlowLayout extends AbstractLayout {
       if (cell) {
         this.trackCell(cell, bounds);
         cell.nodes.push(node);
-        if (!node.bounds.equals(originalBounds)) {
+        if (!node.bounds.equals(anchoralBounds)) {
           node.onGeometryChanged([GeometryUpdate.Position]);
         }
       }

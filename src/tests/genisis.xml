@@ -14,8 +14,8 @@
                 clip="false"
                 marginTop="50"
                 marginLeft="50"
-                fixtureRight="0.9"
-                fixtureBottom="0.9"
+                size="800"
+                fixture="center"
                 padding="10"
                 >
                 <Fill fillColor="#333" />

@@ -4,7 +4,7 @@ import Surface from 'src/lib/node/surface';
 
 export default class Image extends Surface {
   protected _src?: string;
-  protected sprite?: Sprite;
+  protected _sprite?: Sprite;
 
   private setSrc(src: string) {
     if (this._src) {
@@ -17,7 +17,7 @@ export default class Image extends Surface {
     }
 
     const texture = this.document.getTexture(src);
-    const sprite = (this.sprite = this.createSpriteFromTexture(
+    const sprite = (this._sprite = this.createSpriteFromTexture(
       texture
     ) as Sprite);
     this.container.addChildAt(sprite, 0);
@@ -54,7 +54,7 @@ export default class Image extends Surface {
   }
 
   updateSpriteSize() {
-    const { sprite, width, height } = this;
+    const { _sprite: sprite, width, height } = this;
     if (sprite) {
       sprite.width = width;
       sprite.height = height;
@@ -62,7 +62,7 @@ export default class Image extends Surface {
   }
 
   getSprite<T = Sprite>(): T {
-    return this.sprite as unknown as T;
+    return this._sprite as unknown as T;
   }
 
   get src() {
@@ -73,12 +73,16 @@ export default class Image extends Surface {
     if (src) {
       this.setSrc(src);
     } else {
-      const { sprite } = this;
+      const { _sprite: sprite } = this;
       if (sprite && sprite.parent) {
         sprite.parent.removeChild(sprite);
-        delete this.sprite;
+        delete this._sprite;
       }
       this._src = undefined;
     }
+  }
+
+  get sprite() {
+    return this._sprite;
   }
 }
