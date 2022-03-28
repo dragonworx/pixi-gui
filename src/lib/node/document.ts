@@ -59,7 +59,8 @@ export default class Document extends Node {
     this.emit(NodeEvent.init);
   }
 
-  preload(urls: string[]): Promise<void> {
+  preload(url: string | string[]): Promise<void> {
+    const urls = Array.isArray(url) ? url : [url];
     const loader = new Loader();
     urls.forEach(url => loader.add(url));
     const promise = new Promise<void>((resolve, reject) => {
@@ -78,6 +79,14 @@ export default class Document extends Node {
     });
     loader.load();
     return promise;
+  }
+
+  hasTexture(url: string) {
+    return this._textureCache.has(url);
+  }
+
+  clearTextureCache() {
+    this._textureCache.clear();
   }
 
   getTexture(url: string) {
