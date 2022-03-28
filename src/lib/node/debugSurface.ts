@@ -1,9 +1,9 @@
-import ThemableSurface from 'src/lib/node/themableSurface';
+import Themable from 'src/lib/node/themable';
 import Canvas2DPainter from 'src/lib/display/canvas2DPainter';
 import { GeometryUpdate } from 'src/lib/node/box';
 import { Sprite } from 'pixi.js';
 
-export default class DebugSurface extends ThemableSurface {
+export default class DebugSurface extends Themable {
   protected idSprite?: Sprite;
 
   init() {

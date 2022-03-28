@@ -1,10 +1,10 @@
 import { Texture, Resource, NineSlicePlane } from 'pixi.js';
-import ImageSurface from 'src/lib/node/imageSurface';
+import Image from 'src/lib/node/image';
 import { Sides } from 'src/lib/display/style';
 
 const defaultEdge = 5;
 
-export default class NineSliceImageSurface extends ImageSurface {
+export default class NineSliceImage extends Image {
   protected edge: Sides;
 
   constructor() {

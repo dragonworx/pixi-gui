@@ -2,8 +2,8 @@ import Color from 'color';
 import Document, { DocumentOptions } from 'src/lib/node/document';
 import Node from 'src/lib/node/node';
 import Element from 'src/lib/node/element';
-import ImageSurface from 'src/lib/node/imageSurface';
-import NineSliceImageSurface from 'src/lib/node/nineSliceImageSurface';
+import Image from 'src/lib/node/image';
+import NineSliceImage from 'src/lib/node/ninesliceImage';
 import Fill from 'src/lib/node/fill';
 import Block from 'src/lib/layout/block';
 import Row from 'src/lib/layout/row';
@@ -33,8 +33,8 @@ export default class Parser {
   factory: Record<string, FactoryClass> = {
     Document: Document,
     Element: Element,
-    Image: ImageSurface,
-    NineSliceImage: NineSliceImageSurface,
+    Image: Image,
+    NineSliceImage: NineSliceImage,
     Fill: Fill,
     // Container: DisplayContainer,
     Container: Element,

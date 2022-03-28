@@ -2,7 +2,7 @@ import { Graphics } from 'pixi.js';
 import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import Surface from 'src/lib/node/surface';
 
-export default abstract class PaintedSurface extends Surface {
+export default abstract class Painted extends Surface {
   protected painter: GraphicsPainter;
   protected graphics: Graphics;
 

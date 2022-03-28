@@ -1,7 +1,7 @@
-import ThemableSurface from 'src/lib/node/themableSurface';
+import Themable from 'src/lib/node/themable';
 import { Geometry } from '../display/style';
 
-export default class Fill extends ThemableSurface {
+export default class Fill extends Themable {
   defaultGeometry(): Geometry {
     return {
       ...super.defaultGeometry(),

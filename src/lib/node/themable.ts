@@ -1,8 +1,8 @@
 import { Appearance, FillType } from 'src/lib/display/style';
-import PaintedSurface from 'src/lib/node/paintedSurface';
+import Painted from 'src/lib/node/painted';
 import { randomColor } from 'src/lib/util';
 
-export default class ThemableSurface extends PaintedSurface {
+export default class Themable extends Painted {
   appearance: Appearance;
 
   constructor() {
