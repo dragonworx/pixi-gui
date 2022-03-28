@@ -1,6 +1,5 @@
-import { Application, Texture, TilingSprite, settings } from 'pixi.js';
+import { Application, settings } from 'pixi.js';
 import Box from 'src/lib/node/box';
-import DebugGrid from 'src/lib/display/debugGrid';
 import Node from 'src/lib/node/node';
 import Container from 'src/lib/node/container';
 import Renderer from 'src/lib/display/renderer';
@@ -11,7 +10,6 @@ export interface DocumentOptions {
   app?: Application;
   resizeTo?: HTMLElement;
   deferInit?: boolean;
-  debug?: boolean;
 }
 
 export default class Document extends Node {
@@ -21,9 +19,7 @@ export default class Document extends Node {
   protected _container?: HTMLElement;
   protected _theme?: Partial<Theme>; // todo: partial or required?
   protected _observer?: ResizeObserver;
-  protected _debugGrid?: TilingSprite;
   protected _deferInit: boolean;
-  protected _debug: boolean;
   protected _sharp: boolean;
   protected _resizeToElement?: HTMLElement;
 
@@ -48,13 +44,11 @@ export default class Document extends Node {
     }
 
     this._deferInit = false;
-    this._debug = false;
     this._sharp = true;
   }
 
   init() {
     this.sharp = this._sharp;
-    // this.debug = this._debug;
 
     super.init();
   }
@@ -68,14 +62,6 @@ export default class Document extends Node {
   performLayout() {
     log(this, 'performLayout');
     this.forEach<Box>(node => node.performLayout());
-  }
-
-  render() {
-    this.walk(node => {
-      if (node instanceof Container) {
-        node.render();
-      }
-    });
   }
 
   observeResizeOn(element: HTMLElement) {
@@ -102,10 +88,6 @@ export default class Document extends Node {
   resize(width: number, height: number) {
     log(this, 'resize', { width, height });
     this.app.renderer.resize(width, height);
-    if (this._debugGrid) {
-      this._debugGrid.width = width;
-      this._debugGrid.height = height;
-    }
     this.performLayout();
     this.app.render();
   }
@@ -120,16 +102,6 @@ export default class Document extends Node {
 
   getTheme() {
     return this._theme;
-  }
-
-  createDebugGrid() {
-    const grid = new DebugGrid();
-    this._debugGrid = new TilingSprite(
-      Texture.from(grid.canvas),
-      this.width,
-      this.height
-    );
-    return this._debugGrid;
   }
 
   get className() {
@@ -155,10 +127,6 @@ export default class Document extends Node {
 
   get deferInit() {
     return this._deferInit;
-  }
-
-  get debug() {
-    return this._debug;
   }
 
   get container() {
@@ -195,21 +163,6 @@ export default class Document extends Node {
 
   set resizeTo(element: HTMLElement) {
     this.observeResizeOn(element);
-  }
-
-  set debug(enabled: boolean) {
-    if (!this._debugGrid && enabled) {
-      const sprite = this.createDebugGrid();
-      this.app.stage.addChildAt(sprite, 0);
-      this.app.stage.alpha = 0.5;
-    } else if (this._debugGrid && !enabled) {
-      this.app.stage.alpha = 1;
-      this.app.stage.removeChild(this._debugGrid);
-      this._debugGrid = undefined;
-    }
-    this._debug = enabled;
-    this.walk(node => node.onDebugChange(enabled));
-    this.render();
   }
 
   set deferInit(defer: boolean) {

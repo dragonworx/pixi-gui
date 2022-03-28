@@ -3,6 +3,7 @@ import Element from '../lib/node/element';
 import { queryParam } from '../lib/util';
 import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
+import Grid from '../lib/display/grid';
 import { enableLog } from '../lib/log';
 
 // enableLog();
@@ -19,6 +20,9 @@ win.blue = blue;
 
 const colors = ['red', 'green', 'pink', 'yellow', 'grey', 'lime', 'salmon'];
 const randSize = () => Math.ceil(Math.random() * 4) * 10;
+
+const grid = Grid.createTilingSprite(1000, 1000);
+doc.app.stage.addChildAt(grid, 0);
 
 const row = new Row();
 row.id = 'row';

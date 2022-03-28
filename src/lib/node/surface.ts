@@ -1,16 +1,29 @@
+import { Container, Graphics, Sprite } from 'pixi.js';
 import { Appearance, FillType } from 'src/lib/display/style';
 import { GeometryUpdate } from 'src/lib/node/box';
-import BoxContainer from 'src/lib/node/container';
+import GraphicsPainter from 'src/lib/display/graphicsPainter';
+import DisplayContainer from 'src/lib/node/container';
 import { randomColor } from 'src/lib/util';
 import { log } from '../log';
 
-export default class Surface extends BoxContainer {
+export default class Surface extends DisplayContainer {
   apperance: Appearance;
+
+  protected _painter: GraphicsPainter;
+  protected _graphics: Graphics;
 
   constructor() {
     super();
 
     this.apperance = this.defaultAppearance();
+    const graphics = (this._graphics = new Graphics());
+    this._painter = new GraphicsPainter(graphics);
+  }
+
+  onInit(): void {
+    super.onInit();
+    this.container.addChildAt(this._graphics, 0);
+    this.render();
   }
 
   defaultAppearance(): Appearance {
@@ -34,20 +47,22 @@ export default class Surface extends BoxContainer {
     }
   }
 
-  paintBackground() {
+  render() {
     const { _painter: painter } = this;
 
     log(this, 'render');
 
     if (this.apperance.fill?.type === 'solid') {
-      this.apperance.fill.color = randomColor().hex();
+      this.apperance.fill.color =
+        this.apperance.fill.color || randomColor().hex();
       painter
+        .clear()
+        .uncache()
         .beginFill(this.apperance.fill?.color!)
         .drawRect(0, 0, this.width, this.height)
-        .endFill();
+        .endFill()
+        .cache();
     }
-
-    super.paintBackground();
   }
 
   /** Setters */

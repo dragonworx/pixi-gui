@@ -82,7 +82,6 @@
                                 <xs:attribute name="resizeTo" type="selector" />
                                 <xs:attribute name="theme" type="xs:string" />
                                 <xs:attribute name="deferInit" type="xs:boolean" />
-                                <xs:attribute name="debug" type="xs:boolean" />
                                 <xs:attribute name="sharp" type="xs:boolean" />
                         </xs:extension>
 

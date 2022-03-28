@@ -1,10 +1,10 @@
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import { Orientation } from 'src/lib/layout/layout';
 import VerticalLayout from 'src/lib/layout/vertical';
-import BoxContainer from 'src/lib/node/container';
+import DisplayContainer from 'src/lib/node/container';
 import { log } from '../log';
 
-export default class Block extends BoxContainer {
+export default class Block extends DisplayContainer {
   _orientation: Orientation;
   _reverse: boolean;
 

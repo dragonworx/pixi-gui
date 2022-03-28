@@ -5,7 +5,7 @@ import Element from 'src/lib/node/element';
 import Block from 'src/lib/layout/block';
 import Row from 'src/lib/layout/row';
 import Column from 'src/lib/layout/column';
-import BoxContainer from 'src/lib/node/container';
+import DisplayContainer from 'src/lib/node/container';
 import XmlSchema, { XsdAttribute, XsdElement, XsdSimpleType } from './schema';
 
 export interface Setter {
@@ -30,7 +30,7 @@ export default class Parser {
   factory: Record<string, FactoryClass> = {
     Document: Document,
     Element: Element,
-    Container: BoxContainer,
+    Container: DisplayContainer,
     Block: Block,
     Row: Row,
     Column: Column,
