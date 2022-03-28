@@ -2,6 +2,7 @@ import HorizontalLayout from 'src/lib/layout/horizontal';
 import { Direction } from 'src/lib/layout';
 import VerticalLayout from 'src/lib/layout/vertical';
 import DisplayContainer from 'src/lib/node/displayContainer';
+// import DisplayContainer from 'src/lib/node/debugSurface';
 
 export default class Block extends DisplayContainer {
   protected _direction: Direction;

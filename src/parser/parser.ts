@@ -31,6 +31,7 @@ export default class Parser {
     Document: Document,
     Element: Element,
     Container: DisplayContainer,
+    // Container: Element,
     Block: Block,
     Row: Row,
     Column: Column,

@@ -21,12 +21,12 @@ export default class ThemableSurface extends PaintedSurface {
   }
 
   protected paint() {
-    const { _painter } = this;
+    const { painter } = this;
 
     if (this.apperance.fill?.type === 'solid') {
       this.apperance.fill.color =
         this.apperance.fill.color || randomColor().hex();
-      _painter
+      painter
 
         .beginFill(this.apperance.fill?.color!)
         .drawRect(0, 0, this.width, this.height)

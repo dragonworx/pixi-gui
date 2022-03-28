@@ -3,24 +3,24 @@ import GraphicsPainter from 'src/lib/display/graphicsPainter';
 import Surface from 'src/lib/node/surface';
 
 export default abstract class PaintedSurface extends Surface {
-  protected _painter: GraphicsPainter;
-  protected _graphics: Graphics;
+  protected painter: GraphicsPainter;
+  protected graphics: Graphics;
 
   constructor() {
     super();
 
-    const graphics = (this._graphics = new Graphics());
-    this._painter = new GraphicsPainter(graphics);
+    const graphics = (this.graphics = new Graphics());
+    this.painter = new GraphicsPainter(graphics);
   }
 
   init() {
     super.init();
 
-    this.container.addChildAt(this._graphics, 0);
+    this.container.addChildAt(this.graphics, 0);
   }
 
   render() {
-    const { _painter } = this;
+    const { painter: _painter } = this;
 
     if (!this.isReady) {
       return;

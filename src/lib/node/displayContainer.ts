@@ -4,7 +4,7 @@ import Box, { GeometryUpdate } from 'src/lib/node/box';
 export default class DisplayContainer extends Box {
   container: Container;
 
-  protected _mask: Graphics;
+  protected mask: Graphics;
   protected _clip: boolean;
 
   constructor() {
@@ -12,12 +12,12 @@ export default class DisplayContainer extends Box {
 
     this.container = new Container();
 
-    this._mask = new Graphics();
+    this.mask = new Graphics();
     this._clip = false;
   }
 
   protected updateMaskSize() {
-    const { _mask: mask } = this;
+    const { mask: mask } = this;
 
     mask.clear();
     mask.beginFill(0xffffff);
@@ -90,7 +90,7 @@ export default class DisplayContainer extends Box {
   /** Setter */
   set clip(shouldClip: boolean) {
     // todo: fix up
-    const { container, _mask: mask } = this;
+    const { container, mask: mask } = this;
     this._clip = shouldClip;
     if (shouldClip) {
       this.updateMaskSize();
