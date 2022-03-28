@@ -27,7 +27,6 @@ export default class DisplayContainer extends Box {
 
     this.updateContainerPosition();
     this.updateMaskSize();
-    this.render();
   }
 
   removeFromParent(): void {
@@ -53,8 +52,6 @@ export default class DisplayContainer extends Box {
       this.updateContainerPosition();
     }
   }
-
-  render() {}
 
   updateMaskSize() {
     const { _mask: mask } = this;

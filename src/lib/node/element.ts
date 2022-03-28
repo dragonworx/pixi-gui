@@ -1,3 +1,3 @@
-import Surface from 'src/lib/node/surface';
+import ThemableSurface from 'src/lib/node/themableSurface';
 
-export default class Element extends Surface {}
+export default class Element extends ThemableSurface {}
