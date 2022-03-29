@@ -19,6 +19,8 @@ export default class Text extends DisplayContainer {
 
     this.text = this._text;
     this.geometry.size.height = this.font.height;
+
+    this.applyFixtures();
   }
 
   set text(value: string) {

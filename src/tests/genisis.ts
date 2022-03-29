@@ -84,6 +84,21 @@ doc.preload(['img/button.png', 'img/test.png']).then(() => {
   custom.anchorY = 0.5;
   custom.fixtureTop = 0.3;
   blue.addChild(custom);
+
+  const font = new Font({
+    fontSize: 20,
+    fontFamily: 'serif',
+  });
+
+  const text = new Text(font, 'yellow');
+  text.id = 'text';
+  text.text = 'hello world!';
+  text.fixture = 'center';
+  blue.addChild(text);
+
+  const paragraph = new Paragraph(font, 'Hello world! How about this?!');
+  paragraph.fixture = 'fill';
+  foo.addChild(paragraph);
 });
 
 console.log(doc);
@@ -91,18 +106,3 @@ win.doc = doc;
 win.row = row;
 
 dump();
-
-const font = new Font({
-  fontSize: 20,
-  fontFamily: 'serif',
-});
-
-// const text = new Text(font, 'yellow');
-// text.text = 'hello world!';
-// text.x = 0;
-// text.y = 0;
-// foo.addChild(text);
-
-const paragraph = new Paragraph(font, 'Hello world! How about this?!');
-paragraph.fixture = 'fill';
-foo.addChild(paragraph);
