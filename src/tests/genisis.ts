@@ -5,6 +5,8 @@ import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
 import Grid from '../lib/display/grid';
 import CustomContainer from '../lib/node/customContainer';
+import Font from '../lib/text/font';
+import Text from '../lib/text/text';
 
 // @ts-ignore
 import xml from './genisis.xml';
@@ -88,3 +90,15 @@ win.doc = doc;
 win.row = row;
 
 dump();
+
+const font = new Font({
+  fontSize: 20,
+  fontFamily: 'serif',
+});
+
+const text = new Text(font, 'yellow');
+text.text = 'hello world!';
+text.x = 0;
+text.y = 0;
+text.anchorX = 1;
+blue.addChild(text);
