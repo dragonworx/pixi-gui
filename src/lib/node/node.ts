@@ -32,17 +32,24 @@ export default class Node extends EventEmitter {
   }
 
   deepInit() {
-    this._hasInit = true;
+    const hasInit = this._hasInit;
+
+    const init = () => {
+      this._hasInit = true;
+      this.init();
+    };
 
     if (this.shouldInitBeforeChildren()) {
-      this.init();
+      !hasInit && init();
       this.children.forEach(node => node.deepInit());
     } else {
       this.children.forEach(node => node.deepInit());
-      this.init();
+      !hasInit && init();
     }
 
-    this.emit(NodeEvent.init);
+    if (!hasInit) {
+      this.emit(NodeEvent.init);
+    }
   }
 
   init() {}

@@ -7,6 +7,7 @@ import Grid from '../lib/display/grid';
 import CustomContainer from '../lib/node/customContainer';
 import Font from '../lib/text/font';
 import Text from '../lib/text/text';
+import Paragraph from '../lib/text/paragraph';
 
 // @ts-ignore
 import xml from './genisis.xml';
@@ -96,9 +97,12 @@ const font = new Font({
   fontFamily: 'serif',
 });
 
-const text = new Text(font, 'yellow');
-text.text = 'hello world!';
-text.x = 0;
-text.y = 0;
-text.anchorX = 1;
-blue.addChild(text);
+// const text = new Text(font, 'yellow');
+// text.text = 'hello world!';
+// text.x = 0;
+// text.y = 0;
+// foo.addChild(text);
+
+const paragraph = new Paragraph(font, 'Hello world! How about this?!');
+paragraph.fixture = 'fill';
+foo.addChild(paragraph);

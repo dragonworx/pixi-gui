@@ -14,6 +14,13 @@ export default class Text extends DisplayContainer {
     this._text = '';
   }
 
+  init() {
+    super.init();
+
+    this.text = this._text;
+    this.geometry.size.height = this.font.height;
+  }
+
   set text(value: string) {
     this._text = value;
     this.renderText();
@@ -21,6 +28,9 @@ export default class Text extends DisplayContainer {
 
   private renderText() {
     const { font, color, _text: text } = this;
+    [...this.container.children].forEach(child =>
+      this.container.removeChild(child)
+    ); // todo: diff
     let x = 0;
     for (let i = 0; i < text.length; i++) {
       const char = text.charAt(i);
