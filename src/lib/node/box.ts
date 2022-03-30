@@ -7,6 +7,7 @@ import { LayoutAlign, LayoutType, Fixture } from 'src/lib/layout/';
 import WrapLayout from 'src/lib/layout/wrap';
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
+import { GeometrySystem } from 'pixi.js';
 
 export enum GeometryUpdate {
   Anchor = 'Anchor',
@@ -146,6 +147,26 @@ export default class Box extends Node {
     if (this.hasUpdate(updates, GeometryUpdate.Fixture)) {
       this.updateLayout();
     }
+  }
+
+  setPosition(x: number, y: number) {
+    this.geometry.position.x = x;
+    this.geometry.position.y = y;
+    this.onGeometryChanged([
+      GeometryUpdate.Position,
+      GeometryUpdate.X,
+      GeometryUpdate.Y,
+    ]);
+  }
+
+  setSize(width: number, height: number) {
+    this.geometry.size.width = width;
+    this.geometry.size.height = height;
+    this.onGeometryChanged([
+      GeometryUpdate.Size,
+      GeometryUpdate.Width,
+      GeometryUpdate.Height,
+    ]);
   }
 
   /** Getters */

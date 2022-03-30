@@ -14,7 +14,7 @@ export default class StaticText extends Text {
 
     for (let i = 0; i < text.length; i++) {
       const char = new Char();
-      char.set(text.charAt(i), font, color);
+      char.setText(text.charAt(i), font, color);
       this.addChild(char);
       char.x = x;
       x += char.width;

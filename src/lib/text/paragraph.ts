@@ -1,7 +1,7 @@
-import WrapLayout from '../layout/wrap';
-import Text from './staticText';
+import WrapLayout from 'src/lib/layout/wrap';
+import StaticText from 'src/lib/text/staticText';
 
-export default class Paragraph extends Text {
+export default class Paragraph extends StaticText {
   constructor() {
     super();
 
@@ -21,17 +21,18 @@ export default class Paragraph extends Text {
       this.removeChild(child);
     });
 
-    const words: Text[] = [];
+    const words: StaticText[] = [];
     const wordStrs = text.split(' ');
 
     wordStrs.forEach((wordStr, i) => {
-      const word = new Text();
+      const word = new StaticText();
       word.font = font;
       word.text = wordStr;
       this.addChild(word, false);
       words.push(word);
+
       if (i <= wordStrs.length - 1) {
-        const space = new Text();
+        const space = new StaticText();
         space.text = ' ';
         this.addChild(space, false);
         words.push(space);

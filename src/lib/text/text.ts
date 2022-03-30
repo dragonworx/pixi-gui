@@ -22,7 +22,7 @@ export default abstract class Text extends DisplayContainer<Sprite> {
     super.init();
   }
 
-  set(text: string, font: Font, color: string) {
+  setText(text: string, font: Font, color: string) {
     this._color = color;
     this._font = font;
     this.text = text;
