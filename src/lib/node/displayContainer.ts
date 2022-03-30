@@ -57,10 +57,6 @@ export default class DisplayContainer extends Box {
   onGeometryChanged(updateType: GeometryUpdate[]) {
     super.onGeometryChanged(updateType);
 
-    if (!this.isReady) {
-      return;
-    }
-
     if (
       updateType.indexOf(GeometryUpdate.Size) > -1 ||
       updateType.indexOf(GeometryUpdate.Fixture) > -1

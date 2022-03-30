@@ -73,16 +73,6 @@ export default class Font {
         width,
         texture,
       });
-
-      // charCanvas.style.cssText = `position:absolute;top:200px;left:${x}px;`;
-      // document.body.appendChild(charCanvas);
-
-      // ctx.beginPath();
-      // ctx.moveTo(x, 0);
-      // ctx.lineTo(x, height);
-      // ctx.stroke();
-      // ctx.closePath();
-
       x += width;
     });
   }
@@ -121,3 +111,8 @@ export default class Font {
     return group;
   }
 }
+
+export const defaultFont: Font = new Font({
+  fontSize: 14,
+  fontFamily: 'sans-serif',
+});

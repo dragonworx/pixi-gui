@@ -5,7 +5,7 @@ import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
 import Grid from '../lib/display/grid';
 import CustomContainer from '../lib/node/customContainer';
-import Font from '../lib/text/font';
+import Font, { defaultFont } from '../lib/text/font';
 import Text from '../lib/text/text';
 import Paragraph from '../lib/text/paragraph';
 
@@ -85,18 +85,15 @@ doc.preload(['img/button.png', 'img/test.png']).then(() => {
   custom.fixtureTop = 0.3;
   blue.addChild(custom);
 
-  const font = new Font({
-    fontSize: 20,
-    fontFamily: 'serif',
-  });
-
-  const text = new Text(font, 'yellow');
+  const text = new Text();
   text.id = 'text';
+  text.color = 'yellow';
   text.text = 'hello world!';
   text.fixture = 'center';
   blue.addChild(text);
 
-  const paragraph = new Paragraph(font, 'Hello world! How about this?!');
+  const paragraph = new Paragraph();
+  paragraph.text = 'Hello world! How about this?!';
   paragraph.fixture = 'fill';
   foo.addChild(paragraph);
 });
