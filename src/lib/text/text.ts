@@ -1,10 +1,8 @@
 import { Sprite } from 'pixi.js';
 import DisplayContainer from 'src/lib/node/displayContainer';
 import Font, { defaultFont } from 'src/lib/text/font';
-import Color from 'color';
-import { GeometryUpdate } from '../node/box';
 
-export default class Text extends DisplayContainer {
+export default abstract class Text extends DisplayContainer<Sprite> {
   protected _color: string;
   protected _text: string;
   protected _font: Font;
@@ -23,6 +21,16 @@ export default class Text extends DisplayContainer {
     super.init();
   }
 
+  set(text: string, font: Font, color: string) {
+    this._color = color;
+    this._font = font;
+    this.text = text;
+  }
+
+  protected createContainer() {
+    return new Sprite();
+  }
+
   get font() {
     return this._font;
   }
@@ -37,7 +45,9 @@ export default class Text extends DisplayContainer {
 
   set text(value: string) {
     this._text = value;
+    this.debug('text');
     this.renderText();
+    this.updateLayout();
   }
 
   set color(value: string) {
@@ -50,34 +60,5 @@ export default class Text extends DisplayContainer {
     this.renderText();
   }
 
-  protected renderText() {
-    const { font, color, text } = this;
-
-    [...this.container.children].forEach(child =>
-      this.container.removeChild(child)
-    );
-
-    let x = 0;
-
-    for (let i = 0; i < text.length; i++) {
-      const char = text.charAt(i);
-      const fontChar = font.charMap.get(char);
-
-      if (fontChar) {
-        const sprite = Sprite.from(fontChar.texture);
-        sprite.tint = Color(color).rgbNumber();
-        this.container.addChild(sprite);
-        sprite.x = x;
-        x += fontChar.width;
-      }
-    }
-
-    this.geometry.size.height = this.font.height;
-    this.geometry.size.width = x;
-    this.onGeometryChanged([
-      GeometryUpdate.Size,
-      GeometryUpdate.Width,
-      GeometryUpdate.Height,
-    ]);
-  }
+  protected abstract renderText(): void;
 }

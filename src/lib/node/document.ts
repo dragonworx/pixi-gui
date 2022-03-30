@@ -58,13 +58,6 @@ export default class Document extends Node {
     this.children.forEach(node => node.deepInit());
     this.width = this.width - 1;
 
-    // todo: hack to fix initial text layout glitch, need to find bug properly
-    // setTimeout(() => {
-    //   this.width = this.width - 1;
-    //   this.performLayout();
-    //   this.width = this.width + 1;
-    // }, 0);
-
     this.emit(NodeEvent.init);
   }
 

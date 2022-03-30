@@ -1,7 +1,7 @@
 import { GeometryUpdate } from 'src/lib/node/box';
-import DisplayContainer from 'src/lib/node/displayContainer';
+import MaskedDisplayContainer from 'src/lib/node/maskedDisplayContainer';
 
-export default class Surface extends DisplayContainer {
+export default class Surface extends MaskedDisplayContainer {
   onGeometryChanged(updateType: GeometryUpdate[]) {
     super.onGeometryChanged(updateType);
 

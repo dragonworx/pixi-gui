@@ -136,7 +136,8 @@ export default class Box extends Node {
 
   onGeometryChanged(updates: GeometryUpdate[]) {
     if (this.hasUpdate(updates, GeometryUpdate.Size)) {
-      this.forEach<Box>(node => node.updateLayout());
+      this.updateLayout();
+      // this.forEach<Box>(node => node.updateLayout());
     }
 
     if (this.hasUpdate(updates, GeometryUpdate.Padding)) {

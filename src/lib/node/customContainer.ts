@@ -1,8 +1,8 @@
 import { Container } from 'pixi.js';
-import DisplayContainer from 'src/lib/node/displayContainer';
+import MaskedDisplayContainer from 'src/lib/node/maskedDisplayContainer';
 import { GeometryUpdate } from 'src/lib/node/box';
 
-export default class CustomContainer extends DisplayContainer {
+export default class CustomContainer extends MaskedDisplayContainer {
   protected _object?: Container;
 
   constructor() {

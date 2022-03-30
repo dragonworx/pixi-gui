@@ -1,5 +1,5 @@
 import WrapLayout from '../layout/wrap';
-import Text from './text';
+import Text from './staticText';
 
 export default class Paragraph extends Text {
   constructor() {
@@ -11,7 +11,6 @@ export default class Paragraph extends Text {
   init() {
     super.init();
 
-    this.text = this._text;
     this.updateLayout();
   }
 
