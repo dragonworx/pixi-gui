@@ -28,5 +28,7 @@ export default class StaticText extends Text {
       GeometryUpdate.Width,
       GeometryUpdate.Height,
     ]);
+
+    this.updateContainerPosition();
   }
 }
