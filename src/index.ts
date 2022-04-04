@@ -1,1 +1,2 @@
-import './tests/genisis';
+// import './tests/genisis';
+import './examples/main';

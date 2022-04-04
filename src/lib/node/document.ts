@@ -4,8 +4,11 @@ import Node, { NodeEvent } from 'src/lib/node/node';
 
 export interface DocumentOptions {
   app?: Application;
+  container?: HTMLElement;
   resizeTo?: HTMLElement;
   deferInit?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export enum DocumentEvent {
@@ -26,17 +29,23 @@ export default class Document extends Node {
   constructor(opts: DocumentOptions = {}) {
     super();
 
-    const { app, resizeTo } = opts;
+    const { app, resizeTo, container, width, height } = opts;
 
     this.app =
       app ||
       new Application({
+        width,
+        height,
         antialias: false,
         backgroundColor: 0,
       });
 
     if (resizeTo) {
       this.observeResizeOn(resizeTo);
+    }
+
+    if (container) {
+      this.container = container;
     }
 
     this._textureCache = new Map();
@@ -82,6 +91,10 @@ export default class Document extends Node {
     return promise;
   }
 
+  clear() {
+    this.children.length = 0;
+  }
+
   hasTexture(url: string) {
     return this._textureCache.has(url);
   }
@@ -102,6 +115,7 @@ export default class Document extends Node {
       if (this._observer) {
         this._observer.disconnect();
       }
+      element.style.overflow = 'hidden';
       this._observer = new ResizeObserver(this.onContainerResize);
       this._observer.observe(element);
       this._resizeToElement = element;

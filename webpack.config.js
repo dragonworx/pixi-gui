@@ -29,7 +29,7 @@ module.exports = function (env, argv) {
         ],
       },
       resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.tsx', '.js'],
         plugins: [
           new TsconfigPathsPlugin({
             /* options: see below */
