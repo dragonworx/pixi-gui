@@ -48,9 +48,9 @@ export default abstract class FlowLayout extends AbstractLayout {
     }
 
     children.forEach(node => {
-      if (node.hasFixture) {
-        return;
-      }
+      // if (node.hasFixture) {
+      //   return;
+      // }
 
       const {
         geometry: { position },
@@ -85,9 +85,10 @@ export default abstract class FlowLayout extends AbstractLayout {
       }
     });
 
-    cells.forEach(cell =>
-      this.alignCell(cell, hAlign, vAlign, this.getDirection())
-    );
+    cells.forEach(cell => {
+      this.alignCell(cell, hAlign, vAlign, this.getDirection());
+      cell.nodes.forEach(node => node.applyFixtures());
+    });
   }
 
   protected alignCell(

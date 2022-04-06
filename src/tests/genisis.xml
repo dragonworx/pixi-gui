@@ -1,105 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../parser/schema.xsd"?>
-<Document
-        id="document"
-        width="500"
-        height="500"
-        container="#main"
-        resizeTo="#main"
-        deferInit="true"
-        sharp="true"
+<Container
+        id="blue"
+        clip="false"
+        fixtureLeft="0.2"
+        fixtureTop="0.2"
+        fixtureRight="0.8"
+        fixtureBottom="0.8"
+        padding="10"
         >
-        <Container
-                id="blue"
-                clip="false"
-                fixtureLeft="0.2"
-                fixtureTop="0.2"
-                fixtureRight="0.8"
-                fixtureBottom="0.8"
-                padding="10"
+        <Fill fillColor="#333" />
+        <NineSliceImage
+                id="nineslice"
+                src="img/button.png"
+                edges="25"
+                fixture="fill"
+                />
+        <Image
+                id="image"
+                src="img/test.png"
+                fixture="center"
+                />
+
+        <Column
+                id="supblock"
+                alignH="center"
+                fixture="bottomRight"
                 >
-                <Fill fillColor="#333" />
-                <NineSliceImage
-                        id="nineslice"
-                        src="img/button.png"
-                        edges="25"
+                <Element
+                        id="test"
+                        fillColor="#000"
                         fixture="fill"
                         />
-                <Image
-                        id="image"
-                        src="img/test.png"
-                        fixture="center"
-                        />
-
-                <Column
-                        id="supblock"
-                        alignH="center"
-                        fixture="bottomRight"
+                <Row
+                        id="sub1"
+                        alignV="center"
+                        marginRight="20"
+                        marginBottom="50"
                         >
                         <Element
-                                id="test"
-                                fillColor="#000"
-                                fixture="fill"
+                                id="a"
+                                fillColor="red"
+                                size="20"
                                 />
-                        <Row
-                                id="sub1"
-                                alignV="center"
-                                marginRight="20"
-                                marginBottom="50"
-                                >
-                                <Element
-                                        id="a"
-                                        fillColor="red"
-                                        size="20"
-                                        />
-                                <Element
-                                        id="b"
-                                        fillColor="blue"
-                                        size="20"
-                                        marginRight="10"
-                                        />
-                                <Element
-                                        id="c"
-                                        fillColor="green"
-                                        size="20"
-                                        />
-                        </Row>
-                        <Row id="sub2">
-                                <Element
-                                        id="d"
-                                        fillColor="green"
-                                        size="20"
-                                        />
-                                <Element
-                                        id="e"
-                                        fillColor="red"
-                                        size="20"
-                                        marginRight="10"
-                                        />
-                                <Element
-                                        id="f"
-                                        fillColor="blue"
-                                        size="20"
-                                        />
-                        </Row>
-                </Column>
-                <Container
-                        id="foo"
-                        padding="10"
-                        fixtureLeft="0.7"
-                        fixtureRight="1"
-                        size="100"
-                        fixtureBottom="0.25"
-                        layout="wrap"
-                        clip="false"
-                        >
-                        <Fill fillColor="pink" />
                         <Element
+                                id="b"
                                 fillColor="blue"
-                                id="Xxx"
-                                size="30"
-                                fixture="leftCenter"
+                                size="20"
+                                marginRight="10"
                                 />
-                </Container>
+                        <Element
+                                id="c"
+                                fillColor="green"
+                                size="20"
+                                />
+                </Row>
+                <Row id="sub2">
+                        <Element
+                                id="d"
+                                fillColor="green"
+                                size="20"
+                                />
+                        <Element
+                                id="e"
+                                fillColor="red"
+                                size="20"
+                                marginRight="10"
+                                />
+                        <Element
+                                id="f"
+                                fillColor="blue"
+                                size="20"
+                                />
+                </Row>
+        </Column>
+        <Container
+                id="foo"
+                padding="10"
+                fixtureLeft="0.7"
+                fixtureRight="1"
+                size="100"
+                fixtureBottom="0.25"
+                layout="wrap"
+                clip="false"
+                >
+                <Fill fillColor="pink" />
+                <Element
+                        fillColor="blue"
+                        id="Xxx"
+                        size="30"
+                        fixture="leftCenter"
+                        />
         </Container>
-</Document>
+</Container>

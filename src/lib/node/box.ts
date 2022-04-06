@@ -74,7 +74,7 @@ export default class Box extends Node {
     this.applyLayout();
   }
 
-  protected applyFixtures() {
+  applyFixtures() {
     if (!this.isReady) {
       return;
     }
@@ -123,7 +123,7 @@ export default class Box extends Node {
     }
   }
 
-  protected applyLayout() {
+  applyLayout() {
     const { _layout, _alignH, _alignV } = this;
 
     if (_layout && this.children.length) {

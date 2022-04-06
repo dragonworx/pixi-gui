@@ -1,7 +1,7 @@
+import { Sprite } from 'pixi.js';
 import Themable from 'src/lib/node/themable';
 import Canvas2DPainter from 'src/lib/display/canvas2DPainter';
 import { GeometryUpdate } from 'src/lib/node/box';
-import { Sprite } from 'pixi.js';
 
 export default class DebugSurface extends Themable {
   protected idSprite?: Sprite;
@@ -16,6 +16,7 @@ export default class DebugSurface extends Themable {
     idSprite.anchor.y = 0.5;
     this.container.addChild(idSprite);
     this.updateIdSpritePosition();
+    this.container.alpha = 0.7;
   }
 
   protected paint() {
@@ -23,7 +24,7 @@ export default class DebugSurface extends Themable {
     super.paint();
     painter
       .lineStyle('cyan')
-      .drawRect(...this.localContentBounds.toArray())
+      .drawRect(...this.localContentBounds.expand(1, 1).toArray())
       .lineStyle('yellow')
       .drawRect(...this.localMarginBounds.toArray());
   }

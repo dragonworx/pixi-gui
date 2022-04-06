@@ -36,7 +36,7 @@ export default class Document extends Node {
       container,
       width = 500,
       height = 500,
-      sharp = true,
+      sharp = false,
     } = opts;
 
     this.app =

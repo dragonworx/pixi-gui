@@ -22,7 +22,7 @@ type FactoryClass = { new (...args: any[]): Node };
 export default class Parser {
   schema: XmlSchema;
 
-  constructor(readonly opts?: DocumentOptions) {
+  constructor(readonly docOpts?: DocumentOptions) {
     this.schema = new XmlSchema();
   }
 
@@ -50,10 +50,14 @@ export default class Parser {
   parse(xmlStr: string) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlStr, 'application/xml');
-    const doc = this.parseNode(xmlDoc.documentElement) as Document;
+    const doc = new Document(this.docOpts);
+
+    this.parseNode(xmlDoc.documentElement, doc);
+
     if (!doc.deferInit) {
       doc.deepInit();
     }
+
     return doc;
   }
 
@@ -107,9 +111,12 @@ export default class Parser {
 
     const className = node.nodeName;
     const Class = this.factory[className];
-    const obj = (
-      className === 'Document' ? new Class(this.opts) : new Class()
-    ) as any;
+    if (!Class) {
+      throw new Error(
+        `"${className}" is not a known node type. Check XML syntax.`
+      );
+    }
+    const obj = new Class() as any;
 
     const xsdElement = this.schema.getElement(className);
     if (!xsdElement) {

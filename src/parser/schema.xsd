@@ -54,11 +54,11 @@
         </xs:simpleType>
 
         <xs:simpleType name="color">
-                <xs:restriction base="xs:string"></xs:restriction>
+                <xs:restriction base="xs:string" />
         </xs:simpleType>
 
         <xs:simpleType name="selector">
-                <xs:restriction base="xs:string"></xs:restriction>
+                <xs:restriction base="xs:string" />
         </xs:simpleType>
 
         <!-- Attributes -->
@@ -87,42 +87,6 @@
                         name="height"
                         type="xs:decimal"
                         />
-        </xs:complexType>
-
-        <xs:complexType name="Document">
-                <xs:complexContent>
-                        <xs:extension base="Node">
-                                <xs:sequence>
-                                        <xs:any
-                                                processContents="lax"
-                                                namespace="##any"
-                                                minOccurs="0"
-                                                maxOccurs="unbounded"
-                                                />
-                                </xs:sequence>
-                                <xs:attribute
-                                        name="container"
-                                        type="selector"
-                                        />
-                                <xs:attribute
-                                        name="resizeTo"
-                                        type="selector"
-                                        />
-                                <xs:attribute
-                                        name="theme"
-                                        type="xs:string"
-                                        />
-                                <xs:attribute
-                                        name="deferInit"
-                                        type="xs:boolean"
-                                        />
-                                <xs:attribute
-                                        name="sharp"
-                                        type="xs:boolean"
-                                        />
-                        </xs:extension>
-
-                </xs:complexContent>
         </xs:complexType>
 
         <xs:complexType name="Box">
@@ -367,11 +331,5 @@
         <xs:element
                 name="NineSliceImage"
                 type="NineSliceImage"
-                />
-
-        <!-- Document -->
-        <xs:element
-                name="Document"
-                type="Document"
                 />
 </xs:schema>

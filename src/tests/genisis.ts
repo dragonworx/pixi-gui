@@ -14,7 +14,14 @@ import xml from './genisis.xml';
 import { dump } from '../lib/log';
 import { Sprite, Texture } from 'pixi.js';
 
-const doc = Parser.fromXmlString(xml);
+const main = document.getElementById('main')!;
+
+const doc = Parser.fromXmlString(xml, {
+  container: main,
+  resizeTo: main,
+  deferInit: true,
+});
+
 const win = window as any;
 doc.stage.alpha = 0.5;
 
