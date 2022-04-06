@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <!-- Simple Types -->
+        <xs:simpleType name="layout">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="wrap" />
+                        <xs:enumeration value="wrap-reverse" />
+                        <xs:enumeration value="horizontal" />
+                        <xs:enumeration value="horizontal-reverse" />
+                        <xs:enumeration value="vertical" />
+                        <xs:enumeration value="vertical-reverse" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="fillType">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="solid" />
+                        <xs:enumeration value="none" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="align">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="start" />
+                        <xs:enumeration value="center" />
+                        <xs:enumeration value="end" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="direction">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="vertical" />
+                        <xs:enumeration value="horizontal" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="fixture">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="left" />
+                        <xs:enumeration value="top" />
+                        <xs:enumeration value="right" />
+                        <xs:enumeration value="bottom" />
+                        <xs:enumeration value="topLeft" />
+                        <xs:enumeration value="topRight" />
+                        <xs:enumeration value="bottomLeft" />
+                        <xs:enumeration value="bottomRight" />
+                        <xs:enumeration value="topCenter" />
+                        <xs:enumeration value="bottomCenter" />
+                        <xs:enumeration value="leftCenter" />
+                        <xs:enumeration value="rightCenter" />
+                        <xs:enumeration value="fill" />
+                        <xs:enumeration value="center" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="color">
+                <xs:restriction base="xs:string"></xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="selector">
+                <xs:restriction base="xs:string"></xs:restriction>
+        </xs:simpleType>
+
+        <!-- Attributes -->
+        <xs:complexType name="Node">
+                <xs:sequence>
+                        <xs:any
+                                processContents="lax"
+                                namespace="##any"
+                                minOccurs="0"
+                                maxOccurs="unbounded"
+                                />
+                </xs:sequence>
+                <xs:attribute
+                        name="id"
+                        type="xs:string"
+                        />
+                <xs:attribute
+                        name="size"
+                        type="xs:decimal"
+                        />
+                <xs:attribute
+                        name="width"
+                        type="xs:decimal"
+                        />
+                <xs:attribute
+                        name="height"
+                        type="xs:decimal"
+                        />
+        </xs:complexType>
+
+        <xs:complexType name="Document">
+                <xs:complexContent>
+                        <xs:extension base="Node">
+                                <xs:sequence>
+                                        <xs:any
+                                                processContents="lax"
+                                                namespace="##any"
+                                                minOccurs="0"
+                                                maxOccurs="unbounded"
+                                                />
+                                </xs:sequence>
+                                <xs:attribute
+                                        name="container"
+                                        type="selector"
+                                        />
+                                <xs:attribute
+                                        name="resizeTo"
+                                        type="selector"
+                                        />
+                                <xs:attribute
+                                        name="theme"
+                                        type="xs:string"
+                                        />
+                                <xs:attribute
+                                        name="deferInit"
+                                        type="xs:boolean"
+                                        />
+                                <xs:attribute
+                                        name="sharp"
+                                        type="xs:boolean"
+                                        />
+                        </xs:extension>
+
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Box">
+                <xs:complexContent>
+                        <xs:extension base="Node">
+                                <xs:attribute
+                                        name="anchor"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="anchorX"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="anchorY"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="x"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="y"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="margin"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="marginBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="padding"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="paddingBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixture"
+                                        type="fixture"
+                                        />
+                                <xs:attribute
+                                        name="fixtureLeft"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureTop"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureRight"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fixtureBottom"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="layout"
+                                        type="layout"
+                                        />
+                                <xs:attribute
+                                        name="alignH"
+                                        type="align"
+                                        />
+                                <xs:attribute
+                                        name="alignV"
+                                        type="align"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="DisplayContainer">
+                <xs:complexContent>
+                        <xs:extension base="Box">
+                                <xs:attribute
+                                        name="clip"
+                                        type="xs:boolean"
+                                        />
+                                <xs:attribute
+                                        name="alpha"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="rotation"
+                                        type="xs:decimal"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Surface">
+                <xs:complexContent>
+                        <xs:extension base="DisplayContainer" />
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="ThemableSurface">
+                <xs:complexContent>
+                        <xs:extension base="Surface">
+                                <xs:attribute
+                                        name="fillColor"
+                                        type="color"
+                                        />
+                                <xs:attribute
+                                        name="fillType"
+                                        type="fillType"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Element">
+                <xs:complexContent>
+                        <xs:extension base="ThemableSurface" />
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Fill">
+                <xs:complexContent>
+                        <xs:extension base="ThemableSurface" />
+                </xs:complexContent>
+        </xs:complexType>
+
+
+        <xs:complexType name="Block">
+                <xs:complexContent>
+                        <xs:extension base="DisplayContainer">
+                                <xs:attribute
+                                        name="reverse"
+                                        type="xs:boolean"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="RowCol">
+                <xs:complexContent>
+                        <xs:extension base="Block" />
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="Image">
+                <xs:complexContent>
+                        <xs:extension base="Surface">
+                                <xs:attribute
+                                        name="src"
+                                        type="xs:string"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="NineSliceImage">
+                <xs:complexContent>
+                        <xs:extension base="Image">
+                                <xs:attribute
+                                        name="leftEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="topEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="rightEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="bottomEdge"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="edges"
+                                        type="xs:decimal"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <!-- Elements -->
+
+        <xs:element
+                name="Element"
+                type="Element"
+                />
+
+        <xs:element
+                name="Fill"
+                type="Fill"
+                />
+
+        <xs:element
+                name="Container"
+                type="DisplayContainer"
+                />
+
+        <xs:element
+                name="Row"
+                type="RowCol"
+                />
+
+        <xs:element
+                name="Column"
+                type="RowCol"
+                />
+
+        <xs:element
+                name="Image"
+                type="Image"
+                />
+
+        <xs:element
+                name="NineSliceImage"
+                type="NineSliceImage"
+                />
+
+        <!-- Document -->
+        <xs:element
+                name="Document"
+                type="Document"
+                />
+</xs:schema>

@@ -9,6 +9,7 @@ export interface DocumentOptions {
   deferInit?: boolean;
   width?: number;
   height?: number;
+  sharp?: boolean;
 }
 
 export enum DocumentEvent {
@@ -29,7 +30,14 @@ export default class Document extends Node {
   constructor(opts: DocumentOptions = {}) {
     super();
 
-    const { app, resizeTo, container, width, height } = opts;
+    const {
+      app,
+      resizeTo,
+      container,
+      width = 500,
+      height = 500,
+      sharp = true,
+    } = opts;
 
     this.app =
       app ||
@@ -50,7 +58,7 @@ export default class Document extends Node {
 
     this._textureCache = new Map();
     this._deferInit = false;
-    this._sharp = true;
+    this._sharp = sharp;
   }
 
   deepInit() {
@@ -63,8 +71,10 @@ export default class Document extends Node {
     }
 
     this._hasInit = true;
+
     this.sharp = this._sharp;
     this.children.forEach(node => node.deepInit());
+
     this.width = this.width - 1;
 
     this.emit(NodeEvent.init);
@@ -92,7 +102,7 @@ export default class Document extends Node {
   }
 
   clear() {
-    this.children.length = 0;
+    [...this.children].forEach(child => child.removeFromParent());
   }
 
   hasTexture(url: string) {
