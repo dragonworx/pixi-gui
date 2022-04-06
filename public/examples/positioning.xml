@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../src/parser/schema.xsd"?>
+<UI>
+        <Element
+                id="1"
+                width="50"
+                height="100"
+                fillColor="blue"
+                />
+        <Element
+                id="2"
+                x="100"
+                width="100"
+                height="50"
+                fillColor="blue"
+                />
+        <Element
+                id="3"
+                x="100"
+                y="100"
+                size="50"
+                fillColor="blue"
+                />
+        <Element
+                id="anchorX"
+                x="300"
+                y="50"
+                size="50"
+                anchorX="0.5"
+                fillColor="blue"
+                />
+        <Element
+                id="anchorY"
+                x="400"
+                y="50"
+                size="50"
+                anchorY="0.5"
+                fillColor="blue"
+                />
+        <Element
+                id="anchor"
+                x="200"
+                y="200"
+                size="50"
+                anchor="0.5"
+                fillColor="blue"
+                />
+        <Container
+                size="100"
+                x="300"
+                y="150"
+                >
+                <Element
+                        x="10"
+                        y="10"
+                        size="50"
+                        fillColor="blue"
+                        />
+        </Container>
+
+        <Column y="300">
+                <Row>
+                        <Container size="100">
+                                <Element
+                                        width="20"
+                                        fixture="left"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        width="20"
+                                        fixture="right"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        height="20"
+                                        fixture="top"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        height="20"
+                                        fixture="bottom"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                </Row>
+                <Row>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="leftCenter"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="topLeft"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="topCenter"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="topRight"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                </Row>
+                <Row>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="rightCenter"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="bottomRight"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="bottomCenter"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="bottomLeft"
+                                        fillColor="blue"
+                                        />
+                        </Container>
+                </Row>
+        </Column>
+        <Container
+                fixtureLeft="0.5"
+                fixtureTop="0.1"
+                fixtureBottom="0.5"
+                fixtureRight="0.9"
+                >
+                <Fill fillColor="#ccc" />
+                <Fill
+                        fillColor="#333"
+                        fixtureLeft="0.3"
+                        fixtureRight="0.7"
+                        fixtureTop="0.3"
+                        fixtureBottom="0.7"
+                        />
+        </Container>
+</UI>

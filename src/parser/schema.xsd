@@ -62,6 +62,17 @@
         </xs:simpleType>
 
         <!-- Attributes -->
+        <xs:complexType name="UI">
+                <xs:sequence>
+                        <xs:any
+                                processContents="lax"
+                                namespace="##any"
+                                minOccurs="0"
+                                maxOccurs="unbounded"
+                                />
+                </xs:sequence>
+        </xs:complexType>
+
         <xs:complexType name="Node">
                 <xs:sequence>
                         <xs:any
@@ -297,6 +308,11 @@
         </xs:complexType>
 
         <!-- Elements -->
+
+        <xs:element
+                name="UI"
+                type="UI"
+                />
 
         <xs:element
                 name="Element"

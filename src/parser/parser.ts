@@ -110,6 +110,12 @@ export default class Parser {
     }
 
     const className = node.nodeName;
+
+    if (className === 'UI') {
+      this.parseChildren(node, parent);
+      return parent;
+    }
+
     const Class = this.factory[className];
     if (!Class) {
       throw new Error(
@@ -145,6 +151,12 @@ export default class Parser {
       });
     }
 
+    this.parseChildren(node, obj);
+
+    return obj;
+  }
+
+  protected parseChildren(node: ChildNode, obj: any) {
     for (
       let child = node.firstChild;
       child !== null;
@@ -156,7 +168,5 @@ export default class Parser {
 
       this.parseNode(child, obj);
     }
-
-    return obj;
   }
 }

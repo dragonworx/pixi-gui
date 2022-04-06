@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../src/parser/schema.xsd"?>
+<UI>
+        <Element
+                id="all"
+                size="50"
+                padding="10"
+                fillColor="blue"
+                />
+        <Element
+                id="left"
+                x="100"
+                size="50"
+                paddingLeft="10"
+                fillColor="blue"
+                />
+        <Element
+                id="right"
+                x="100"
+                y="100"
+                size="50"
+                paddingRight="10"
+                fillColor="blue"
+                />
+        <Element
+                id="top"
+                x="200"
+                y="0"
+                size="50"
+                paddingTop="10"
+                fillColor="blue"
+                />
+        <Element
+                id="bottom"
+                x="200"
+                y="100"
+                size="50"
+                paddingBottom="10"
+                fillColor="blue"
+                />
+</UI>

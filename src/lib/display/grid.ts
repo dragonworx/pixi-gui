@@ -53,7 +53,7 @@ export default class Grid {
   }
 
   private lineColor(num: number) {
-    const green = Color('lime');
+    const green = Color('green');
     const alpha = num % 100 === 0 ? light : num % 50 === 0 ? inbetween : dark;
     return green.darken(alpha).hex();
   }

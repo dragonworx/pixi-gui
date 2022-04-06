@@ -1,6 +1,8 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark as theme } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { SplitPane } from 'react-collapse-pane';
 import Grid from 'src/lib/display/grid';
-import Document from 'src/lib/node/document';
 import Parser from 'src/parser/parser';
 import { query } from './util';
 
@@ -12,8 +14,9 @@ type Example = {
 };
 
 const examples: Example[] = [
-  { label: 'Test1', file: 'test1' },
-  { label: 'Test2', file: 'test2' },
+  { label: 'Positioning', file: 'positioning' },
+  { label: 'Margins', file: 'margins' },
+  { label: 'Padding', file: 'padding' },
 ];
 
 const getExamplePageUrl = (example: string) =>
@@ -23,6 +26,7 @@ const getExampleXmlUrl = (example: string) =>
   `${location.protocol}//${location.host}/examples/${example}.xml`;
 
 export default function App() {
+  const [xmlSrc, setXmlSrc] = useState<string>();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,12 +45,15 @@ export default function App() {
           response.text().then(xml => {
             const container = containerRef.current!;
             const doc = Parser.fromXmlString(xml, {
+              width: 500,
+              height: 500,
               container: container,
               resizeTo: container,
               deferInit: true,
             });
             doc.stage.addChildAt(grid, 0);
             doc.init();
+            setXmlSrc(xml);
           });
         });
       }
@@ -74,7 +81,18 @@ export default function App() {
         </select>
         <button onClick={onReloadClick}>Reload</button>
       </header>
-      <div id="example" ref={containerRef}></div>
+      <div id="container">
+        <SplitPane split="vertical" collapse={true}>
+          <div id="code">
+            {xmlSrc ? (
+              <SyntaxHighlighter language="xmlDoc" style={theme}>
+                {xmlSrc}
+              </SyntaxHighlighter>
+            ) : null}
+          </div>
+          <div id="example" ref={containerRef}></div>
+        </SplitPane>
+      </div>
     </div>
   );
 }
