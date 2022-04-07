@@ -17,6 +17,8 @@ const examples: Example[] = [
   { label: 'Positioning', file: 'positioning' },
   { label: 'Margins', file: 'margins' },
   { label: 'Padding', file: 'padding' },
+  { label: 'Horizontal Layout', file: 'horizontalLayout' },
+  { label: 'Vertical Layout', file: 'verticalLayout' },
 ];
 
 const getExamplePageUrl = (example: string) =>
@@ -82,7 +84,17 @@ export default function App() {
         <button onClick={onReloadClick}>Reload</button>
       </header>
       <div id="container">
-        <SplitPane split="vertical" collapse={true}>
+        <SplitPane
+          split="vertical"
+          initialSizes={[0.7, 0.3]}
+          collapse={false}
+          resizerOptions={{
+            grabberSize: 5,
+            css: { backgroundColor: 'green', width: 5 },
+            hoverCss: { backgroundColor: 'green', width: 5 },
+          }}
+        >
+          <div id="example" ref={containerRef}></div>
           <div id="code">
             {xmlSrc ? (
               <SyntaxHighlighter language="xmlDoc" style={theme}>
@@ -90,7 +102,6 @@ export default function App() {
               </SyntaxHighlighter>
             ) : null}
           </div>
-          <div id="example" ref={containerRef}></div>
         </SplitPane>
       </div>
     </div>
