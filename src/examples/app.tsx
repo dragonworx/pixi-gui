@@ -5,6 +5,7 @@ import { SplitPane } from 'react-collapse-pane';
 import Grid from 'src/lib/display/grid';
 import Parser from 'src/parser/parser';
 import { query } from './util';
+import Document from 'src/lib/node/document';
 
 const grid = Grid.createTilingSprite(5000, 5000);
 
@@ -19,6 +20,7 @@ const examples: Example[] = [
   { label: 'Padding', file: 'padding' },
   { label: 'Horizontal Layout', file: 'horizontalLayout' },
   { label: 'Vertical Layout', file: 'verticalLayout' },
+  { label: 'Images', file: 'images' },
 ];
 
 const getExamplePageUrl = (example: string) =>
@@ -46,16 +48,19 @@ export default function App() {
 
           response.text().then(xml => {
             const container = containerRef.current!;
-            const doc = Parser.fromXmlString(xml, {
+            const doc = new Document({
               width: 500,
               height: 500,
               container: container,
               resizeTo: container,
               deferInit: true,
             });
+            Parser.fromXmlString(xml, doc);
             doc.stage.addChildAt(grid, 0);
-            doc.init();
-            setXmlSrc(xml);
+            doc.preload(['img/button.png', 'img/test.png']).then(() => {
+              doc.init();
+              setXmlSrc(xml);
+            });
           });
         });
       }

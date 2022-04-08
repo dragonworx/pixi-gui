@@ -1,5 +1,6 @@
 import Parser from '../parser/parser';
 import Element from '../lib/node/element';
+import Document from '../lib/node/document';
 import { queryParam } from '../lib/util';
 import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
@@ -16,11 +17,13 @@ import { Sprite, Texture } from 'pixi.js';
 
 const main = document.getElementById('main')!;
 
-const doc = Parser.fromXmlString(xml, {
+const doc = new Document({
   container: main,
   resizeTo: main,
   deferInit: true,
 });
+
+Parser.fromXmlString(xml, doc);
 
 const win = window as any;
 doc.stage.alpha = 0.5;

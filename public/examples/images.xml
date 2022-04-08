@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../src/parser/schema.xsd"?>
+<UI>
+        <NineSliceImage
+                id="nineslice"
+                src="img/button.png"
+                edges="25"
+                fixture="fill"
+                alpha="0.5"
+                />
+        <Image
+                x="50"
+                y="50"
+                id="button"
+                src="img/button.png"
+                />
+        <Image
+                id="image"
+                src="img/test.png"
+                fixture="center"
+                />
+</UI>

@@ -27,16 +27,15 @@ export default class Document extends Node {
   protected _resizeToElement?: HTMLElement;
   protected _textureCache: Map<string, Texture<Resource>>;
 
-  constructor(opts: DocumentOptions = {}) {
+  constructor(readonly opts: DocumentOptions = {}) {
     super();
 
     const {
       app,
-      resizeTo,
-      container,
       width = 500,
       height = 500,
       sharp = false,
+      deferInit = false,
     } = opts;
 
     this.app =
@@ -48,16 +47,8 @@ export default class Document extends Node {
         backgroundColor: 0,
       });
 
-    if (resizeTo) {
-      this.observeResizeOn(resizeTo);
-    }
-
-    if (container) {
-      this.container = container;
-    }
-
     this._textureCache = new Map();
-    this._deferInit = false;
+    this._deferInit = deferInit;
     this._sharp = sharp;
   }
 
@@ -66,11 +57,17 @@ export default class Document extends Node {
   }
 
   init() {
-    if (!this._htmlContainer) {
-      console.error('Document was initialised without a container');
-    }
+    const { resizeTo, container } = this.opts;
 
     this._hasInit = true;
+
+    if (resizeTo) {
+      this.observeResizeOn(resizeTo);
+    }
+
+    if (container) {
+      this.container = container;
+    }
 
     this.sharp = this._sharp;
     this.children.forEach(node => node.deepInit());

@@ -1,5 +1,5 @@
 import Color from 'color';
-import Document, { DocumentOptions } from 'src/lib/node/document';
+import Document from 'src/lib/node/document';
 import Node from 'src/lib/node/node';
 import Element from 'src/lib/node/element';
 import Image from 'src/lib/node/image';
@@ -23,12 +23,12 @@ type FactoryFunction = (node: ChildNode) => FactoryClass;
 export default class Parser {
   schema: XmlSchema;
 
-  constructor(readonly docOpts?: DocumentOptions) {
+  constructor(readonly doc: Document) {
     this.schema = new XmlSchema();
   }
 
-  static fromXmlString(xml: string, opts?: DocumentOptions) {
-    return new Parser(opts).parse(xml);
+  static fromXmlString(xml: string, doc: Document) {
+    return new Parser(doc).parse(xml);
   }
 
   factory: Record<string, FactoryFunction> = {
@@ -49,9 +49,9 @@ export default class Parser {
   }
 
   parse(xmlStr: string) {
+    const { doc } = this;
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlStr, 'application/xml');
-    const doc = new Document(this.docOpts);
 
     this.parseNode(xmlDoc.documentElement, doc);
 
