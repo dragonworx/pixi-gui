@@ -83,6 +83,8 @@ export default class Box extends Node {
       geometry: { fixture },
       parentLocalContentBounds: parentLocalBounds,
       bounds,
+      marginWidth,
+      marginHeight,
     } = this;
 
     if (fixture.left !== undefined) {
@@ -108,7 +110,7 @@ export default class Box extends Node {
         0
       );
 
-      bounds.setRight(x);
+      bounds.setRight(x - marginWidth);
       this.width = bounds.width;
     }
 
@@ -118,7 +120,7 @@ export default class Box extends Node {
         fixture.bottom
       );
 
-      bounds.setBottom(y);
+      bounds.setBottom(y - marginHeight);
       this.height = bounds.height;
     }
   }
@@ -207,6 +209,20 @@ export default class Box extends Node {
       bounds.width + margin.left + margin.right,
       bounds.height + margin.top + margin.bottom
     );
+  }
+
+  get marginWidth() {
+    const {
+      geometry: { margin },
+    } = this;
+    return margin.left + margin.right;
+  }
+
+  get marginHeight() {
+    const {
+      geometry: { margin },
+    } = this;
+    return margin.top + margin.bottom;
   }
 
   get localMarginBounds() {

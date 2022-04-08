@@ -21,13 +21,13 @@ export default class Canvas2DPainter {
 
   static createTextCanvas(
     text: string,
+    fontSize: number,
     color: string,
-    bgColor: string = 'black'
+    bgColor: string = 'transparent'
   ) {
     const { canvas, ctx } = Canvas2DPainter.createCanvas();
+    ctx.font = `${fontSize}px sans-serif`;
     let metrics = ctx.measureText(text);
-    // let fontHeight =
-    //   metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
     const padding = 3;
     let height =
       metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
@@ -37,17 +37,18 @@ export default class Canvas2DPainter {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, width + padding, height + padding);
     ctx.fillStyle = color;
+    ctx.font = `${fontSize}px sans-serif`;
     ctx.fillText(text, padding / 2, height + padding / 2);
     return canvas;
   }
 
   static createTextSprite(text: string, color: string) {
-    const canvas = Canvas2DPainter.createTextCanvas(text, color);
+    const canvas = Canvas2DPainter.createTextCanvas(text, 12, color);
     return Sprite.from(Texture.from(canvas));
   }
 
   clear(width: number, height: number, color: string = 'transparent') {
-    this.ctx.fillStyle = 'transparent';
+    this.ctx.fillStyle = color;
     this.fillRect(0, 0, width, height);
     return this;
   }

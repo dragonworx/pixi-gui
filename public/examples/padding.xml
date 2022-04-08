@@ -38,4 +38,47 @@
                 paddingBottom="10"
                 fillColor="blue"
                 />
+        <Row y="200">
+                <Container
+                        padding="10"
+                        size="100"
+                        >
+                        <Element
+                                size="50"
+                                fillColor="purple"
+                                />
+                </Container>
+                <Container
+                        padding="10"
+                        size="100"
+                        >
+                        <Element
+                                size="50"
+                                fillColor="purple"
+                                marginLeft="10"
+                                />
+                </Container>
+                <Container
+                        padding="10"
+                        size="100"
+                        >
+                        <Element
+                                size="50"
+                                fillColor="purple"
+                                fixture="fill"
+                                />
+                </Container>
+                <Container
+                        padding="10"
+                        size="100"
+                        >
+                        <Element
+                                size="50"
+                                fillColor="purple"
+                                fixture="fill"
+                                margin="10"
+                                marginLeft="0"
+                                />
+                </Container>
+        </Row>
 </UI>

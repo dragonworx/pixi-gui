@@ -4,7 +4,7 @@
         <Column>
                 <Row>
                         <Container
-                                id="horizontal"
+                                id="default"
                                 layout="horizontal"
                                 width="250"
                                 height="100"
@@ -27,7 +27,7 @@
                                         />
                         </Container>
                         <Container
-                                id="horizontal"
+                                id="centerV"
                                 layout="horizontal"
                                 alignV="center"
                                 x="300"
@@ -52,7 +52,7 @@
                                         />
                         </Container>
                         <Container
-                                id="horizontal"
+                                id="endV"
                                 layout="horizontal"
                                 alignV="end"
                                 x="600"
@@ -78,31 +78,9 @@
                         </Container>
                 </Row>
                 <Row>
+
                         <Container
-                                id="horizontal"
-                                layout="horizontal"
-                                width="250"
-                                height="100"
-                                padding="10"
-                                >
-                                <Element
-                                        size="50"
-                                        margin="10"
-                                        fillColor="blue"
-                                        />
-                                <Element
-                                        size="40"
-                                        margin="10"
-                                        fillColor="blue"
-                                        />
-                                <Element
-                                        size="30"
-                                        margin="10"
-                                        fillColor="blue"
-                                        />
-                        </Container>
-                        <Container
-                                id="horizontal"
+                                id="centerH,V"
                                 layout="horizontal"
                                 alignH="center"
                                 alignV="center"
@@ -128,7 +106,7 @@
                                         />
                         </Container>
                         <Container
-                                id="horizontal"
+                                id="endH,endV"
                                 layout="horizontal"
                                 alignH="end"
                                 alignV="end"
@@ -158,17 +136,17 @@
                         <Element
                                 size="50"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="40"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="30"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                 </Row>
                 <Row
@@ -178,17 +156,17 @@
                         <Element
                                 size="50"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="40"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="30"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                 </Row>
                 <Row
@@ -198,17 +176,17 @@
                         <Element
                                 size="50"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="40"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                         <Element
                                 size="30"
                                 margin="10"
-                                fillColor="blue"
+                                fillColor="purple"
                                 />
                 </Row>
         </Column>

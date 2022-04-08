@@ -43,31 +43,31 @@
                         id="all"
                         size="50"
                         margin="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="left"
                         size="50"
                         marginLeft="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="right"
                         size="50"
                         marginRight="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="top"
                         size="50"
                         marginTop="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="bottom"
                         size="50"
                         marginBottom="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
         </Row>
         <Row
@@ -78,31 +78,31 @@
                         id="all"
                         size="50"
                         margin="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="left"
                         size="50"
                         marginLeft="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="right"
                         size="50"
                         marginRight="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="top"
                         size="50"
                         marginTop="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="bottom"
                         size="50"
                         marginBottom="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
         </Row>
         <Row
@@ -113,31 +113,31 @@
                         id="all"
                         size="50"
                         margin="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="left"
                         size="50"
                         marginLeft="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="right"
                         size="50"
                         marginRight="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="top"
                         size="50"
                         marginTop="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
                 <Element
                         id="bottom"
                         size="50"
                         marginBottom="10"
-                        fillColor="blue"
+                        fillColor="purple"
                         />
         </Row>
 </UI>

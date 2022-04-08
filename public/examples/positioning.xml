@@ -64,28 +64,28 @@
                                 <Element
                                         width="20"
                                         fixture="left"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         width="20"
                                         fixture="right"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         height="20"
                                         fixture="top"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         height="20"
                                         fixture="bottom"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                 </Row>
@@ -94,28 +94,28 @@
                                 <Element
                                         size="50"
                                         fixture="leftCenter"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="topLeft"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="topCenter"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="topRight"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                 </Row>
@@ -124,28 +124,42 @@
                                 <Element
                                         size="50"
                                         fixture="rightCenter"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="bottomRight"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="bottomCenter"
-                                        fillColor="blue"
+                                        fillColor="purple"
                                         />
                         </Container>
                         <Container size="100">
                                 <Element
                                         size="50"
                                         fixture="bottomLeft"
-                                        fillColor="blue"
+                                        fillColor="purple"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="fill"
+                                        fillColor="purple"
+                                        />
+                        </Container>
+                        <Container size="100">
+                                <Element
+                                        size="50"
+                                        fixture="center"
+                                        fillColor="purple"
                                         />
                         </Container>
                 </Row>
@@ -156,9 +170,9 @@
                 fixtureBottom="0.5"
                 fixtureRight="0.9"
                 >
-                <Fill fillColor="#ccc" />
+                <Fill fillColor="orange" />
                 <Fill
-                        fillColor="#333"
+                        fillColor="yellow"
                         fixtureLeft="0.3"
                         fixtureRight="0.7"
                         fixtureTop="0.3"

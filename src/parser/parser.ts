@@ -8,7 +8,7 @@ import Fill from 'src/lib/node/fill';
 import Block from 'src/lib/layout/block';
 import Row from 'src/lib/layout/row';
 import Column from 'src/lib/layout/column';
-import DisplayContainer from 'src/lib/node/displayContainer';
+// import DisplayContainer from 'src/lib/node/displayContainer';
 import XmlSchema, { XsdAttribute, XsdSimpleType } from './schema';
 
 export interface Setter {
@@ -18,6 +18,7 @@ export interface Setter {
 }
 
 type FactoryClass = { new (...args: any[]): Node };
+type FactoryFunction = (node: ChildNode) => FactoryClass;
 
 export default class Parser {
   schema: XmlSchema;
@@ -30,21 +31,21 @@ export default class Parser {
     return new Parser(opts).parse(xml);
   }
 
-  factory: Record<string, FactoryClass> = {
-    Document: Document,
-    Element: Element,
-    Image: Image,
-    NineSliceImage: NineSliceImage,
-    Fill: Fill,
+  factory: Record<string, FactoryFunction> = {
+    Document: () => Document,
+    Element: () => Element,
+    Image: () => Image,
+    NineSliceImage: () => NineSliceImage,
+    Fill: () => Fill,
     // Container: DisplayContainer,
-    Container: Element,
-    Block: Block,
-    Row: Row,
-    Column: Column,
+    Container: () => Element,
+    Block: () => Block,
+    Row: () => Row,
+    Column: () => Column,
   };
 
-  addFactoryType<T extends FactoryClass>(key: string, Class: T) {
-    this.factory[key] = Class;
+  addFactoryType(key: string, factory: FactoryFunction) {
+    this.factory[key] = factory;
   }
 
   parse(xmlStr: string) {
@@ -116,7 +117,7 @@ export default class Parser {
       return parent;
     }
 
-    const Class = this.factory[className];
+    const Class = this.factory[className](node);
     if (!Class) {
       throw new Error(
         `"${className}" is not a known node type. Check XML syntax.`
