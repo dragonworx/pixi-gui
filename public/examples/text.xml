@@ -3,11 +3,14 @@
 <UI>
         <Text
                 id="text"
+                x="100"
+                y="50"
                 text="Hello world!"
                 fontSize="30"
                 color="cyan"
                 />
         <Container
+                x="100"
                 y="100"
                 fixtureRight="0.5"
                 height="100"
@@ -15,7 +18,7 @@
                 <Paragraph
                         id="para"
                         y="100"
-                        fontSize="16"
+                        fontSize="20"
                         text="The quick brown fox jumps over the lazy dog."
                         fixture="fill"
                         />
