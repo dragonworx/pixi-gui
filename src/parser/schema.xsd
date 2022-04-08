@@ -61,6 +61,13 @@
                 <xs:restriction base="xs:string" />
         </xs:simpleType>
 
+        <xs:simpleType name="fontWeight">
+                <xs:restriction base="xs:string">
+                        <xs:enumeration value="bold" />
+                        <xs:enumeration value="regular" />
+                </xs:restriction>
+        </xs:simpleType>
+
         <!-- Attributes -->
         <xs:complexType name="UI">
                 <xs:sequence>
@@ -307,6 +314,33 @@
                 </xs:complexContent>
         </xs:complexType>
 
+        <xs:complexType name="Text">
+                <xs:complexContent>
+                        <xs:extension base="Surface">
+                                <xs:attribute
+                                        name="color"
+                                        type="color"
+                                        />
+                                <xs:attribute
+                                        name="text"
+                                        type="xs:string"
+                                        />
+                                <xs:attribute
+                                        name="fontSize"
+                                        type="xs:decimal"
+                                        />
+                                <xs:attribute
+                                        name="fontFamily"
+                                        type="xs:string"
+                                        />
+                                <xs:attribute
+                                        name="fontWeight"
+                                        type="fontWeight"
+                                        />
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
         <!-- Elements -->
 
         <xs:element
@@ -347,5 +381,15 @@
         <xs:element
                 name="NineSliceImage"
                 type="NineSliceImage"
+                />
+
+        <xs:element
+                name="Text"
+                type="Text"
+                />
+
+        <xs:element
+                name="Paragraph"
+                type="Text"
                 />
 </xs:schema>

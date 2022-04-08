@@ -21,6 +21,7 @@ const examples: Example[] = [
   { label: 'Horizontal Layout', file: 'horizontalLayout' },
   { label: 'Vertical Layout', file: 'verticalLayout' },
   { label: 'Images', file: 'images' },
+  { label: 'Text', file: 'text' },
 ];
 
 const getExamplePageUrl = (example: string) =>

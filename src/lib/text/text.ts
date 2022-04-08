@@ -47,7 +47,6 @@ export default abstract class Text extends DisplayContainer<Sprite> {
   set text(value: string) {
     this._text = value;
     this.renderText();
-    // this.updateLayout();
   }
 
   set color(value: string) {
@@ -59,6 +58,8 @@ export default abstract class Text extends DisplayContainer<Sprite> {
     this._font = value;
     this.text = this.text;
   }
+
+  set fontSize(value: number) {}
 
   protected abstract renderText(): void;
 }

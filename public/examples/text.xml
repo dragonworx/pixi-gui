@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../src/parser/schema.xsd"?>
+<UI>
+        <Text text="Hello world!" />
+        <Container
+                y="100"
+                fixtureRight="0.5"
+                >
+                <Paragraph
+                        y="100"
+                        text="The quick brown fox jumps over the lazy dog."
+                        fixture="fill"
+                        />
+        </Container>
+</UI>

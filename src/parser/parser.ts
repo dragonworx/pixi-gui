@@ -8,6 +8,8 @@ import Fill from 'src/lib/node/fill';
 import Block from 'src/lib/layout/block';
 import Row from 'src/lib/layout/row';
 import Column from 'src/lib/layout/column';
+import StaticText from 'src/lib/text/staticText';
+import Paragraph from 'src/lib/text/paragraph';
 // import DisplayContainer from 'src/lib/node/displayContainer';
 import XmlSchema, { XsdAttribute, XsdSimpleType } from './schema';
 
@@ -42,6 +44,8 @@ export default class Parser {
     Block: () => Block,
     Row: () => Row,
     Column: () => Column,
+    Text: () => StaticText,
+    Paragraph: () => Paragraph,
   };
 
   addFactoryType(key: string, factory: FactoryFunction) {
