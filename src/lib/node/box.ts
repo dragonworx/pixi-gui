@@ -7,7 +7,6 @@ import { LayoutAlign, LayoutType, Fixture } from 'src/lib/layout/';
 import WrapLayout from 'src/lib/layout/wrap';
 import HorizontalLayout from 'src/lib/layout/horizontal';
 import VerticalLayout from 'src/lib/layout/vertical';
-import { GeometrySystem } from 'pixi.js';
 
 export enum GeometryUpdate {
   Anchor = 'Anchor',

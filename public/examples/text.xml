@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../src/parser/schema.xsd"?>
 <UI>
-        <Text text="Hello world!" />
+        <Text
+                id="text"
+                text="Hello world!"
+                fontSize="30"
+                color="cyan"
+                />
         <Container
                 y="100"
                 fixtureRight="0.5"
+                height="100"
                 >
                 <Paragraph
+                        id="para"
                         y="100"
+                        fontSize="16"
                         text="The quick brown fox jumps over the lazy dog."
                         fixture="fill"
                         />

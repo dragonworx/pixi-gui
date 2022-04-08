@@ -18,6 +18,7 @@ const examples: Example[] = [
   { label: 'Positioning', file: 'positioning' },
   { label: 'Margins', file: 'margins' },
   { label: 'Padding', file: 'padding' },
+  { label: 'Wrap Layout', file: 'wrapLayout' },
   { label: 'Horizontal Layout', file: 'horizontalLayout' },
   { label: 'Vertical Layout', file: 'verticalLayout' },
   { label: 'Images', file: 'images' },
@@ -49,13 +50,13 @@ export default function App() {
 
           response.text().then(xml => {
             const container = containerRef.current!;
-            const doc = new Document({
+            const doc = ((window as any).doc = new Document({
               width: 500,
               height: 500,
               container: container,
               resizeTo: container,
               deferInit: true,
-            });
+            }));
             Parser.fromXmlString(xml, doc);
             doc.stage.addChildAt(grid, 0);
             doc.preload(['img/button.png', 'img/test.png']).then(() => {
@@ -87,7 +88,9 @@ export default function App() {
             </option>
           ))}
         </select>
-        <button onClick={onReloadClick}>Reload</button>
+        <button id="reload" onClick={onReloadClick}>
+          Reload
+        </button>
       </header>
       <div id="container">
         <SplitPane

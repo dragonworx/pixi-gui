@@ -172,6 +172,7 @@
                 <Row
                         alignV="end"
                         marginTop="30"
+                        reverse="true"
                         >
                         <Element
                                 size="50"

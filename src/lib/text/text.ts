@@ -1,7 +1,6 @@
 import { Sprite } from 'pixi.js';
 import DisplayContainer from 'src/lib/node/displayContainer';
 import Font, { defaultFont } from 'src/lib/text/font';
-import { GeometryUpdate } from '../node/box';
 
 export default abstract class Text extends DisplayContainer<Sprite> {
   protected _color: string;
@@ -59,7 +58,13 @@ export default abstract class Text extends DisplayContainer<Sprite> {
     this.text = this.text;
   }
 
-  set fontSize(value: number) {}
+  set fontSize(value: number) {
+    this._font = new Font({
+      ...this._font.fontInfo,
+      fontSize: value,
+    });
+    this.renderText();
+  }
 
   protected abstract renderText(): void;
 }

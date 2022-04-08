@@ -171,6 +171,7 @@
                 <Column
                         alignH="end"
                         marginLeft="30"
+                        reverse="true"
                         >
                         <Element
                                 size="50"

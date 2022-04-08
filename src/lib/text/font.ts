@@ -7,10 +7,12 @@ const symbol = `!@#$%^&*()_+-=[]{}\|;:'",<';'.>/? `;
 
 const fullCharSet = lowerAlpha + upperAlpha + numeric + symbol;
 
+export type FontWeight = 'bold' | 'regular';
+
 export interface FontInfo {
   charSet?: string;
   fontSize: number;
-  fontWeight?: 'bold' | 'regular';
+  fontWeight?: FontWeight;
   fontFamily: string;
 }
 
@@ -26,9 +28,16 @@ export default class Font {
   metrics: TextMetrics;
 
   constructor(readonly fontInfo: FontInfo) {
-    const { charSet = fullCharSet } = fontInfo;
+    const { canvas, charMap, metrics } = this.generate();
 
-    const font = this.font;
+    this.canvas = canvas;
+    this.charMap = charMap;
+    this.metrics = metrics;
+  }
+
+  private generate() {
+    const { charSet = fullCharSet } = this.fontInfo;
+    const fontStyle = this.fontStyle;
 
     const bgColor = 'transparent';
     const color = 'white';
@@ -36,14 +45,14 @@ export default class Font {
     const canvas = (this.canvas = document.createElement('canvas'));
     const ctx = canvas.getContext('2d')!;
 
-    ctx.font = font;
+    ctx.font = fontStyle;
     const metrics = (this.metrics = ctx.measureText(charSet));
     const height = this.height;
     const width = this.width;
     canvas.width = width;
     canvas.height = height;
 
-    ctx.font = font;
+    ctx.font = fontStyle;
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = color;
@@ -65,7 +74,7 @@ export default class Font {
       charCanvas.width = width;
       charCanvas.height = height;
       const charCtx = charCanvas.getContext('2d')!;
-      charCtx.font = font;
+      charCtx.font = fontStyle;
       charCtx.drawImage(canvas, x, 0, width, height, 0, 0, width, height);
       const texture = Texture.from(charCanvas);
       charMap.set(char, {
@@ -75,6 +84,8 @@ export default class Font {
       });
       x += width;
     });
+
+    return { canvas, charMap, metrics };
   }
 
   get height() {
@@ -88,7 +99,7 @@ export default class Font {
     return this.metrics.width;
   }
 
-  get font() {
+  get fontStyle() {
     const { fontSize, fontWeight = 'regular', fontFamily } = this.fontInfo;
 
     return `${fontWeight === 'bold' ? 'bold ' : ''}${fontSize}px ${fontFamily}`;
@@ -110,9 +121,32 @@ export default class Font {
     }
     return group;
   }
+
+  set fontSize(value: number) {
+    this.fontInfo.fontSize = value;
+    this.generate();
+  }
+
+  set fontFamily(value: string) {
+    this.fontInfo.fontFamily = value;
+    this.generate();
+  }
+
+  set fontWeight(value: FontWeight) {
+    this.fontInfo.fontWeight = value;
+    this.generate();
+  }
+
+  setFontInfo(fontInfo: FontInfo) {
+    this.fontInfo.charSet = fontInfo.fontFamily;
+    this.fontInfo.fontFamily = fontInfo.fontFamily;
+    this.fontInfo.fontSize = fontInfo.fontSize;
+    this.fontInfo.fontWeight = fontInfo.fontWeight;
+    this.generate();
+  }
 }
 
-export const defaultFont: Font = new Font({
+export const defaultFont = new Font({
   fontSize: 14,
   fontFamily: 'sans-serif',
 });

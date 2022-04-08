@@ -68,6 +68,11 @@ body {
   cursor: pointer;
 }
 
+#reload {
+  background-color: #222 !important;
+  color: #999 !important;
+}
+
 #container {
   background-color: red;
   overflow: hidden;

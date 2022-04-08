@@ -6,7 +6,6 @@ import Row from '../lib/layout/row';
 import Column from '../lib/layout/column';
 import Grid from '../lib/display/grid';
 import CustomContainer from '../lib/node/customContainer';
-import Font, { defaultFont } from '../lib/text/font';
 import Text from '../lib/text/staticText';
 import Paragraph from '../lib/text/paragraph';
 

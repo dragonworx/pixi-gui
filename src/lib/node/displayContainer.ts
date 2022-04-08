@@ -44,7 +44,10 @@ export default class DisplayContainer<
   onGeometryChanged(updateType: GeometryUpdate[]) {
     super.onGeometryChanged(updateType);
 
-    if (updateType.indexOf(GeometryUpdate.Position) > -1) {
+    if (
+      updateType.indexOf(GeometryUpdate.Position) > -1 ||
+      updateType.indexOf(GeometryUpdate.Anchor) > -1
+    ) {
       this.updateContainerPosition();
     }
   }
