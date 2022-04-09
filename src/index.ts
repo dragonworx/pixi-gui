@@ -1,2 +1,3 @@
 // import './tests/genisis';
-import './examples/main';
+// import './examples/main';
+import './tests/yoga';
