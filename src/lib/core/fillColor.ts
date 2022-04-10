@@ -16,10 +16,4 @@ export default class FillColor extends Display<Sprite> {
   get color() {
     return this._color;
   }
-
-  onGeometryChanged(): void {
-    const { _displayObject, width, height } = this;
-    _displayObject.width = width;
-    _displayObject.height = height;
-  }
 }

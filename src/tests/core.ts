@@ -20,4 +20,12 @@ dom.root.addChild(blue);
 blue.width = 100;
 blue.height = 100;
 
+for (let i = 0; i < 5; i++) {
+  const red = new FillColor();
+  red.color = 0xff0000;
+  red.width = 10;
+  red.height = 10;
+}
+
+(window as any).blue = blue;
 (window as any).dom = dom;
