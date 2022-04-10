@@ -1,5 +1,5 @@
 {
-  "include": ["./src"],
+  "include": ["./src", "src/lib/core/.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
