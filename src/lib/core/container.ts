@@ -15,6 +15,7 @@ export default class Container extends Display<PIXIContainer> {
   }
 
   addChild(child: node): void {
+    // super.addChild(child);
     if (child instanceof Display) {
       this._displayObject.addChild(child._displayObject);
     }

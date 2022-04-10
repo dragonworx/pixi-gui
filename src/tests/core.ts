@@ -16,16 +16,17 @@ const dom = new DOM(app);
 
 const blue = new FillColor();
 blue.color = 0x0000ff;
-dom.root.addChild(blue);
 blue.width = 100;
 blue.height = 100;
-
-for (let i = 0; i < 5; i++) {
-  const red = new FillColor();
-  red.color = 0xff0000;
-  red.width = 10;
-  red.height = 10;
-}
+dom.root.addChild(blue);
+// blue.layout.setWidthPercent(0.5);
+dom.root.update();
+// for (let i = 0; i < 5; i++) {
+//   const red = new FillColor();
+//   red.color = 0xff0000;
+//   red.width = 10;
+//   red.height = 10;
+// }
 
 (window as any).blue = blue;
 (window as any).dom = dom;

@@ -16,7 +16,7 @@ export default abstract class Display<T extends DisplayObject> extends Layout {
     return this._displayObject as unknown as T;
   }
 
-  update(): void {
+  refresh(): void {
     const { _displayObject, _layout } = this;
     const { left, top, width, height } = _layout.getComputedLayout();
     _displayObject.x = left;

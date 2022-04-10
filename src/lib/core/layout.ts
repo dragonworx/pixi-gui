@@ -20,7 +20,7 @@ export default abstract class Layout extends DOMNode {
 
   set width(value: number) {
     this._layout.setWidth(value);
-    this.onGeometryChanged();
+    this.update();
   }
 
   get height() {
@@ -29,7 +29,7 @@ export default abstract class Layout extends DOMNode {
 
   set height(value: number) {
     this._layout.setHeight(value);
-    this.onGeometryChanged();
+    this.update();
   }
 
   get x() {
@@ -42,24 +42,26 @@ export default abstract class Layout extends DOMNode {
 
   set x(value: number) {
     this._layout.setPosition(EDGE_LEFT, value);
-    this.onGeometryChanged();
+    this.update();
   }
 
   set y(value: number) {
     this._layout.setPosition(EDGE_TOP, value);
-    this.onGeometryChanged();
-  }
-
-  onGeometryChanged() {
-    this._layout.calculateLayout();
     this.update();
   }
 
-  addChild(child: Layout): void {
-    const { _layout, _children } = this;
-    _layout.insertChild(child.layout, _children.length);
-    super.addChild(child);
+  update() {
+    this._layout.calculateLayout();
+    this.refresh();
   }
 
-  update() {}
+  addChild(child: Layout): void {
+    super.addChild(child);
+
+    const { _layout, _children } = this;
+    _layout.insertChild(child.layout, _children.length);
+    this.update();
+  }
+
+  refresh() {}
 }
