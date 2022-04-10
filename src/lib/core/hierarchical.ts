@@ -7,10 +7,21 @@ export default class Hierarchical {
     this._children = [];
   }
 
+  getParent<T>() {
+    return this._parent as unknown as T;
+  }
+
+  get children() {
+    return this._children;
+  }
+
   addChild(child: Hierarchical) {
     this._children.push(child);
     child.setParent(this);
+    child.onAddedToParent();
   }
+
+  onAddedToParent() {}
 
   setParent(parent: Hierarchical | null) {
     this._parent = parent;
