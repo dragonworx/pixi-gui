@@ -12,15 +12,26 @@ const app = new Application({
 
 main.appendChild(app.renderer.view);
 
-const dom = new DOM(app);
+const doc = new DOM(app);
 
 const blue = new Element({
+  id: 'blue',
   width: 150,
   backgroundColor: 0x0000ff,
 });
 blue.width = 200;
 blue.height = 300;
-dom.root.addChild(blue);
+doc.root.addChild(blue);
 
+const green = new Element({
+  id: 'green',
+  width: 150,
+  backgroundColor: 0x00ff00,
+});
+green.width = 50;
+green.height = 50;
+blue.addChild(green);
+
+(window as any).doc = doc;
 (window as any).blue = blue;
-(window as any).dom = dom;
+(window as any).green = green;

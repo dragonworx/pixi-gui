@@ -1,6 +1,9 @@
 import DeepDiff from 'deep-diff';
 import DOMNode from './node';
 
+let id = 0;
+const nextId = () => String(id++);
+
 enum DiffType {
   New = 'N',
   Deleted = 'D',
@@ -12,7 +15,11 @@ export interface WithState<T> {
   setState(state: T): void;
 }
 
-export default abstract class Component<Props extends {}>
+export interface BaseProps {
+  id: string;
+}
+
+export default abstract class Component<Props extends BaseProps>
   extends DOMNode
   implements WithState<Props>
 {
@@ -27,13 +34,21 @@ export default abstract class Component<Props extends {}>
     };
   }
 
+  get id() {
+    return this.state.id;
+  }
+
   init() {
     super.init();
 
     this.setState(this.state, true);
   }
 
-  protected abstract defaultProps(): Props;
+  protected defaultProps(): Props {
+    return {
+      id: nextId(),
+    } as Props;
+  }
 
   setState(state: Partial<Props>, forceUpdate: boolean = false) {
     const { state: oldState } = this;
@@ -72,11 +87,15 @@ export default abstract class Component<Props extends {}>
       });
     } else if (forceUpdate) {
       console.log('INIT');
-      const defaultProps = this.defaultProps();
-      for (const [k] of Object.entries(this.state)) {
-        const key = k as PropKey;
-        this.onStateChange(key, this.state[key], defaultProps[key]);
-      }
+      this.update();
+    }
+  }
+
+  update() {
+    const defaultProps = this.defaultProps();
+    for (const [k] of Object.entries(this.state)) {
+      const key = k as keyof Props;
+      this.onStateChange(key, this.state[key], defaultProps[key]);
     }
   }
 
@@ -93,6 +112,6 @@ export default abstract class Component<Props extends {}>
   abstract onStateChange(
     key: keyof Props,
     value: Props[keyof Props],
-    oldValue: Props[keyof Props]
+    _oldValue: Props[keyof Props]
   ): void;
 }

@@ -1,12 +1,20 @@
 import DOM from './document';
 import Hierarchical from './hierarchical';
 
-export default abstract class DOMNode extends Hierarchical {
+export interface WithInit {
+  hasInit: boolean;
+}
+
+export default abstract class DOMNode extends Hierarchical implements WithInit {
   _document?: DOM;
   _hasInit: boolean = false;
 
   get document() {
     return this._document;
+  }
+
+  get hasInit() {
+    return this._hasInit;
   }
 
   setDocument(dom: DOM) {

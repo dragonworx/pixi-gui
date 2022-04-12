@@ -1,5 +1,6 @@
 import { Application } from 'pixi.js';
 import Element from './element';
+import yoga from 'yoga-layout-prebuilt';
 
 export default class DOM {
   _root: Element;
@@ -13,10 +14,11 @@ export default class DOM {
     this._height = height;
 
     const root = (this._root = new Element({
+      id: 'root',
       backgroundColor: 0xff0000,
+      width,
+      height,
     }));
-    root.width = width;
-    root.height = height;
     root.setDocument(this);
     root.init();
   }

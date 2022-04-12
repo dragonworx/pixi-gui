@@ -38,33 +38,33 @@ export default abstract class Display extends Layout {
     value: Props[keyof Props],
     oldValue: number
   ): void {
-    const { _background, _transitions } = this;
     super.onStateChange(key as keyof LayoutProps, value, oldValue);
 
-    console.log('Display update state', key, value, oldValue);
+    const { _background, computedLayout } = this;
+    const { left, top, width, height } = computedLayout;
 
     if (key === 'backgroundColor') {
-      _background.tint = value;
+      _background.tint = value as number;
     } else if (key === 'width') {
-      _background.width = value;
+      _background.width = width;
     } else if (key === 'height') {
-      _background.height = value;
+      _background.height = height;
     } else if (key === 'x') {
-      this.container.x = value;
+      this.container.x = left;
     } else if (key === 'y') {
-      this.container.y = value;
+      this.container.y = top;
     }
   }
 
   addChild(child: Display): void {
-    super.addChild(child);
-
     this._childContainer.addChild(child.container);
+
+    super.addChild(child);
   }
 
   setDocument(dom: document): void {
-    super.setDocument(dom);
-
     dom.stage.addChild(this._container);
+
+    super.setDocument(dom);
   }
 }

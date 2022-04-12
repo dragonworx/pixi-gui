@@ -1,10 +1,11 @@
 import { Tween } from 'tweenyweeny';
 import { WithState } from './component';
+import DOMNode, { WithInit } from './node';
 
 export default class Transition<T extends string> {
   transitions: Map<T, Tween>;
 
-  constructor(readonly target: WithState<any>) {
+  constructor(readonly target: WithState<any> & WithInit) {
     this.transitions = new Map();
   }
 
@@ -25,5 +26,14 @@ export default class Transition<T extends string> {
 
   setDuration(key: T, duration: number) {
     this.get(key).durationMs = duration;
+  }
+
+  start(key: T, fromValue: number, toValue: number) {
+    const { target } = this;
+    if (target.hasInit) {
+      this.get(key).start(fromValue, toValue);
+    } else {
+      target.setState({ [key]: toValue });
+    }
   }
 }

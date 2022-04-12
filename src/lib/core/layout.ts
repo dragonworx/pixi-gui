@@ -1,41 +1,61 @@
-import yoga, { EDGE_LEFT, EDGE_TOP, Node } from 'yoga-layout-prebuilt';
-import Component from './component';
+import yoga, {
+  EDGE_LEFT,
+  EDGE_TOP,
+  Node,
+  YogaJustifyContent,
+  YogaAlign,
+  JUSTIFY_FLEX_START,
+  JUSTIFY_CENTER,
+  JUSTIFY_FLEX_END,
+  ALIGN_FLEX_START,
+  ALIGN_CENTER,
+  ALIGN_FLEX_END,
+  DIRECTION_LTR,
+} from 'yoga-layout-prebuilt';
+import Component, { BaseProps } from './component';
 import Transition from './transition';
 
 type TransitionKeys = 'x' | 'y' | 'width' | 'height';
 
-export interface Props {
+export interface Props extends BaseProps {
   x: number;
   y: number;
   width: number;
   height: number;
+  justifyContent: YogaJustifyContent;
+  alignItems: YogaAlign;
 }
 
+const durationMs = 250;
+
 export default class Layout extends Component<Props> {
-  _layout: yoga.YogaNode = Node.create();
+  _yoga: yoga.YogaNode = Node.create();
   _transitions: Transition<TransitionKeys>;
 
   constructor(props: Partial<Props> = {}) {
     super(props);
 
     (this._transitions = new Transition<TransitionKeys>(this))
-      .set('x', 250)
-      .set('y', 250)
-      .set('width', 250)
-      .set('height', 250);
+      .set('x', durationMs)
+      .set('y', durationMs)
+      .set('width', durationMs)
+      .set('height', durationMs);
   }
 
   protected defaultProps(): Props {
     return {
+      ...super.defaultProps(),
       x: 0,
       y: 0,
       width: 100,
       height: 100,
+      justifyContent: JUSTIFY_FLEX_START,
+      alignItems: ALIGN_FLEX_START,
     };
   }
 
-  get _layoutNode() {
-    return this._layout;
+  get yoga() {
+    return this._yoga;
   }
 
   onStateChange(
@@ -44,28 +64,41 @@ export default class Layout extends Component<Props> {
     _oldValue: Props[keyof Props]
   ): void {
     if (key === 'x') {
-      this._layout.setPosition(EDGE_LEFT, value);
+      this._yoga.setPosition(EDGE_LEFT, value);
     } else if (key === 'y') {
-      this._layout.setPosition(EDGE_TOP, value);
+      this._yoga.setPosition(EDGE_TOP, value);
     } else if (key === 'width') {
-      this._layout.setWidth(value);
+      this._yoga.setWidth(value);
     } else if (key === 'height') {
-      this._layout.setHeight(value);
+      this._yoga.setHeight(value);
+    } else if (key === 'justifyContent') {
+      this._yoga.setJustifyContent(value as YogaJustifyContent);
+    } else if (key === 'alignItems') {
+      this._yoga.setAlignItems(value as YogaAlign);
     } else {
       return;
     }
 
-    this._layout.calculateLayout();
+    this.calcLayout();
   }
 
   addChild(child: Layout): void {
     super.addChild(child);
 
-    const { _layout, _children } = this;
+    const { _yoga, _children } = this;
 
-    _layout.insertChild(child._layoutNode, _children.length - 1);
+    _yoga.insertChild(child.yoga, _children.length - 1);
 
-    this._layout.calculateLayout();
+    this.calcLayout();
+    child.update();
+  }
+
+  calcLayout() {
+    this._yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
+  }
+
+  get computedLayout() {
+    return this._yoga.getComputedLayout();
   }
 
   get x() {
@@ -73,7 +106,7 @@ export default class Layout extends Component<Props> {
   }
 
   set x(value: number) {
-    this._transitions.get('x').start(this.state.x, value);
+    this._transitions.start('x', this.state.x, value);
   }
 
   get y() {
@@ -81,7 +114,7 @@ export default class Layout extends Component<Props> {
   }
 
   set y(value: number) {
-    this._transitions.get('y').start(this.state.y, value);
+    this._transitions.start('y', this.state.y, value);
   }
 
   get width() {
@@ -89,7 +122,7 @@ export default class Layout extends Component<Props> {
   }
 
   set width(value: number) {
-    this._transitions.get('width').start(this.state.width, value);
+    this._transitions.start('width', this.state.width, value);
   }
 
   get height() {
@@ -97,6 +130,57 @@ export default class Layout extends Component<Props> {
   }
 
   set height(value: number) {
-    this._transitions.get('height').start(this.state.height, value);
+    this._transitions.start('height', this.state.height, value);
+  }
+
+  get justifyContent() {
+    return this._yoga.getJustifyContent();
+  }
+
+  set justifyContent(value: YogaJustifyContent) {
+    this.setState({ justifyContent: value });
+    this.updateChildrenFromLayout();
+  }
+
+  get alignItems() {
+    return this._yoga.getJustifyContent();
+  }
+
+  set alignItems(value: YogaJustifyContent) {
+    this.setState({ alignItems: value });
+    this.updateChildrenFromLayout();
+  }
+
+  updateChildrenFromLayout() {
+    this._children.forEach(node => {
+      const child = node as Layout;
+      const layout = child.computedLayout;
+      child.x = layout.left;
+      child.y = layout.top;
+    });
+  }
+
+  setJustifyStart() {
+    this.justifyContent = JUSTIFY_FLEX_START;
+  }
+
+  setJustifyCenter() {
+    this.justifyContent = JUSTIFY_CENTER;
+  }
+
+  setJustifyEnd() {
+    this.justifyContent = JUSTIFY_FLEX_END;
+  }
+
+  setAlignItemsStart() {
+    this.alignItems = ALIGN_FLEX_START;
+  }
+
+  setAlignItemsCenter() {
+    this.alignItems = ALIGN_CENTER;
+  }
+
+  setAlignItemsEnd() {
+    this.alignItems = ALIGN_FLEX_END;
   }
 }
