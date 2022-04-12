@@ -1,67 +1,102 @@
 import yoga, { EDGE_LEFT, EDGE_TOP, Node } from 'yoga-layout-prebuilt';
-import DOMNode from './node';
+import Component from './component';
+import Transition from './transition';
 
-export default abstract class Layout extends DOMNode {
-  _layout: yoga.YogaNode;
+type TransitionKeys = 'x' | 'y' | 'width' | 'height';
 
-  constructor() {
-    super();
+export interface Props {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
-    this._layout = Node.create();
+export default class Layout extends Component<Props> {
+  _layout: yoga.YogaNode = Node.create();
+  _transitions: Transition<TransitionKeys>;
+
+  constructor(props: Partial<Props> = {}) {
+    super(props);
+
+    (this._transitions = new Transition<TransitionKeys>(this))
+      .set('x', 250)
+      .set('y', 250)
+      .set('width', 250)
+      .set('height', 250);
   }
 
-  get layout() {
+  protected defaultProps(): Props {
+    return {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+    };
+  }
+
+  get _layoutNode() {
     return this._layout;
   }
 
-  get width() {
-    return this._layout.getWidth().value;
-  }
+  onStateChange(
+    key: keyof Props,
+    value: Props[keyof Props],
+    _oldValue: Props[keyof Props]
+  ): void {
+    if (key === 'x') {
+      this._layout.setPosition(EDGE_LEFT, value);
+    } else if (key === 'y') {
+      this._layout.setPosition(EDGE_TOP, value);
+    } else if (key === 'width') {
+      this._layout.setWidth(value);
+    } else if (key === 'height') {
+      this._layout.setHeight(value);
+    } else {
+      return;
+    }
 
-  set width(value: number) {
-    this._layout.setWidth(value);
-    this.update();
-  }
-
-  get height() {
-    return this._layout.getHeight().value;
-  }
-
-  set height(value: number) {
-    this._layout.setHeight(value);
-    this.update();
-  }
-
-  get x() {
-    return this._layout.getPosition(EDGE_LEFT).value;
-  }
-
-  get y() {
-    return this._layout.getPosition(EDGE_TOP).value;
-  }
-
-  set x(value: number) {
-    this._layout.setPosition(EDGE_LEFT, value);
-    this.update();
-  }
-
-  set y(value: number) {
-    this._layout.setPosition(EDGE_TOP, value);
-    this.update();
-  }
-
-  update() {
     this._layout.calculateLayout();
-    this.refresh();
   }
 
   addChild(child: Layout): void {
     super.addChild(child);
 
     const { _layout, _children } = this;
-    _layout.insertChild(child.layout, _children.length);
-    this.update();
+
+    _layout.insertChild(child._layoutNode, _children.length - 1);
+
+    this._layout.calculateLayout();
   }
 
-  refresh() {}
+  get x() {
+    return this.state.x;
+  }
+
+  set x(value: number) {
+    this._transitions.get('x').start(this.state.x, value);
+  }
+
+  get y() {
+    return this.state.y;
+  }
+
+  set y(value: number) {
+    this._transitions.get('y').start(this.state.y, value);
+  }
+
+  get width() {
+    return this.state.width;
+  }
+
+  set width(value: number) {
+    this._transitions.get('width').start(this.state.width, value);
+  }
+
+  get height() {
+    return this.state.height;
+  }
+
+  set height(value: number) {
+    this._transitions.get('height').start(this.state.height, value);
+  }
 }

@@ -13,9 +13,12 @@
   },
   "dependencies": {
     "color": "^4.2.1",
+    "deep-diff": "^1.0.2",
     "eventemitter3": "^4.0.7",
     "hotkeys-js": "^3.8.7",
     "pixi.js": "^6.2.2",
+    "tslib": "^2.3.1",
+    "tweenyweeny": "^0.1.1",
     "yoga-layout-prebuilt": "^1.10.0"
   },
   "devDependencies": {
@@ -23,6 +26,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@types/color": "^3.0.2",
+    "@types/deep-diff": "^1.0.1",
     "@types/jest": "^27.4.1",
     "@types/pixi.js": "^5.0.0",
     "@types/react": "^17.0.43",

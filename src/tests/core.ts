@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 import DOM from 'src/lib/core/document';
-import FillColor from 'src/lib/core/fillColor';
+import Element from 'src/lib/core/element';
 
 const main = document.getElementById('main')!;
 
@@ -14,19 +14,13 @@ main.appendChild(app.renderer.view);
 
 const dom = new DOM(app);
 
-const blue = new FillColor();
-blue.color = 0x0000ff;
-blue.width = 100;
-blue.height = 100;
+const blue = new Element({
+  width: 150,
+  backgroundColor: 0x0000ff,
+});
+blue.width = 200;
+blue.height = 300;
 dom.root.addChild(blue);
-// blue.layout.setWidthPercent(0.5);
-dom.root.update();
-// for (let i = 0; i < 5; i++) {
-//   const red = new FillColor();
-//   red.color = 0xff0000;
-//   red.width = 10;
-//   red.height = 10;
-// }
 
 (window as any).blue = blue;
 (window as any).dom = dom;
