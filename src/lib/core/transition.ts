@@ -1,6 +1,6 @@
 import { Tween } from 'tweenyweeny';
 import { WithState } from './component';
-import DOMNode, { WithInit } from './node';
+import { WithInit } from './node';
 
 export default class Transition<T extends string> {
   transitions: Map<T, Tween>;
@@ -30,7 +30,8 @@ export default class Transition<T extends string> {
 
   start(key: T, fromValue: number, toValue: number) {
     const { target } = this;
-    if (target.hasInit) {
+    const tween = this.get(key);
+    if (target.hasInit && tween.durationMs > 0) {
       this.get(key).start(fromValue, toValue);
     } else {
       target.setState({ [key]: toValue });

@@ -26,7 +26,7 @@ export interface Props extends BaseProps {
   alignItems: YogaAlign;
 }
 
-const durationMs = 250;
+const durationMs = 0;
 
 export default class Layout extends Component<Props> {
   _yoga: yoga.YogaNode = Node.create();
@@ -95,6 +95,10 @@ export default class Layout extends Component<Props> {
 
   calcLayout() {
     this._yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
+  }
+
+  setTransitionDuration(key: TransitionKeys, durationMs: number) {
+    this._transitions.setDuration(key, durationMs);
   }
 
   get computedLayout() {
