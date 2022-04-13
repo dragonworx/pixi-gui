@@ -1,5 +1,6 @@
 import DeepDiff from 'deep-diff';
 import DOMNode from './node';
+import Transition from './transition';
 
 let id = 0;
 const nextId = () => String(id++);
@@ -24,6 +25,7 @@ export default abstract class Component<Props extends BaseProps>
   implements WithState<Props>
 {
   protected state: Props;
+  _transitions: Transition;
 
   constructor(readonly props: Partial<Props> = {}) {
     super();
@@ -32,6 +34,8 @@ export default abstract class Component<Props extends BaseProps>
       ...this.defaultProps(),
       ...props,
     };
+
+    this._transitions = new Transition(this);
   }
 
   get id() {
@@ -50,7 +54,11 @@ export default abstract class Component<Props extends BaseProps>
     } as Props;
   }
 
-  setState(state: Partial<Props>, forceUpdate: boolean = false) {
+  getState<T>(): T {
+    return this.state as unknown as T;
+  }
+
+  setState<T>(state: Partial<T>, forceUpdate: boolean = false) {
     const { state: oldState } = this;
 
     this.state = {
@@ -109,9 +117,13 @@ export default abstract class Component<Props extends BaseProps>
     }
   }
 
-  abstract onStateChange(
-    key: keyof Props,
-    value: Props[keyof Props],
-    _oldValue: Props[keyof Props]
+  abstract onStateChange<T>(
+    key: keyof T,
+    value: unknown,
+    _oldValue: unknown
   ): void;
+
+  setTransitionDuration(key: string, durationMs: number) {
+    this._transitions.setDuration(key, durationMs);
+  }
 }

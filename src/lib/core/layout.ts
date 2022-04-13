@@ -13,9 +13,7 @@ import yoga, {
   DIRECTION_LTR,
 } from 'yoga-layout-prebuilt';
 import Component, { BaseProps } from './component';
-import Transition from './transition';
-
-type TransitionKeys = 'x' | 'y' | 'width' | 'height';
+import Hierarchical from './hierarchical';
 
 export interface Props extends BaseProps {
   x: number;
@@ -26,23 +24,22 @@ export interface Props extends BaseProps {
   alignItems: YogaAlign;
 }
 
-const durationMs = 0;
+export type TransitionKeys = 'x' | 'y' | 'width' | 'height';
 
-export default class Layout extends Component<Props> {
+export default class Layout<P> extends Component<P & Props> {
   _yoga: yoga.YogaNode = Node.create();
-  _transitions: Transition<TransitionKeys>;
 
-  constructor(props: Partial<Props> = {}) {
+  constructor(props: Partial<P & Props>) {
     super(props);
 
-    (this._transitions = new Transition<TransitionKeys>(this))
-      .set('x', durationMs)
-      .set('y', durationMs)
-      .set('width', durationMs)
-      .set('height', durationMs);
+    this._transitions
+      .initKey('x')
+      .initKey('y')
+      .initKey('width')
+      .initKey('height');
   }
 
-  protected defaultProps(): Props {
+  protected defaultProps(): P & Props {
     return {
       ...super.defaultProps(),
       x: 0,
@@ -58,19 +55,19 @@ export default class Layout extends Component<Props> {
     return this._yoga;
   }
 
-  onStateChange(
+  onStateChange<Props>(
     key: keyof Props,
-    value: Props[keyof Props],
-    _oldValue: Props[keyof Props]
+    value: unknown,
+    _oldValue: unknown
   ): void {
     if (key === 'x') {
-      this._yoga.setPosition(EDGE_LEFT, value);
+      this._yoga.setPosition(EDGE_LEFT, value as number);
     } else if (key === 'y') {
-      this._yoga.setPosition(EDGE_TOP, value);
+      this._yoga.setPosition(EDGE_TOP, value as number);
     } else if (key === 'width') {
-      this._yoga.setWidth(value);
+      this._yoga.setWidth(value as number);
     } else if (key === 'height') {
-      this._yoga.setHeight(value);
+      this._yoga.setHeight(value as number);
     } else if (key === 'justifyContent') {
       this._yoga.setJustifyContent(value as YogaJustifyContent);
     } else if (key === 'alignItems') {
@@ -82,7 +79,8 @@ export default class Layout extends Component<Props> {
     this.calcLayout();
   }
 
-  addChild(child: Layout): void {
+  addChild(node: Hierarchical): void {
+    const child = node as Layout<P>;
     super.addChild(child);
 
     const { _yoga, _children } = this;
@@ -95,10 +93,6 @@ export default class Layout extends Component<Props> {
 
   calcLayout() {
     this._yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
-  }
-
-  setTransitionDuration(key: TransitionKeys, durationMs: number) {
-    this._transitions.setDuration(key, durationMs);
   }
 
   get computedLayout() {
@@ -157,7 +151,7 @@ export default class Layout extends Component<Props> {
 
   updateChildrenFromLayout() {
     this._children.forEach(node => {
-      const child = node as Layout;
+      const child = node as Layout<P>;
       const layout = child.computedLayout;
       child.x = layout.left;
       child.y = layout.top;
