@@ -1,12 +1,7 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import document from './document';
 import Hierarchical from './hierarchical';
-import Layout, {
-  Props as LayoutProps,
-  TransitionKeys as LayoutTransitionKeys,
-} from './layout';
-
-export type TranstionKeys = LayoutTransitionKeys | 'alpha';
+import Layout, { Props as LayoutProps } from './layout';
 
 export interface Props extends LayoutProps {
   backgroundColor: number;
@@ -41,6 +36,10 @@ export default abstract class Display<P> extends Layout<P & Props> {
 
   get container() {
     return this._container;
+  }
+
+  protected transitionKeys(): string[] {
+    return [...super.transitionKeys(), 'alpha'];
   }
 
   onStateChange<Props>(

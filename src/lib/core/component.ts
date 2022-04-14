@@ -54,6 +54,10 @@ export default abstract class Component<Props extends BaseProps>
     } as Props;
   }
 
+  protected transitionKeys(): string[] {
+    return [];
+  }
+
   getState<T>(): T {
     return this.state as unknown as T;
   }
@@ -125,5 +129,11 @@ export default abstract class Component<Props extends BaseProps>
 
   setTransitionDuration(key: string, durationMs: number) {
     this._transitions.setDuration(key, durationMs);
+  }
+
+  setAllTransitionDuration(durationMs: number) {
+    this.transitionKeys().forEach(key =>
+      this._transitions.setDuration(key, durationMs)
+    );
   }
 }

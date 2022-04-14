@@ -24,8 +24,6 @@ export interface Props extends BaseProps {
   alignItems: YogaAlign;
 }
 
-export type TransitionKeys = 'x' | 'y' | 'width' | 'height';
-
 export default class Layout<P> extends Component<P & Props> {
   _yoga: yoga.YogaNode = Node.create();
 
@@ -53,6 +51,10 @@ export default class Layout<P> extends Component<P & Props> {
 
   get yoga() {
     return this._yoga;
+  }
+
+  protected transitionKeys(): string[] {
+    return [...super.transitionKeys(), 'x', 'y', 'width', 'height'];
   }
 
   onStateChange<Props>(
