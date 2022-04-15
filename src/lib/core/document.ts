@@ -1,8 +1,7 @@
 import { Application } from 'pixi.js';
 import Element from './element';
-import yoga from 'yoga-layout-prebuilt';
 
-export default class DOM {
+export default class Document {
   _root: Element;
   _width: number = 0;
   _height: number = 0;
@@ -19,7 +18,7 @@ export default class DOM {
       width,
       height,
     }));
-    root.setDocument(this);
+    root.setAsRoot(this);
     root.init();
   }
 

@@ -1,7 +1,7 @@
 import yoga, {
   EDGE_LEFT,
   EDGE_TOP,
-  Node,
+  Node as YogaNode,
   YogaJustifyContent,
   YogaAlign,
   JUSTIFY_FLEX_START,
@@ -12,8 +12,8 @@ import yoga, {
   ALIGN_FLEX_END,
   DIRECTION_LTR,
 } from 'yoga-layout-prebuilt';
-import Component, { BaseProps } from './component';
-import Hierarchical from './hierarchical';
+import NodeWithState, { BaseProps } from './nodeWithState';
+import Node from './node';
 
 export interface Props extends BaseProps {
   x: number;
@@ -24,8 +24,8 @@ export interface Props extends BaseProps {
   alignItems: YogaAlign;
 }
 
-export default class Layout<P> extends Component<P & Props> {
-  _yoga: yoga.YogaNode = Node.create();
+export default class NodeWithLayout<P> extends NodeWithState<P & Props> {
+  _yoga: yoga.YogaNode = YogaNode.create();
 
   constructor(props: Partial<P & Props>) {
     super(props);
@@ -36,6 +36,8 @@ export default class Layout<P> extends Component<P & Props> {
       .initKey('width')
       .initKey('height');
   }
+
+  foo = '';
 
   protected defaultProps(): P & Props {
     return {
@@ -81,9 +83,8 @@ export default class Layout<P> extends Component<P & Props> {
     this.calcLayout();
   }
 
-  addChild(node: Hierarchical): void {
-    const child = node as Layout<P>;
-    super.addChild(child);
+  addChild(child: NodeWithLayout<any>): void {
+    super.addChild(child as Node);
 
     const { _yoga, _children } = this;
 
@@ -153,7 +154,7 @@ export default class Layout<P> extends Component<P & Props> {
 
   updateChildrenFromLayout() {
     this._children.forEach(node => {
-      const child = node as Layout<P>;
+      const child = node as NodeWithLayout<P>;
       const layout = child.computedLayout;
       child.x = layout.left;
       child.y = layout.top;

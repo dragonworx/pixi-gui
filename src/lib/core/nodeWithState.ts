@@ -1,5 +1,5 @@
 import DeepDiff from 'deep-diff';
-import DOMNode from './node';
+import Node from './node';
 import Transition from './transition';
 
 let id = 0;
@@ -20,8 +20,8 @@ export interface BaseProps {
   id: string;
 }
 
-export default abstract class Component<Props extends BaseProps>
-  extends DOMNode
+export default abstract class NodeWithState<Props extends BaseProps>
+  extends Node
   implements WithState<Props>
 {
   protected state: Props;

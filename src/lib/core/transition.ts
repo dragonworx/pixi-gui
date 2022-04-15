@@ -1,5 +1,5 @@
 import { Tween } from 'tweenyweeny';
-import { WithState } from './component';
+import { WithState } from './nodeWithState';
 import { WithInit } from './node';
 
 export default class Transition {

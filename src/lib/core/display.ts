@@ -1,14 +1,16 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import document from './document';
-import Hierarchical from './hierarchical';
-import Layout, { Props as LayoutProps } from './layout';
+import Node from './node';
+import NodeWithLayout, { Props as LayoutProps } from './nodeWithLayout';
 
 export interface Props extends LayoutProps {
   backgroundColor: number;
   alpha: number;
 }
 
-export default abstract class Display<P> extends Layout<P & Props> {
+export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
+  P & Props
+> {
   _container: Container;
   _childContainer: Container;
   _background: Sprite;
@@ -67,16 +69,16 @@ export default abstract class Display<P> extends Layout<P & Props> {
     }
   }
 
-  addChild(child: Hierarchical): void {
-    this._childContainer.addChild((child as Display<P>).container);
+  addChild(child: NodeWithDisplay<any>): void {
+    this._childContainer.addChild(child.container);
 
-    super.addChild(child as Layout<any>);
+    super.addChild(child as NodeWithLayout<any>);
   }
 
-  setDocument(dom: document): void {
+  setAsRoot(dom: document): void {
     dom.stage.addChild(this._container);
 
-    super.setDocument(dom);
+    super.setAsRoot(dom);
   }
 
   get backgroundColor() {
