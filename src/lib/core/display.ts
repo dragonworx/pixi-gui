@@ -1,4 +1,5 @@
 import { Container, Sprite, Texture } from 'pixi.js';
+import { Tween } from 'tweenyweeny';
 import document from './document';
 import NodeWithLayout, { Props as LayoutProps } from './nodeWithLayout';
 import { TransitionKey } from './transition';
@@ -52,7 +53,6 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     super.onStateChange(key as keyof LayoutProps, value, oldValue);
 
     const { _container, _background, computedLayout } = this;
-    // const { left, top, width, height } = computedLayout;
     const num = value as number;
 
     if (key === 'backgroundColor') {
@@ -66,7 +66,6 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
       }
     } else if (key === 'alpha') {
       _container.alpha = num;
-      // }
     } else if (key === 'x') {
       _container.x = num;
     } else if (key === 'y') {
@@ -76,8 +75,6 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     } else if (key === 'height') {
       _background.height = num;
     }
-
-    // this.refresh();
   }
 
   addChild(child: NodeWithDisplay<any>): void {
@@ -108,18 +105,44 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     this._transitions.start('alpha', this.state.alpha, value);
   }
 
-  refresh() {
+  onParentLayoutChanged() {
     const {
-      container,
+      _container,
       _background,
-      // computedLayout: { left, top, width, height },
+      _transitions,
+      computedLayout: { left, top, width, height },
     } = this;
-    const { x: left, y: top, width, height } = this.state;
-    console.log(this.id, left, top);
-    container.x = left;
-    container.y = top;
-    _background.width = width;
-    _background.height = height;
-    return this;
+    Tween.run(
+      value => {
+        _container.x = value;
+      },
+      this.state.x,
+      left,
+      _transitions.getDuration('x')
+    );
+    Tween.run(
+      value => {
+        _container.y = value;
+      },
+      this.state.y,
+      top,
+      _transitions.getDuration('y')
+    );
+    Tween.run(
+      value => {
+        _background.width = value;
+      },
+      this.state.width,
+      width,
+      _transitions.getDuration('width')
+    );
+    Tween.run(
+      value => {
+        _background.height = value;
+      },
+      this.state.height,
+      height,
+      _transitions.getDuration('height')
+    );
   }
 }

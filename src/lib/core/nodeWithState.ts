@@ -45,7 +45,14 @@ export default abstract class NodeWithState<Props extends BaseProps>
   init() {
     super.init();
 
-    this.setState(this.state, true);
+    this.setState(this.state);
+
+    const defaultProps = this.defaultProps();
+
+    for (const [k] of Object.entries(this.state)) {
+      const key = k as keyof Props;
+      this.onStateChange(key, this.state[key], defaultProps[key]);
+    }
   }
 
   protected defaultProps(): Props {
@@ -62,7 +69,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
     return this.state as unknown as T;
   }
 
-  setState<T>(state: Partial<T>, forceUpdate: boolean = false) {
+  setState<T>(state: Partial<T>) {
     const { state: oldState } = this;
 
     this.state = {
@@ -76,7 +83,8 @@ export default abstract class NodeWithState<Props extends BaseProps>
     type PropValue = Props[keyof Props];
 
     if (diffs) {
-      diffs.forEach(diff => {
+      for (let i = 0; i < diffs.length; i++) {
+        const diff = diffs[i];
         const { kind } = diff;
         if (kind === DiffType.New) {
           const state = diff.rhs;
@@ -96,19 +104,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
             diff.lhs as unknown as PropValue
           );
         }
-      });
-    } else if (forceUpdate) {
-      console.log('INIT');
-      this.update();
-    }
-  }
-
-  update() {
-    //todo: move to init
-    const defaultProps = this.defaultProps();
-    for (const [k] of Object.entries(this.state)) {
-      const key = k as keyof Props;
-      this.onStateChange(key, this.state[key], defaultProps[key]);
+      }
     }
   }
 
@@ -133,7 +129,6 @@ export default abstract class NodeWithState<Props extends BaseProps>
   }
 
   setAllTransitionDuration(durationMs: number) {
-    // todo: streamline, get rid of transitionKeys - maybe make key type in Transition class from all required
     this.transitionKeys().forEach(key =>
       this._transitions.setDuration(key, durationMs)
     );

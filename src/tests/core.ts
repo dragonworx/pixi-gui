@@ -22,6 +22,7 @@ doc.stage.addChildAt(grid, 0);
 const blue = new Element({
   id: 'blue',
   backgroundColor: 0x0000ff,
+  x: 50,
 });
 blue.width = 200;
 blue.height = 200;

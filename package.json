@@ -17,7 +17,7 @@
     "eventemitter3": "^4.0.7",
     "hotkeys-js": "^3.8.7",
     "pixi.js": "^6.2.2",
-    "tweenyweeny": "1.0.0",
+    "tweenyweeny": "1.1.0",
     "yoga-layout-prebuilt": "^1.10.0"
   },
   "devDependencies": {
