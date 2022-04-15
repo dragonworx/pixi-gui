@@ -15,17 +15,47 @@ import yoga, {
 import NodeWithState, { BaseProps } from './nodeWithState';
 import Node from './node';
 
-export interface Props extends BaseProps {
+export interface LayoutAPI {
   x: number;
   y: number;
   width: number;
   height: number;
+}
+
+const layoutApiKeys = ['x', 'y', 'width', 'height'];
+
+export const JUSTIFY = {
+  start: JUSTIFY_FLEX_START,
+  center: JUSTIFY_CENTER,
+  end: JUSTIFY_FLEX_END,
+};
+
+export const ALIGN = {
+  start: ALIGN_FLEX_START,
+  center: ALIGN_CENTER,
+  end: ALIGN_FLEX_END,
+};
+
+export const defaultX = 0;
+export const defaultY = 0;
+export const defaultWidth = 100;
+export const defaultHeight = 100;
+
+export interface Props extends BaseProps, LayoutAPI {
   justifyContent: YogaJustifyContent;
   alignItems: YogaAlign;
 }
 
-export default class NodeWithLayout<P> extends NodeWithState<P & Props> {
+export default class NodeWithLayout<P>
+  extends NodeWithState<P & Props>
+  implements LayoutAPI
+{
   _yoga: yoga.YogaNode = YogaNode.create();
+
+  x = defaultX;
+  y = defaultY;
+  width = defaultWidth;
+  height = defaultHeight;
 
   constructor(props: Partial<P & Props>) {
     super(props);
@@ -35,6 +65,17 @@ export default class NodeWithLayout<P> extends NodeWithState<P & Props> {
       .initKey('y')
       .initKey('width')
       .initKey('height');
+
+    layoutApiKeys.forEach(key => {
+      Object.defineProperty(this, key, {
+        get() {
+          return this.state[key];
+        },
+        set(value: number) {
+          this._transitions.start(key, this.state[key], value);
+        },
+      });
+    });
   }
 
   foo = '';
@@ -42,10 +83,10 @@ export default class NodeWithLayout<P> extends NodeWithState<P & Props> {
   protected defaultProps(): P & Props {
     return {
       ...super.defaultProps(),
-      x: 0,
-      y: 0,
-      width: 100,
-      height: 100,
+      x: defaultX,
+      y: defaultY,
+      width: defaultWidth,
+      height: defaultHeight,
       justifyContent: JUSTIFY_FLEX_START,
       alignItems: ALIGN_FLEX_START,
     };
@@ -100,38 +141,6 @@ export default class NodeWithLayout<P> extends NodeWithState<P & Props> {
 
   get computedLayout() {
     return this._yoga.getComputedLayout();
-  }
-
-  get x() {
-    return this.state.x;
-  }
-
-  set x(value: number) {
-    this._transitions.start('x', this.state.x, value);
-  }
-
-  get y() {
-    return this.state.y;
-  }
-
-  set y(value: number) {
-    this._transitions.start('y', this.state.y, value);
-  }
-
-  get width() {
-    return this.state.width;
-  }
-
-  set width(value: number) {
-    this._transitions.start('width', this.state.width, value);
-  }
-
-  get height() {
-    return this.state.height;
-  }
-
-  set height(value: number) {
-    this._transitions.start('height', this.state.height, value);
   }
 
   get justifyContent() {

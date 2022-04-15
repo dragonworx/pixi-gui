@@ -104,6 +104,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
   }
 
   update() {
+    //todo: move to init
     const defaultProps = this.defaultProps();
     for (const [k] of Object.entries(this.state)) {
       const key = k as keyof Props;
