@@ -19,7 +19,7 @@ export default class Transition {
     return transitions.get(key)!;
   }
 
-  initKey(key: TransitionKey, duration: number = 0) {
+  initKey(key: TransitionKey, duration: number = 1000) {
     const tween = new Tween(duration);
     this.transitions.set(key, tween);
     tween.on('update', value => this.target.setState({ [key]: value }));

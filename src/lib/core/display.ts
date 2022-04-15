@@ -51,8 +51,8 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
   ): void {
     super.onStateChange(key as keyof LayoutProps, value, oldValue);
 
-    const { _background, computedLayout } = this;
-    const { left, top, width, height } = computedLayout;
+    const { _container, _background, computedLayout } = this;
+    // const { left, top, width, height } = computedLayout;
     const num = value as number;
 
     if (key === 'backgroundColor') {
@@ -65,15 +65,19 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
         _background.tint = num;
       }
     } else if (key === 'alpha') {
-      this._container.alpha = num;
-    } else if (
-      key === 'width' ||
-      key === 'height' ||
-      key === 'x' ||
-      key === 'y'
-    ) {
-      this.updateFromLayout();
+      _container.alpha = num;
     }
+    // } else if (key === 'x') {
+    //   _container.x = num;
+    // } else if (key === 'y') {
+    //   _container.y = num;
+    // } else if (key === 'width') {
+    //   _background.width = num;
+    // } else if (key === 'height') {
+    //   _background.height = num;
+    // }
+
+    this.refresh();
   }
 
   addChild(child: NodeWithDisplay<any>): void {
@@ -104,7 +108,7 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     this._transitions.start('alpha', this.state.alpha, value);
   }
 
-  updateFromLayout(): void {
+  refresh() {
     const {
       container,
       _background,

@@ -38,6 +38,3 @@ blue.addChild(green);
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
-
-blue.justifyContent = 'center';
-blue.alignItems = 'center';

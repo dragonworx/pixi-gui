@@ -134,25 +134,42 @@ export default class NodeWithLayout<P>
     value: unknown,
     _oldValue: unknown
   ): void {
+    const num = value as number;
+    const str = value as string;
+
     if (key === 'x') {
-      this._yoga.setPosition(EDGE_LEFT, value as number);
+      this._yoga.setPosition(EDGE_LEFT, num);
     } else if (key === 'y') {
-      this._yoga.setPosition(EDGE_TOP, value as number);
+      this._yoga.setPosition(EDGE_TOP, num);
     } else if (key === 'width') {
-      this._yoga.setWidth(value as number);
+      this._yoga.setWidth(num);
     } else if (key === 'height') {
-      this._yoga.setHeight(value as number);
+      this._yoga.setHeight(num);
     } else if (key === 'justifyContent') {
-      this._yoga.setJustifyContent(JUSTIFY[value as unknown as string]);
+      this._yoga.setJustifyContent(JUSTIFY[str]);
     } else if (key === 'alignItems') {
-      this._yoga.setAlignItems(ALIGN[value as unknown as string]);
+      this._yoga.setAlignItems(ALIGN[str]);
     } else if (key === 'flexDirection') {
-      this._yoga.setFlexDirection(FLEX_DIRECTION[value as unknown as string]);
+      this._yoga.setFlexDirection(FLEX_DIRECTION[str]);
     } else {
       return;
     }
 
     this.calcLayout();
+
+    if (key === 'alignItems' || key === 'justifyContent') {
+      this.updateChildrenFromLayout();
+    }
+  }
+
+  calcLayout() {
+    const { _yoga, state } = this;
+    _yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
+    const { left, top, width, height } = this._yoga.getComputedLayout();
+    state.x = left;
+    state.y = top;
+    state.width = width;
+    state.height = height;
   }
 
   addChild(child: NodeWithLayout<any>): void {
@@ -166,10 +183,6 @@ export default class NodeWithLayout<P>
     child.update();
   }
 
-  calcLayout() {
-    this._yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
-  }
-
   get computedLayout() {
     return this._yoga.getComputedLayout();
   }
@@ -180,7 +193,6 @@ export default class NodeWithLayout<P>
 
   set justifyContent(value: JUSTIFY_VALUE) {
     this.setState({ justifyContent: value });
-    this.updateChildrenFromLayout();
   }
 
   get alignItems() {
@@ -189,7 +201,6 @@ export default class NodeWithLayout<P>
 
   set alignItems(value: ALIGN_VALUE) {
     this.setState({ alignItems: value });
-    this.updateChildrenFromLayout();
   }
 
   get flexDirection() {
@@ -198,14 +209,26 @@ export default class NodeWithLayout<P>
 
   set flexDirection(value: FLEX_DIRECTION_VALUE) {
     this.setState({ alignItems: value });
-    this.updateChildrenFromLayout();
   }
 
   updateChildrenFromLayout() {
-    this._children.forEach(node =>
-      (node as NodeWithLayout<P>).updateFromLayout()
-    );
+    this._children.forEach(node => {
+      (node as NodeWithLayout<P>).refresh2();
+    });
   }
 
-  updateFromLayout() {}
+  refresh() {}
+
+  refresh2() {
+    // this.calcLayout();
+    const {
+      computedLayout: { left, top, width, height },
+    } = this;
+    // const { x: left, y: top, width, height } = this.state;
+    console.log(left, top);
+    this.x = left;
+    this.y = top;
+    this.width = width;
+    this.height = height;
+  }
 }
