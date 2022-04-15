@@ -14,7 +14,7 @@ export default class Document {
 
     const root = (this._root = new Element({
       id: 'root',
-      backgroundColor: 0xff0000,
+      backgroundColor: -1,
       width,
       height,
     }));

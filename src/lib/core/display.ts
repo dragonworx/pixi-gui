@@ -1,7 +1,7 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import document from './document';
-import Node from './node';
 import NodeWithLayout, { Props as LayoutProps } from './nodeWithLayout';
+import { TransitionKey } from './transition';
 
 export interface Props extends LayoutProps {
   backgroundColor: number;
@@ -21,6 +21,7 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     const container = (this._container = new Container());
     const childContainer = (this._childContainer = new Container());
     const background = (this._background = Sprite.from(Texture.WHITE));
+    background.visible = false;
 
     container.addChild(background);
     container.addChild(childContainer);
@@ -31,8 +32,7 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
   protected defaultProps(): P & Props {
     return {
       ...super.defaultProps(),
-      backgroundColor: 0x333333,
-      alpha: 1,
+      alpha: 0.5,
     };
   }
 
@@ -40,7 +40,7 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     return this._container;
   }
 
-  protected transitionKeys(): string[] {
+  protected transitionKeys(): TransitionKey[] {
     return [...super.transitionKeys(), 'alpha'];
   }
 
@@ -53,19 +53,26 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
 
     const { _background, computedLayout } = this;
     const { left, top, width, height } = computedLayout;
+    const num = value as number;
 
     if (key === 'backgroundColor') {
-      _background.tint = value as number;
+      if (num === -1) {
+        _background.visible = false;
+      } else {
+        if (!_background.visible) {
+          _background.visible = true;
+        }
+        _background.tint = num;
+      }
     } else if (key === 'alpha') {
-      this._container.alpha = value as number;
-    } else if (key === 'width') {
-      _background.width = width;
-    } else if (key === 'height') {
-      _background.height = height;
-    } else if (key === 'x') {
-      this.container.x = left;
-    } else if (key === 'y') {
-      this.container.y = top;
+      this._container.alpha = num;
+    } else if (
+      key === 'width' ||
+      key === 'height' ||
+      key === 'x' ||
+      key === 'y'
+    ) {
+      this.updateFromLayout();
     }
   }
 
@@ -95,5 +102,17 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
 
   set alpha(value: number) {
     this._transitions.start('alpha', this.state.alpha, value);
+  }
+
+  updateFromLayout(): void {
+    const {
+      container,
+      _background,
+      computedLayout: { left, top, width, height },
+    } = this;
+    container.x = left;
+    container.y = top;
+    _background.width = width;
+    _background.height = height;
   }
 }

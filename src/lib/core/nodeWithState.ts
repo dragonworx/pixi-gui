@@ -1,6 +1,6 @@
 import DeepDiff from 'deep-diff';
 import Node from './node';
-import Transition from './transition';
+import Transition, { TransitionKey } from './transition';
 
 let id = 0;
 const nextId = () => String(id++);
@@ -54,7 +54,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
     } as Props;
   }
 
-  protected transitionKeys(): string[] {
+  protected transitionKeys(): TransitionKey[] {
     return [];
   }
 
@@ -128,11 +128,12 @@ export default abstract class NodeWithState<Props extends BaseProps>
     _oldValue: unknown
   ): void;
 
-  setTransitionDuration(key: string, durationMs: number) {
+  setTransitionDuration(key: TransitionKey, durationMs: number) {
     this._transitions.setDuration(key, durationMs);
   }
 
   setAllTransitionDuration(durationMs: number) {
+    // todo: streamline, get rid of transitionKeys - maybe make key type in Transition class from all required
     this.transitionKeys().forEach(key =>
       this._transitions.setDuration(key, durationMs)
     );

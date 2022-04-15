@@ -1,37 +1,43 @@
 import { Application } from 'pixi.js';
 import DOM from 'src/lib/core/document';
 import Element from 'src/lib/core/element';
+import Grid from 'src/lib/display/grid';
+import { ALIGN_CENTER, JUSTIFY_CENTER } from 'yoga-layout-prebuilt';
 
 const main = document.getElementById('main')!;
 
 const app = new Application({
-  width: 500,
-  height: 500,
-  backgroundColor: 0x333333,
+  width: 400,
+  height: 400,
+  backgroundColor: 0,
 });
 
 main.appendChild(app.renderer.view);
 
 const doc = new DOM(app);
 
+const grid = Grid.createTilingSprite(1000, 1000);
+doc.stage.addChildAt(grid, 0);
+
 const blue = new Element({
   id: 'blue',
-  width: 150,
   backgroundColor: 0x0000ff,
 });
 blue.width = 200;
-blue.height = 300;
+blue.height = 200;
 doc.root.addChild(blue);
 
 const green = new Element({
   id: 'green',
-  width: 150,
+  width: 50,
+  height: 50,
   backgroundColor: 0x00ff00,
 });
-green.width = 50;
-green.height = 50;
 blue.addChild(green);
 
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
+
+blue.justifyContent = 'center';
+blue.alignItems = 'center';
