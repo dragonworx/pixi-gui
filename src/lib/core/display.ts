@@ -66,18 +66,18 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
       }
     } else if (key === 'alpha') {
       _container.alpha = num;
+      // }
+    } else if (key === 'x') {
+      _container.x = num;
+    } else if (key === 'y') {
+      _container.y = num;
+    } else if (key === 'width') {
+      _background.width = num;
+    } else if (key === 'height') {
+      _background.height = num;
     }
-    // } else if (key === 'x') {
-    //   _container.x = num;
-    // } else if (key === 'y') {
-    //   _container.y = num;
-    // } else if (key === 'width') {
-    //   _background.width = num;
-    // } else if (key === 'height') {
-    //   _background.height = num;
-    // }
 
-    this.refresh();
+    // this.refresh();
   }
 
   addChild(child: NodeWithDisplay<any>): void {
@@ -112,11 +112,14 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     const {
       container,
       _background,
-      computedLayout: { left, top, width, height },
+      // computedLayout: { left, top, width, height },
     } = this;
+    const { x: left, y: top, width, height } = this.state;
+    console.log(this.id, left, top);
     container.x = left;
     container.y = top;
     _background.width = width;
     _background.height = height;
+    return this;
   }
 }

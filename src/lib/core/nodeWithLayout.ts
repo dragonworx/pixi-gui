@@ -163,13 +163,22 @@ export default class NodeWithLayout<P>
   }
 
   calcLayout() {
-    const { _yoga, state } = this;
+    const { _yoga, state, _transitions } = this;
     _yoga.calculateLayout(this.width, this.height, DIRECTION_LTR);
     const { left, top, width, height } = this._yoga.getComputedLayout();
-    state.x = left;
-    state.y = top;
-    state.width = width;
-    state.height = height;
+    if (_transitions.getDuration('x') === 0) {
+      state.x = left;
+    }
+    if (_transitions.getDuration('y') === 0) {
+      state.y = top;
+    }
+    if (_transitions.getDuration('width') === 0) {
+      state.width = width;
+    }
+    if (_transitions.getDuration('height') === 0) {
+      state.height = height;
+    }
+    return this;
   }
 
   addChild(child: NodeWithLayout<any>): void {
@@ -213,22 +222,38 @@ export default class NodeWithLayout<P>
 
   updateChildrenFromLayout() {
     this._children.forEach(node => {
-      (node as NodeWithLayout<P>).refresh2();
+      (node as NodeWithLayout<P>).calcLayout().refresh().refresh2();
     });
   }
 
-  refresh() {}
+  refresh() {
+    return this;
+  }
 
   refresh2() {
     // this.calcLayout();
     const {
+      _transitions,
       computedLayout: { left, top, width, height },
     } = this;
     // const { x: left, y: top, width, height } = this.state;
-    console.log(left, top);
-    this.x = left;
-    this.y = top;
-    this.width = width;
-    this.height = height;
+    console.log(this.id, left, top);
+    // this.x = left;
+    // this.y = top;
+    // this.width = width;
+    // this.height = height;
+    if (_transitions.getDuration('x') > 0) {
+      this.x = left;
+    }
+    if (_transitions.getDuration('y') > 0) {
+      this.y = top;
+    }
+    if (_transitions.getDuration('width') > 0) {
+      this.width = width;
+    }
+    if (_transitions.getDuration('height') > 0) {
+      this.height = height;
+    }
+    return this;
   }
 }
