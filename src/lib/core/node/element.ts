@@ -1,3 +1,3 @@
-import NodeWithDisplay from './display';
+import NodeWithDisplay from './nodeWithDisplay';
 
 export default class Element extends NodeWithDisplay<{}> {}

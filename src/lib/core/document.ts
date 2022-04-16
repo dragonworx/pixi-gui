@@ -1,5 +1,5 @@
 import { Application } from 'pixi.js';
-import Element from './element';
+import Element from './node/element';
 
 export default class Document {
   _root: Element;

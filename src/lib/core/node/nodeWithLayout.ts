@@ -2,27 +2,19 @@ import yoga, {
   EDGE_LEFT,
   EDGE_TOP,
   Node as YogaNode,
-  YogaJustifyContent,
-  YogaAlign,
-  YogaFlexDirection,
-  FLEX_DIRECTION_COLUMN,
-  FLEX_DIRECTION_COLUMN_REVERSE,
-  FLEX_DIRECTION_ROW,
-  FLEX_DIRECTION_ROW_REVERSE,
-  FLEX_DIRECTION_COUNT,
-  JUSTIFY_FLEX_START,
-  JUSTIFY_CENTER,
-  JUSTIFY_FLEX_END,
-  ALIGN_FLEX_START,
-  ALIGN_CENTER,
-  ALIGN_FLEX_END,
   DIRECTION_LTR,
-  POSITION_TYPE_ABSOLUTE,
-  POSITION_TYPE_RELATIVE,
 } from 'yoga-layout-prebuilt';
 import NodeWithState, { BaseProps } from './nodeWithState';
 import Node from './node';
-import { TransitionKey } from './transition';
+import { TransitionKey } from '../transition';
+import {
+  ALIGN,
+  ALIGN_VALUE,
+  FLEX_DIRECTION,
+  FLEX_DIRECTION_VALUE,
+  JUSTIFY,
+  JUSTIFY_VALUE,
+} from './yoga';
 
 export interface NumericLayoutProps {
   x: number;
@@ -32,35 +24,6 @@ export interface NumericLayoutProps {
 }
 
 export const numericLayoutProps = ['x', 'y', 'width', 'height'];
-
-export const JUSTIFY: Record<string, YogaJustifyContent> = {
-  start: JUSTIFY_FLEX_START,
-  center: JUSTIFY_CENTER,
-  end: JUSTIFY_FLEX_END,
-};
-
-export type JUSTIFY_VALUE = 'start' | 'center' | 'end';
-
-export const ALIGN: Record<string, YogaAlign> = {
-  start: ALIGN_FLEX_START,
-  center: ALIGN_CENTER,
-  end: ALIGN_FLEX_END,
-};
-
-export type ALIGN_VALUE = 'start' | 'center' | 'end';
-
-export const FLEX_DIRECTION: Record<string, YogaFlexDirection> = {
-  row: FLEX_DIRECTION_ROW,
-  'row-reverse': FLEX_DIRECTION_ROW_REVERSE,
-  column: FLEX_DIRECTION_COLUMN,
-  'column-reverse': FLEX_DIRECTION_COLUMN_REVERSE,
-};
-
-export type FLEX_DIRECTION_VALUE =
-  | 'row'
-  | 'row-reverse'
-  | 'column'
-  | 'column-reverse';
 
 export const defaultX = 0;
 export const defaultY = 0;
@@ -125,10 +88,6 @@ export default class NodeWithLayout<P>
     return this._yoga;
   }
 
-  protected transitionKeys(): TransitionKey[] {
-    return [...super.transitionKeys(), 'x', 'y', 'width', 'height'];
-  }
-
   onStateChange<Props>(
     key: keyof Props,
     value: unknown,
@@ -146,11 +105,11 @@ export default class NodeWithLayout<P>
     } else if (key === 'height') {
       this._yoga.setHeight(num);
     } else if (key === 'justifyContent') {
-      this._yoga.setJustifyContent(JUSTIFY[str]);
+      this._yoga.setJustifyContent(JUSTIFY[str as JUSTIFY_VALUE]);
     } else if (key === 'alignItems') {
-      this._yoga.setAlignItems(ALIGN[str]);
+      this._yoga.setAlignItems(ALIGN[str as ALIGN_VALUE]);
     } else if (key === 'flexDirection') {
-      this._yoga.setFlexDirection(FLEX_DIRECTION[str]);
+      this._yoga.setFlexDirection(FLEX_DIRECTION[str as FLEX_DIRECTION_VALUE]);
     } else {
       return;
     }

@@ -1,8 +1,8 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import { Tween } from 'tweenyweeny';
-import document from './document';
+import document from '../document';
 import NodeWithLayout, { Props as LayoutProps } from './nodeWithLayout';
-import { TransitionKey } from './transition';
+import { TransitionKey } from '../transition';
 
 export interface Props extends LayoutProps {
   backgroundColor: number;
@@ -39,10 +39,6 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
 
   get container() {
     return this._container;
-  }
-
-  protected transitionKeys(): TransitionKey[] {
-    return [...super.transitionKeys(), 'alpha'];
   }
 
   onStateChange<Props>(

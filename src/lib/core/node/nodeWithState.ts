@@ -1,6 +1,6 @@
 import DeepDiff from 'deep-diff';
 import Node from './node';
-import Transition, { TransitionKey } from './transition';
+import Transition, { TransitionKey, TransitionKeys } from '../transition';
 
 let id = 0;
 const nextId = () => String(id++);
@@ -59,10 +59,6 @@ export default abstract class NodeWithState<Props extends BaseProps>
     return {
       id: nextId(),
     } as Props;
-  }
-
-  protected transitionKeys(): TransitionKey[] {
-    return [];
   }
 
   getState<T>(): T {
@@ -129,7 +125,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
   }
 
   setAllTransitionDuration(durationMs: number) {
-    this.transitionKeys().forEach(key =>
+    TransitionKeys.forEach(key =>
       this._transitions.setDuration(key, durationMs)
     );
   }

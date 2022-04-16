@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 import DOM from 'src/lib/core/document';
-import Element from 'src/lib/core/element';
+import Element from 'src/lib/core/node/element';
 import Grid from 'src/lib/display/grid';
 import { ALIGN_CENTER, JUSTIFY_CENTER } from 'yoga-layout-prebuilt';
 

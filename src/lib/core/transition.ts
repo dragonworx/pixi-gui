@@ -1,8 +1,9 @@
 import { Tween } from 'tweenyweeny';
-import { WithState } from './nodeWithState';
-import { WithInit } from './node';
+import { WithState } from './node/nodeWithState';
+import { WithInit } from './node/node';
 
-export type TransitionKey = 'x' | 'y' | 'width' | 'height' | 'alpha';
+export const TransitionKeys = ['x', 'y', 'width', 'height', 'alpha'] as const;
+export type TransitionKey = typeof TransitionKeys[number];
 
 export default class Transition {
   transitions: Map<TransitionKey, Tween>;
