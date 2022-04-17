@@ -36,8 +36,6 @@ export default abstract class NodeWithState<
   init() {
     super.init();
 
-    // this.setState(this.state);
-
     const defaultProps = this.defaultProps();
 
     for (const [k] of Object.entries(this.state)) {

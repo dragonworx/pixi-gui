@@ -199,7 +199,6 @@ export default class NodeWithLayout<P>
       marginRight: value,
       marginBottom: value,
     });
-    // this.onLayoutChanged();
   }
 
   setPadding(value: number) {
