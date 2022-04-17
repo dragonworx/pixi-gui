@@ -1,10 +1,57 @@
-export interface Props {
+import { Container, Sprite, Texture } from 'pixi.js';
+import { Tween } from 'tweenyweeny';
+import yoga, {
+  Node as YogaNode,
+  EDGE_LEFT,
+  EDGE_TOP,
+  EDGE_RIGHT,
+  EDGE_BOTTOM,
+} from 'yoga-layout-prebuilt';
+import Document from '../document';
+import {
+  ALIGN,
+  ALIGN_VALUE,
+  FLEX_DIRECTION,
+  FLEX_DIRECTION_VALUE,
+  JUSTIFY,
+  JUSTIFY_VALUE,
+  Layout,
+} from './yoga';
+
+/**
+ * To add new prop/state:
+ *  1. define in Prop type
+ *  2. initialise in .init()
+ *  3. update in .update()
+ */
+
+let id = 0;
+const nextId = () => String(id++);
+
+export interface NumericProps {
   left: number;
   top: number;
   right: number;
   bottom: number;
   width: number;
   height: number;
+  backgroundColor: number;
+  alpha: number;
+  marginLeft: number;
+  marginTop: number;
+  marginRight: number;
+  marginBottom: number;
+}
+
+export interface FlexProps {
+  alignItems: ALIGN_VALUE;
+  justifyContent: JUSTIFY_VALUE;
+  flexDirection: FLEX_DIRECTION_VALUE;
+}
+
+export interface Props extends NumericProps, FlexProps {
+  id?: string;
+  parent?: Element;
 }
 
 export const defaultProps: Props = {
@@ -14,17 +61,248 @@ export const defaultProps: Props = {
   bottom: 0,
   width: 100,
   height: 100,
+  marginLeft: 0,
+  marginTop: 0,
+  marginBottom: 0,
+  marginRight: 0,
+  backgroundColor: 0x333333,
+  alpha: 0.5,
+  alignItems: 'auto',
+  justifyContent: 'start',
+  flexDirection: 'row',
 };
 
 export interface State extends Props {}
 
 export default class Element {
-  state: State;
+  _state: State;
+  _yoga: yoga.YogaNode;
+  _container: Container;
+  _backgroundFill: Sprite;
+  _parent?: Element;
+  _children: Array<Element>;
+  _transitions: Map<keyof NumericProps, Tween>;
+  _cachedLayout?: Layout;
 
-  constructor(props: Partial<Props> = {}) {
-    this.state = {
+  constructor(readonly props: Partial<Props> = {}) {
+    this._state = {
+      id: nextId(),
       ...defaultProps,
       ...props,
     };
+
+    this._children = [];
+
+    this._yoga = YogaNode.create();
+
+    this._transitions = new Map();
+
+    this._container = new Container();
+    this._backgroundFill = Sprite.from(Texture.WHITE);
+    this._container.addChild(this._backgroundFill);
+
+    this.init();
+  }
+
+  init() {
+    const {
+      _yoga: yoga,
+      _state: {
+        left,
+        top,
+        right,
+        bottom,
+        width,
+        height,
+        backgroundColor,
+        alpha,
+        marginLeft,
+        marginTop,
+        marginRight,
+        marginBottom,
+        alignItems,
+        justifyContent,
+        flexDirection,
+      },
+      _container,
+      _backgroundFill,
+    } = this;
+
+    _container.alpha = alpha;
+    if (backgroundColor === -1) {
+      _backgroundFill.alpha = 0.3;
+    } else {
+      _backgroundFill.tint = backgroundColor;
+    }
+
+    yoga.setWidth(width);
+    yoga.setHeight(height);
+    yoga.setPosition(EDGE_LEFT, left);
+    yoga.setPosition(EDGE_RIGHT, right);
+    yoga.setPosition(EDGE_TOP, top);
+    yoga.setPosition(EDGE_BOTTOM, bottom);
+    yoga.setMargin(EDGE_LEFT, marginLeft);
+    yoga.setMargin(EDGE_RIGHT, marginRight);
+    yoga.setMargin(EDGE_TOP, marginTop);
+    yoga.setMargin(EDGE_BOTTOM, marginBottom);
+    yoga.setFlexDirection(FLEX_DIRECTION[flexDirection]);
+    yoga.setAlignItems(ALIGN[alignItems]);
+    yoga.setJustifyContent(JUSTIFY[justifyContent]);
+
+    yoga.calculateLayout();
+
+    this.updateDisplayFromLayout();
+  }
+
+  addChild(element: Element) {
+    this._container.addChild(element._container);
+    this._children.push(element);
+    this._yoga.insertChild(element._yoga, this._children.length - 1);
+  }
+
+  setAsRoot(document: Document) {
+    this._yoga.setWidth(document.width);
+    this._yoga.setHeight(document.height);
+    document.stage.addChild(this._container);
+    this.calculateLayout();
+  }
+
+  set(key: keyof Props, value: Props[keyof Props]) {
+    const { _state, _children } = this;
+    if (typeof value === 'number') {
+      const tween = this.getTransition(key as keyof NumericProps);
+      if (tween.duration === 0) {
+        this.update(key, value);
+      } else {
+        tween.start(_state[key as keyof NumericProps], value);
+      }
+    } else if (
+      key === 'alignItems' ||
+      key === 'justifyContent' ||
+      key === 'flexDirection'
+    ) {
+      _children.forEach(child => child.cacheLayout());
+      this.update(key, value);
+      _children.forEach(child => child.updateDisplayFromParentLayoutChange());
+    }
+  }
+
+  update(key: keyof Props, value: Props[keyof Props]) {
+    const { _yoga: yoga, _state: state } = this;
+    if (typeof value === 'number') {
+      if (key === 'left') {
+        yoga.setPosition(EDGE_LEFT, value);
+        state.left = value;
+      } else if (key === 'right') {
+        yoga.setPosition(EDGE_RIGHT, value);
+        state.right = value;
+      } else if (key === 'top') {
+        yoga.setPosition(EDGE_TOP, value);
+        state.top = value;
+      } else if (key === 'bottom') {
+        yoga.setPosition(EDGE_BOTTOM, value);
+        state.bottom = value;
+      } else if (key === 'width') {
+        yoga.setWidth(value);
+        state.width = value;
+      } else if (key === 'height') {
+        yoga.setHeight(value);
+        state.height = value;
+      } else if (key === 'marginLeft') {
+        yoga.setMargin(EDGE_LEFT, value);
+        state.marginLeft = value;
+      } else if (key === 'marginTop') {
+        yoga.setMargin(EDGE_TOP, value);
+        state.marginTop = value;
+      } else if (key === 'marginRight') {
+        yoga.setMargin(EDGE_RIGHT, value);
+        state.marginRight = value;
+      } else if (key === 'marginBottom') {
+        yoga.setMargin(EDGE_BOTTOM, value);
+        state.marginBottom = value;
+      }
+    } else if (typeof value === 'string') {
+      if (key === 'flexDirection') {
+        const val = value as FLEX_DIRECTION_VALUE;
+        yoga.setFlexDirection(FLEX_DIRECTION[val]);
+        state.flexDirection = val;
+      } else if (key === 'alignItems') {
+        const val = value as ALIGN_VALUE;
+        yoga.setAlignItems(ALIGN[val]);
+        state.alignItems = val;
+      } else if (key === 'justifyContent') {
+        const val = value as JUSTIFY_VALUE;
+        yoga.setJustifyContent(JUSTIFY[val]);
+        state.justifyContent = val;
+      }
+    }
+
+    this.calculateLayout();
+  }
+
+  updateDisplayFromLayout() {
+    const { _yoga, _container, _backgroundFill } = this;
+    const { left: x, top: y, width: w, height: h } = _yoga.getComputedLayout();
+    _container.x = x;
+    _container.y = y;
+    _backgroundFill.width = w;
+    _backgroundFill.height = h;
+  }
+
+  calculateLayout() {
+    this._yoga.calculateLayout();
+    this.updateDisplayFromLayout();
+  }
+
+  getTransition(key: keyof NumericProps) {
+    const { _transitions } = this;
+    if (!_transitions.has(key)) {
+      const tween = new Tween(250);
+      tween.onUpdate(value => this.onTransitionUpdate(key, value));
+      _transitions.set(key, tween);
+    }
+    return _transitions.get(key)!;
+  }
+
+  onTransitionUpdate(key: keyof NumericProps, value: number) {
+    this.update(key, value);
+  }
+
+  cacheLayout() {
+    this._cachedLayout = this.computedLayout;
+  }
+
+  updateDisplayFromParentLayoutChange() {
+    const { _cachedLayout } = this;
+    if (_cachedLayout) {
+      const {
+        left: oldLeft,
+        top: oldTop,
+        width: oldWidth,
+        height: oldHeight,
+      } = _cachedLayout;
+
+      const { left, top, width, height } = this._yoga.getComputedLayout();
+
+      if (left !== oldLeft) {
+        this.getTransition('left').start(oldLeft, left);
+      }
+
+      if (top !== oldTop) {
+        this.getTransition('top').start(oldTop, top);
+      }
+
+      if (width !== oldWidth) {
+        this.getTransition('width').start(oldWidth, width);
+      }
+
+      if (height !== oldHeight) {
+        this.getTransition('height').start(oldHeight, height);
+      }
+    }
+  }
+
+  get computedLayout() {
+    return this._yoga.getComputedLayout();
   }
 }

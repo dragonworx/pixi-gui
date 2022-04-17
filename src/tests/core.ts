@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 import DOM from 'src/lib/core/document';
-import Element from 'src/lib/core/node/element';
+import Element from 'src/lib/core/node/base';
 import Grid from 'src/lib/display/grid';
 
 const main = document.getElementById('main')!;
@@ -21,10 +21,10 @@ doc.stage.addChildAt(grid, 0);
 const blue = new Element({
   id: 'blue',
   backgroundColor: 0x0000ff,
-  x: 50,
+  left: 50,
 });
-blue.width = 200;
-blue.height = 200;
+blue.set('width', 200);
+blue.set('height', 200);
 doc.root.addChild(blue);
 
 const green = new Element({
@@ -35,7 +35,7 @@ const green = new Element({
 });
 blue.addChild(green);
 
-green.allDuration = 1000;
+// green.allDuration = 1000;
 
 (window as any).doc = doc;
 (window as any).blue = blue;

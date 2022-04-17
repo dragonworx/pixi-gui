@@ -1,5 +1,5 @@
 import { Application } from 'pixi.js';
-import Element from './node/element';
+import Element from './node/base';
 
 export default class Document {
   _root: Element;
@@ -18,8 +18,8 @@ export default class Document {
       width,
       height,
     }));
+
     root.setAsRoot(this);
-    root.init();
   }
 
   get root() {

@@ -6666,10 +6666,10 @@ tslib@^2.3.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
-tweenyweeny@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/tweenyweeny/-/tweenyweeny-1.1.0.tgz#b7ddfaff35029cb23e9de7953178b7b2f357679a"
-  integrity sha512-43eTzEcRnlOyMzS+7Bn4U9OQYnx+tedWSZ/6Wl3ToHoaXKF4iLDMFK8QuYUupYibv49VEgsHkR3IzshiFghlSA==
+tweenyweeny@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tweenyweeny/-/tweenyweeny-1.2.0.tgz#532c25fea2d879746bb1c4abcd7ca9a4be230512"
+  integrity sha512-lUECBBcOO2+l0lSPXY/EtBs9adx5ojT5ikBCtokgK6dLmpLx40ETlza9bMzh2gGZb04u6EdheOks3wF96D/cUw==
   dependencies:
     eventemitter3 "^4.0.7"
     tslib "^2.3.1"
