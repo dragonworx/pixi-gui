@@ -40,4 +40,10 @@ export default abstract class NodeWithTransitions<P> extends NodeWithState<
       ...super.defaultProps(),
     };
   }
+
+  set allDuration(value: number) {
+    TransitionKeys.forEach(key => {
+      this._transitions.setDuration(key, value);
+    });
+  }
 }

@@ -17,51 +17,33 @@ import {
   JUSTIFY_VALUE,
   POSITION_TYPE,
   POSITION_TYPE_VALUE,
+  Layout,
 } from './yoga';
+import {
+  NumericLayoutProps,
+  defaultX,
+  defaultY,
+  defaultWidth,
+  defaultHeight,
+  defaultMargin,
+  numericLayoutProps,
+  defaultJustifyContent,
+  defaultAlignItems,
+  defaultAlignContent,
+  defaultFlexDirection,
+  defaultDirection,
+  defaultPosition,
+  defaultPadding,
+  defaultAlignSelf,
+} from './nodeWithLayout.types';
 
-export interface NumericLayoutProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  marginLeft: number;
-  marginTop: number;
-  marginRight: number;
-  marginBottom: number;
-}
-
-// dynamically generated
-export const numericLayoutProps = [
-  'x',
-  'y',
-  'width',
-  'height',
-  'marginLeft',
-  'marginTop',
-  'marginRight',
-  'marginBottom',
-];
-
-// defaults
-export const defaultX = 0;
-export const defaultY = 0;
-export const defaultWidth = 100;
-export const defaultHeight = 100;
-export const defaultJustifyContent: JUSTIFY_VALUE = 'start';
-export const defaultAlignItems: ALIGN_VALUE = 'start';
-export const defaultAlignContent: ALIGN_VALUE = 'start';
-export const defaultFlexDirection: FLEX_DIRECTION_VALUE = 'row';
-export const defaultDirection: DIRECTION_VALUE = 'ltr';
-export const defaultPosition: POSITION_TYPE_VALUE = 'relative';
-export const defaultMargin = 0;
-
-// main props
 export interface Props extends BaseProps, NumericLayoutProps {
   direction: DIRECTION_VALUE;
   flexDirection: FLEX_DIRECTION_VALUE;
-  justifyContent: JUSTIFY_VALUE;
   alignItems: ALIGN_VALUE;
   alignContent: ALIGN_VALUE;
+  alignSelf: ALIGN_VALUE;
+  justifyContent: JUSTIFY_VALUE;
 }
 
 export default class NodeWithLayout<P>
@@ -69,6 +51,7 @@ export default class NodeWithLayout<P>
   implements NumericLayoutProps
 {
   _yoga: yoga.YogaNode = YogaNode.create();
+  _lastLayout?: Layout;
 
   // stubs for dynamically generate props in constructor
   x = defaultX;
@@ -79,6 +62,10 @@ export default class NodeWithLayout<P>
   marginTop = defaultMargin;
   marginRight = defaultMargin;
   marginBottom = defaultMargin;
+  paddingLeft = defaultPadding;
+  paddingTop = defaultPadding;
+  paddingRight = defaultPadding;
+  paddingBottom = defaultPadding;
 
   constructor(props: Partial<P & Props>) {
     super(props);
@@ -103,9 +90,10 @@ export default class NodeWithLayout<P>
       y: defaultY,
       width: defaultWidth,
       height: defaultHeight,
-      justifyContent: defaultJustifyContent,
       alignItems: defaultAlignItems,
       alignContent: defaultAlignContent,
+      alignSelf: defaultAlignSelf,
+      justifyContent: defaultJustifyContent,
       flexDirection: defaultFlexDirection,
       direction: defaultDirection,
       position: defaultPosition,
@@ -113,11 +101,11 @@ export default class NodeWithLayout<P>
       marginTop: defaultMargin,
       marginRight: defaultMargin,
       marginBottom: defaultMargin,
+      paddingLeft: defaultPadding,
+      paddingTop: defaultPadding,
+      paddingRight: defaultPadding,
+      paddingBottom: defaultPadding,
     };
-  }
-
-  get yoga() {
-    return this._yoga;
   }
 
   onStateChange<Props>(
@@ -140,6 +128,8 @@ export default class NodeWithLayout<P>
       this._yoga.setJustifyContent(JUSTIFY[str as JUSTIFY_VALUE]);
     } else if (key === 'alignItems') {
       this._yoga.setAlignItems(ALIGN[str as ALIGN_VALUE]);
+    } else if (key === 'alignSelf') {
+      this._yoga.setAlignSelf(ALIGN[str as ALIGN_VALUE]);
     } else if (key === 'alignContent') {
       this._yoga.setAlignContent(ALIGN[str as ALIGN_VALUE]);
     } else if (key === 'flexDirection') {
@@ -154,6 +144,14 @@ export default class NodeWithLayout<P>
       this._yoga.setMargin(EDGE.right, num);
     } else if (key === 'marginBottom') {
       this._yoga.setMargin(EDGE.bottom, num);
+    } else if (key === 'paddingLeft') {
+      this._yoga.setPadding(EDGE.left, num);
+    } else if (key === 'paddingTop') {
+      this._yoga.setPadding(EDGE.top, num);
+    } else if (key === 'paddingRight') {
+      this._yoga.setPadding(EDGE.right, num);
+    } else if (key === 'paddingBottom') {
+      this._yoga.setPadding(EDGE.bottom, num);
     } else {
       // wasn't a layout prop, save re-calculating layout
       return;
@@ -164,14 +162,15 @@ export default class NodeWithLayout<P>
     if (key !== 'x' && key !== 'y') {
       // children need to update their visual components when anything but position changes
       this._children.forEach(node => {
-        (node as NodeWithLayout<P>).onParentLayoutChanged();
+        (node as NodeWithLayout<P>).onLayoutChanged();
       });
     }
   }
 
   calcLayout() {
-    const { _yoga, state } = this;
-    _yoga.calculateLayout(this.width, this.height, DIRECTION[state.direction]);
+    const { _yoga, state, computedLayout } = this;
+    this._lastLayout = computedLayout;
+    _yoga.calculateLayout(undefined, undefined, DIRECTION[state.direction]);
     this.onLayoutChanged();
   }
 
@@ -200,6 +199,20 @@ export default class NodeWithLayout<P>
       marginRight: value,
       marginBottom: value,
     });
+    // this.onLayoutChanged();
+  }
+
+  setPadding(value: number) {
+    this.setState({
+      paddingLeft: value,
+      paddingRight: value,
+      paddingTop: value,
+      paddingBottom: value,
+    });
+  }
+
+  get yoga() {
+    return this._yoga;
   }
 
   get computedLayout() {
@@ -222,6 +235,14 @@ export default class NodeWithLayout<P>
     this.setState({ alignItems: value });
   }
 
+  get alignSelf() {
+    return this.state.alignSelf;
+  }
+
+  set alignSelf(value: ALIGN_VALUE) {
+    this.setState({ alignSelf: value });
+  }
+
   get flexDirection() {
     return this.state.flexDirection;
   }
@@ -229,6 +250,4 @@ export default class NodeWithLayout<P>
   set flexDirection(value: FLEX_DIRECTION_VALUE) {
     this.setState({ alignItems: value });
   }
-
-  onParentLayoutChanged() {}
 }

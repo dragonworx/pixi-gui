@@ -39,6 +39,15 @@ import {
   EDGE_ALL,
 } from 'yoga-layout-prebuilt';
 
+export type Layout = {
+  readonly left: number;
+  readonly right: number;
+  readonly top: number;
+  readonly bottom: number;
+  readonly width: number;
+  readonly height: number;
+};
+
 export type JUSTIFY_VALUE =
   | 'start'
   | 'center'

@@ -284,6 +284,7 @@ declare namespace Yoga {
     markDirty(): void;
     removeChild(child: YogaNode): void;
     reset(): void;
+
     //setAlignContent(alignContent: YogaAlign): void;
     //setAlignItems(alignItems: YogaAlign): void;
     setAlignSelf(alignSelf: YogaAlign): void;
@@ -321,7 +322,7 @@ declare namespace Yoga {
     setMinWidth(minWidth: number | string): void;
     setMinWidthPercent(minWidth: number): void;
     setOverflow(overflow: YogaOverflow): void;
-    setPadding(edge: YogaEdge, padding: number | string): void;
+    //setPadding(edge: YogaEdge, padding: number | string): void;
     setPaddingPercent(edge: YogaEdge, padding: number): void;
     setPosition(edge: YogaEdge, position: number | string): void;
     setPositionPercent(edge: YogaEdge, position: number): void;
@@ -329,6 +330,7 @@ declare namespace Yoga {
     //setWidth(width: number | string): void;
     setWidthAuto(): void;
     setWidthPercent(width: number): void;
+
     unsetMeasureFunc(): void;
   }
 

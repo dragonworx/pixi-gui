@@ -71,18 +71,6 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     }
   }
 
-  onLayoutChanged(): void {
-    const {
-      _container,
-      _background,
-      computedLayout: { left, top, width, height },
-    } = this;
-    _container.x = left;
-    _container.y = top;
-    _background.width = width;
-    _background.height = height;
-  }
-
   addChild(child: NodeWithDisplay<any>): void {
     this._childContainer.addChild(child.container);
 
@@ -111,13 +99,17 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     this._transitions.start('alpha', this.state.alpha, value);
   }
 
-  onParentLayoutChanged() {
+  onLayoutChanged() {
     const {
       _container,
       _background,
       _transitions,
+      _lastLayout,
       computedLayout: { left, top, width, height },
     } = this;
+    if (_lastLayout) {
+      console.log(_lastLayout);
+    }
     Tween.run(
       value => {
         _container.x = value;

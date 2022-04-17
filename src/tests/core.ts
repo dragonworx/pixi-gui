@@ -36,6 +36,8 @@ const green = new Element({
 });
 blue.addChild(green);
 
+green.allDuration = 1000;
+
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
