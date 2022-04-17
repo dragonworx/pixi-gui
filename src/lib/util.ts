@@ -87,6 +87,10 @@ export function objectEquals(x: any, y: any): boolean {
   );
 }
 
+export function capitalise(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function randomColor() {
   const r = Math.round(Math.random() * 255);
   const g = Math.round(Math.random() * 255);

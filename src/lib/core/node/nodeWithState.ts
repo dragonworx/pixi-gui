@@ -1,6 +1,5 @@
 import DeepDiff from 'deep-diff';
 import Node from './node';
-import Transition, { TransitionKey, TransitionKeys } from '../transition';
 
 let id = 0;
 const nextId = () => String(id++);
@@ -12,20 +11,14 @@ enum DiffType {
   Array = 'A',
 }
 
-export interface WithState<T> {
-  setState(state: T): void;
-}
-
 export interface BaseProps {
   id: string;
 }
 
-export default abstract class NodeWithState<Props extends BaseProps>
-  extends Node
-  implements WithState<Props>
-{
+export default abstract class NodeWithState<
+  Props extends BaseProps
+> extends Node {
   protected state: Props;
-  _transitions: Transition;
 
   constructor(readonly props: Partial<Props> = {}) {
     super();
@@ -34,8 +27,6 @@ export default abstract class NodeWithState<Props extends BaseProps>
       ...this.defaultProps(),
       ...props,
     };
-
-    this._transitions = new Transition(this);
   }
 
   get id() {
@@ -45,7 +36,7 @@ export default abstract class NodeWithState<Props extends BaseProps>
   init() {
     super.init();
 
-    this.setState(this.state);
+    // this.setState(this.state);
 
     const defaultProps = this.defaultProps();
 
@@ -119,14 +110,4 @@ export default abstract class NodeWithState<Props extends BaseProps>
     value: unknown,
     _oldValue: unknown
   ): void;
-
-  setTransitionDuration(key: TransitionKey, durationMs: number) {
-    this._transitions.setDuration(key, durationMs);
-  }
-
-  setAllTransitionDuration(durationMs: number) {
-    TransitionKeys.forEach(key =>
-      this._transitions.setDuration(key, durationMs)
-    );
-  }
 }

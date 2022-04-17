@@ -4,9 +4,8 @@ import yoga, {
   Node as YogaNode,
   DIRECTION_LTR,
 } from 'yoga-layout-prebuilt';
-import NodeWithState, { BaseProps } from './nodeWithState';
+import NodeWithTransitions, { Props as BaseProps } from './nodeWithTransitions';
 import Node from './node';
-import { TransitionKey } from '../transition';
 import {
   ALIGN,
   ALIGN_VALUE,
@@ -40,7 +39,7 @@ export interface Props extends BaseProps, NumericLayoutProps {
 }
 
 export default class NodeWithLayout<P>
-  extends NodeWithState<P & Props>
+  extends NodeWithTransitions<P & Props>
   implements NumericLayoutProps
 {
   _yoga: yoga.YogaNode = YogaNode.create();
@@ -52,12 +51,6 @@ export default class NodeWithLayout<P>
 
   constructor(props: Partial<P & Props>) {
     super(props);
-
-    this._transitions
-      .initKey('x')
-      .initKey('y')
-      .initKey('width')
-      .initKey('height');
 
     numericLayoutProps.forEach(key => {
       Object.defineProperty(this, key, {

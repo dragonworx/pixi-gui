@@ -2,7 +2,6 @@ import { Container, Sprite, Texture } from 'pixi.js';
 import { Tween } from 'tweenyweeny';
 import document from '../document';
 import NodeWithLayout, { Props as LayoutProps } from './nodeWithLayout';
-import { TransitionKey } from '../transition';
 
 export interface Props extends LayoutProps {
   backgroundColor: number;
@@ -26,13 +25,12 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
 
     container.addChild(background);
     container.addChild(childContainer);
-
-    this._transitions.initKey('alpha');
   }
 
   protected defaultProps(): P & Props {
     return {
       ...super.defaultProps(),
+      backgroundColor: 0x333333,
       alpha: 0.5,
     };
   }
@@ -48,7 +46,7 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
   ): void {
     super.onStateChange(key as keyof LayoutProps, value, oldValue);
 
-    const { _container, _background, computedLayout } = this;
+    const { _container, _background } = this;
     const num = value as number;
 
     if (key === 'backgroundColor') {

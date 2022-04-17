@@ -1,19 +1,18 @@
 import { Tween } from 'tweenyweeny';
-import { WithState } from './node/nodeWithState';
-import { WithInit } from './node/node';
+import NodeWithState from './node/nodeWithState';
 
 export const TransitionKeys = ['x', 'y', 'width', 'height', 'alpha'] as const;
 export type TransitionKey = typeof TransitionKeys[number];
 
 export default class Transition {
-  transitions: Map<TransitionKey, Tween>;
+  _transitions: Map<TransitionKey, Tween>;
 
-  constructor(readonly target: WithState<any> & WithInit) {
-    this.transitions = new Map();
+  constructor(readonly target: NodeWithState<any>) {
+    this._transitions = new Map();
   }
 
   get(key: TransitionKey) {
-    const { transitions } = this;
+    const { _transitions: transitions } = this;
     if (!transitions.has(key)) {
       throw new Error(`Tween for property "${key}" not defined`);
     }
@@ -22,7 +21,7 @@ export default class Transition {
 
   initKey(key: TransitionKey, duration: number = 1000) {
     const tween = new Tween(duration);
-    this.transitions.set(key, tween);
+    this._transitions.set(key, tween);
     tween.on('update', value => this.target.setState({ [key]: value }));
     return this;
   }
