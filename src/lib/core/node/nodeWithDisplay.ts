@@ -71,6 +71,18 @@ export default abstract class NodeWithDisplay<P> extends NodeWithLayout<
     }
   }
 
+  onLayoutChanged(): void {
+    const {
+      _container,
+      _background,
+      computedLayout: { left, top, width, height },
+    } = this;
+    _container.x = left;
+    _container.y = top;
+    _background.width = width;
+    _background.height = height;
+  }
+
   addChild(child: NodeWithDisplay<any>): void {
     this._childContainer.addChild(child.container);
 

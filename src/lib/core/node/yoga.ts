@@ -27,6 +27,16 @@ import {
   YogaPositionType,
   POSITION_TYPE_RELATIVE,
   POSITION_TYPE_ABSOLUTE,
+  YogaEdge,
+  EDGE_LEFT,
+  EDGE_TOP,
+  EDGE_RIGHT,
+  EDGE_BOTTOM,
+  EDGE_START,
+  EDGE_END,
+  EDGE_HORIZONTAL,
+  EDGE_VERTICAL,
+  EDGE_ALL,
 } from 'yoga-layout-prebuilt';
 
 export type JUSTIFY_VALUE =
@@ -93,4 +103,27 @@ export type POSITION_TYPE_VALUE = 'relative' | 'absolute';
 export const POSITION_TYPE: Record<POSITION_TYPE_VALUE, YogaPositionType> = {
   relative: POSITION_TYPE_RELATIVE,
   absolute: POSITION_TYPE_ABSOLUTE,
+};
+
+export type EDGE_VALUE =
+  | 'left'
+  | 'top'
+  | 'right'
+  | 'bottom'
+  | 'start'
+  | 'end'
+  | 'horizontal'
+  | 'vertical'
+  | 'all';
+
+export const EDGE: Record<EDGE_VALUE, YogaEdge> = {
+  left: EDGE_LEFT,
+  top: EDGE_TOP,
+  right: EDGE_RIGHT,
+  bottom: EDGE_BOTTOM,
+  start: EDGE_START,
+  end: EDGE_END,
+  horizontal: EDGE_HORIZONTAL,
+  vertical: EDGE_VERTICAL,
+  all: EDGE_ALL,
 };

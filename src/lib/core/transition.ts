@@ -1,7 +1,17 @@
 import { Tween } from 'tweenyweeny';
 import NodeWithState from './node/nodeWithState';
 
-export const TransitionKeys = ['x', 'y', 'width', 'height', 'alpha'] as const;
+export const TransitionKeys = [
+  'x',
+  'y',
+  'width',
+  'height',
+  'alpha',
+  'marginLeft',
+  'marginTop',
+  'marginBottom',
+  'marginRight',
+] as const;
 export type TransitionKey = typeof TransitionKeys[number];
 
 export default class Transition {

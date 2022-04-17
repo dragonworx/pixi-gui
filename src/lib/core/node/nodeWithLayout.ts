@@ -10,6 +10,7 @@ import {
   ALIGN_VALUE,
   DIRECTION,
   DIRECTION_VALUE,
+  EDGE,
   FLEX_DIRECTION,
   FLEX_DIRECTION_VALUE,
   JUSTIFY,
@@ -23,10 +24,23 @@ export interface NumericLayoutProps {
   y: number;
   width: number;
   height: number;
+  marginLeft: number;
+  marginTop: number;
+  marginRight: number;
+  marginBottom: number;
 }
 
 // dynamically generated
-export const numericLayoutProps = ['x', 'y', 'width', 'height'];
+export const numericLayoutProps = [
+  'x',
+  'y',
+  'width',
+  'height',
+  'marginLeft',
+  'marginTop',
+  'marginRight',
+  'marginBottom',
+];
 
 // defaults
 export const defaultX = 0;
@@ -39,6 +53,7 @@ export const defaultAlignContent: ALIGN_VALUE = 'start';
 export const defaultFlexDirection: FLEX_DIRECTION_VALUE = 'row';
 export const defaultDirection: DIRECTION_VALUE = 'ltr';
 export const defaultPosition: POSITION_TYPE_VALUE = 'relative';
+export const defaultMargin = 0;
 
 // main props
 export interface Props extends BaseProps, NumericLayoutProps {
@@ -60,6 +75,10 @@ export default class NodeWithLayout<P>
   y = defaultY;
   width = defaultWidth;
   height = defaultHeight;
+  marginLeft = defaultMargin;
+  marginTop = defaultMargin;
+  marginRight = defaultMargin;
+  marginBottom = defaultMargin;
 
   constructor(props: Partial<P & Props>) {
     super(props);
@@ -90,6 +109,10 @@ export default class NodeWithLayout<P>
       flexDirection: defaultFlexDirection,
       direction: defaultDirection,
       position: defaultPosition,
+      marginLeft: defaultMargin,
+      marginTop: defaultMargin,
+      marginRight: defaultMargin,
+      marginBottom: defaultMargin,
     };
   }
 
@@ -123,6 +146,14 @@ export default class NodeWithLayout<P>
       this._yoga.setFlexDirection(FLEX_DIRECTION[str as FLEX_DIRECTION_VALUE]);
     } else if (key === 'position') {
       this._yoga.setPositionType(POSITION_TYPE[str as POSITION_TYPE_VALUE]);
+    } else if (key === 'marginLeft') {
+      this._yoga.setMargin(EDGE.left, num);
+    } else if (key === 'marginTop') {
+      this._yoga.setMargin(EDGE.top, num);
+    } else if (key === 'marginRight') {
+      this._yoga.setMargin(EDGE.right, num);
+    } else if (key === 'marginBottom') {
+      this._yoga.setMargin(EDGE.bottom, num);
     } else {
       // wasn't a layout prop, save re-calculating layout
       return;
@@ -141,7 +172,10 @@ export default class NodeWithLayout<P>
   calcLayout() {
     const { _yoga, state } = this;
     _yoga.calculateLayout(this.width, this.height, DIRECTION[state.direction]);
+    this.onLayoutChanged();
   }
+
+  onLayoutChanged() {}
 
   addChild(child: NodeWithLayout<P>): void {
     super.addChild(child as Node);
@@ -157,6 +191,15 @@ export default class NodeWithLayout<P>
     this._yoga.removeChild((child as NodeWithLayout<P>).yoga);
 
     super.removeChild(child);
+  }
+
+  setMargin(value: number) {
+    this.setState({
+      marginLeft: value,
+      marginTop: value,
+      marginRight: value,
+      marginBottom: value,
+    });
   }
 
   get computedLayout() {
