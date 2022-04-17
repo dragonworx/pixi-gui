@@ -20,6 +20,13 @@ import {
   ALIGN_SPACE_AROUND,
   ALIGN_SPACE_BETWEEN,
   ALIGN_STRETCH,
+  DIRECTION_LTR,
+  DIRECTION_RTL,
+  DIRECTION_INHERIT,
+  YogaDirection,
+  YogaPositionType,
+  POSITION_TYPE_RELATIVE,
+  POSITION_TYPE_ABSOLUTE,
 } from 'yoga-layout-prebuilt';
 
 export type JUSTIFY_VALUE =
@@ -71,4 +78,19 @@ export const FLEX_DIRECTION: Record<FLEX_DIRECTION_VALUE, YogaFlexDirection> = {
   'row-reverse': FLEX_DIRECTION_ROW_REVERSE,
   column: FLEX_DIRECTION_COLUMN,
   'column-reverse': FLEX_DIRECTION_COLUMN_REVERSE,
+};
+
+export type DIRECTION_VALUE = 'inherit' | 'ltr' | 'rtl';
+
+export const DIRECTION: Record<DIRECTION_VALUE, YogaDirection> = {
+  inherit: DIRECTION_INHERIT,
+  ltr: DIRECTION_LTR,
+  rtl: DIRECTION_RTL,
+};
+
+export type POSITION_TYPE_VALUE = 'relative' | 'absolute';
+
+export const POSITION_TYPE: Record<POSITION_TYPE_VALUE, YogaPositionType> = {
+  relative: POSITION_TYPE_RELATIVE,
+  absolute: POSITION_TYPE_ABSOLUTE,
 };

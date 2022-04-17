@@ -24,11 +24,12 @@ export default class Node {
   addChild(child: Node) {
     this._children.push(child);
     child.setParent(this);
-    child.onAddedToParent();
+    child.onAddedToParent(this);
     child.init();
   }
 
-  onAddedToParent() {}
+  onAddedToParent(parent: Node) {}
+  onRemovedFromParent(parent: Node) {}
 
   setParent(parent: Node | null) {
     this._parent = parent;
@@ -42,6 +43,7 @@ export default class Node {
     }
     _children.splice(index, 1);
     child.setParent(null);
+    child.onRemovedFromParent(this);
   }
 
   removeFromParent() {
