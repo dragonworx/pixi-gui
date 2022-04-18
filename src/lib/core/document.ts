@@ -20,6 +20,7 @@ export default class Document {
     }));
 
     root.setAsRoot(this);
+    root.init();
   }
 
   get root() {

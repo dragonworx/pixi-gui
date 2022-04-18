@@ -40,3 +40,20 @@ blue.addChild(green);
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
+
+const _queue: (() => void)[] = [];
+
+function queue(fn: () => void) {
+  _queue.push(fn);
+}
+
+setInterval(() => {
+  if (_queue.length) {
+    const fn = _queue.shift()!;
+    fn();
+  }
+}, 500);
+
+queue(() => green.set('marginLeft', 50));
+queue(() => blue.set('alignItems', 'center'));
+queue(() => blue.set('justifyContent', 'center'));

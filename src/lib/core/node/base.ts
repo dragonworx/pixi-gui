@@ -67,7 +67,7 @@ export const defaultProps: Props = {
   marginRight: 0,
   backgroundColor: 0x333333,
   alpha: 0.5,
-  alignItems: 'auto',
+  alignItems: 'start',
   justifyContent: 'start',
   flexDirection: 'row',
 };
@@ -102,6 +102,19 @@ export default class Element {
     this._container.addChild(this._backgroundFill);
 
     this.init();
+  }
+
+  addChild(element: Element) {
+    this._container.addChild(element._container);
+    this._children.push(element);
+    this._yoga.insertChild(element._yoga, this._children.length - 1);
+  }
+
+  setAsRoot(document: Document) {
+    this._yoga.setWidth(document.width);
+    this._yoga.setHeight(document.height);
+    document.stage.addChild(this._container);
+    this.calculateLayout();
   }
 
   init() {
@@ -149,41 +162,38 @@ export default class Element {
     yoga.setAlignItems(ALIGN[alignItems]);
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
 
-    yoga.calculateLayout();
-
-    this.updateDisplayFromLayout();
-  }
-
-  addChild(element: Element) {
-    this._container.addChild(element._container);
-    this._children.push(element);
-    this._yoga.insertChild(element._yoga, this._children.length - 1);
-  }
-
-  setAsRoot(document: Document) {
-    this._yoga.setWidth(document.width);
-    this._yoga.setHeight(document.height);
-    document.stage.addChild(this._container);
     this.calculateLayout();
+
+    // this.cacheLayout();
   }
 
   set(key: keyof Props, value: Props[keyof Props]) {
     const { _state, _children } = this;
     if (typeof value === 'number') {
       const tween = this.getTransition(key as keyof NumericProps);
-      if (tween.duration === 0) {
-        this.update(key, value);
-      } else {
-        tween.start(_state[key as keyof NumericProps], value);
-      }
+      this.cacheLayout();
+      this.update(key, value);
+      // if (tween.duration > 0) {
+      //   tween.start(_state[key as keyof NumericProps], value);
+      // } else {
+
+      // }
+      this.updateDisplayFromParentLayoutChange();
     } else if (
       key === 'alignItems' ||
       key === 'justifyContent' ||
       key === 'flexDirection'
     ) {
+      // this._yoga.calculateLayout();
+
       _children.forEach(child => child.cacheLayout());
+
       this.update(key, value);
-      _children.forEach(child => child.updateDisplayFromParentLayoutChange());
+
+      this._children.forEach(child => {
+        child.calculateLayout();
+        child.updateDisplayFromParentLayoutChange();
+      });
     }
   }
 
@@ -220,6 +230,8 @@ export default class Element {
       } else if (key === 'marginBottom') {
         yoga.setMargin(EDGE_BOTTOM, value);
         state.marginBottom = value;
+      } else {
+        throw new Error(`Property "${key}" not found`);
       }
     } else if (typeof value === 'string') {
       if (key === 'flexDirection') {
@@ -234,42 +246,33 @@ export default class Element {
         const val = value as JUSTIFY_VALUE;
         yoga.setJustifyContent(JUSTIFY[val]);
         state.justifyContent = val;
+      } else {
+        throw new Error(`Property "${key}" not found`);
       }
     }
 
     this.calculateLayout();
-  }
-
-  updateDisplayFromLayout() {
-    const { _yoga, _container, _backgroundFill } = this;
-    const { left: x, top: y, width: w, height: h } = _yoga.getComputedLayout();
-    _container.x = x;
-    _container.y = y;
-    _backgroundFill.width = w;
-    _backgroundFill.height = h;
+    this.updateDisplayFromLayout();
   }
 
   calculateLayout() {
     this._yoga.calculateLayout();
+    console.log('Calc', this.id, this.computedLayout);
     this.updateDisplayFromLayout();
-  }
-
-  getTransition(key: keyof NumericProps) {
-    const { _transitions } = this;
-    if (!_transitions.has(key)) {
-      const tween = new Tween(250);
-      tween.onUpdate(value => this.onTransitionUpdate(key, value));
-      _transitions.set(key, tween);
-    }
-    return _transitions.get(key)!;
-  }
-
-  onTransitionUpdate(key: keyof NumericProps, value: number) {
-    this.update(key, value);
   }
 
   cacheLayout() {
     this._cachedLayout = this.computedLayout;
+    console.log('cached', this.id, this._cachedLayout);
+  }
+
+  updateDisplayFromLayout() {
+    const { _yoga, _container, _backgroundFill } = this;
+    const { left, top, width, height } = _yoga.getComputedLayout();
+    _container.x = left;
+    _container.y = top;
+    _backgroundFill.width = width;
+    _backgroundFill.height = height;
   }
 
   updateDisplayFromParentLayoutChange() {
@@ -302,7 +305,37 @@ export default class Element {
     }
   }
 
+  getTransition(key: keyof NumericProps) {
+    const { _transitions } = this;
+    if (!_transitions.has(key)) {
+      const tween = new Tween(250);
+      tween.onUpdate(value => this.onTransitionUpdate(key, value));
+      _transitions.set(key, tween);
+    }
+    return _transitions.get(key)!;
+  }
+
+  onTransitionUpdate(key: keyof NumericProps, value: number) {
+    const { _container, _backgroundFill } = this;
+    console.log('trans', this.id, key, value);
+    if (key === 'left') {
+      _container.x = value;
+    } else if (key === 'top') {
+      _container.y = value;
+    } else if (key === 'width') {
+      _backgroundFill.width = value;
+    } else if (key === 'height') {
+      _backgroundFill.height = value;
+    } else {
+      // this.update(key, value);
+    }
+  }
+
   get computedLayout() {
     return this._yoga.getComputedLayout();
+  }
+
+  get id() {
+    return this._state.id;
   }
 }
