@@ -38,8 +38,6 @@ const green = new Element({
 });
 blue.addChild(green);
 
-// green.allDuration = 1000;
-
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
@@ -57,7 +55,7 @@ setInterval(() => {
   }
 }, 500);
 
-queue(() => blue.set('alignItems', 'center'));
-queue(() => blue.set('justifyContent', 'center'));
-queue(() => green.set('marginLeft', 50));
-queue(() => green.set('left', 10));
+// queue(() => blue.set('alignItems', 'center'));
+// queue(() => blue.set('justifyContent', 'center'));
+// queue(() => green.set('marginLeft', 50));
+// queue(() => green.set('left', 10));

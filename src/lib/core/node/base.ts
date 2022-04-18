@@ -380,6 +380,43 @@ export default class Element {
     }
   }
 
+  setMargin(value: number) {
+    const { _yoga, _state } = this;
+    _yoga.setMargin(EDGE_LEFT, value);
+    _yoga.setMargin(EDGE_RIGHT, value);
+    _yoga.setMargin(EDGE_TOP, value);
+    _yoga.setMargin(EDGE_BOTTOM, value);
+    _state.marginLeft = value;
+    _state.marginTop = value;
+    _state.marginRight = value;
+    _state.marginBottom = value;
+
+    this.cacheLayout();
+    this.calculateLayout();
+    this.updateDisplayFromCachedLayout();
+  }
+
+  setPadding(value: number) {
+    const { _yoga, _state } = this;
+    _yoga.setPadding(EDGE_LEFT, value);
+    _yoga.setPadding(EDGE_RIGHT, value);
+    _yoga.setPadding(EDGE_TOP, value);
+    _yoga.setPadding(EDGE_BOTTOM, value);
+    _state.paddingLeft = value;
+    _state.paddingTop = value;
+    _state.paddingRight = value;
+    _state.paddingBottom = value;
+
+    this._children.forEach(child => child.cacheLayout());
+
+    this.calculateLayout();
+
+    this._children.forEach(child => {
+      child.calculateLayout();
+      child.updateDisplayFromCachedLayout();
+    });
+  }
+
   get computedLayout() {
     return this._yoga.getComputedLayout();
   }
