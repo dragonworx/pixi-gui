@@ -21,8 +21,9 @@ import {
 /**
  * To add new prop/state:
  *  1. define in Prop type
- *  2. initialise in .init()
- *  3. update in .update()
+ *  2. define in defaultProps
+ *  3. initialise in .init()
+ *  4. update in .update()
  */
 
 let id = 0;
@@ -41,6 +42,10 @@ export interface NumericProps {
   marginTop: number;
   marginRight: number;
   marginBottom: number;
+  paddingLeft: number;
+  paddingTop: number;
+  paddingRight: number;
+  paddingBottom: number;
 }
 
 export interface FlexProps {
@@ -65,6 +70,10 @@ export const defaultProps: Props = {
   marginTop: 0,
   marginBottom: 0,
   marginRight: 0,
+  paddingLeft: 0,
+  paddingTop: 0,
+  paddingBottom: 0,
+  paddingRight: 0,
   backgroundColor: 0x333333,
   alpha: 0.5,
   alignItems: 'start',
@@ -143,6 +152,10 @@ export default class Element {
         marginTop,
         marginRight,
         marginBottom,
+        paddingLeft,
+        paddingTop,
+        paddingRight,
+        paddingBottom,
         alignItems,
         justifyContent,
         flexDirection,
@@ -168,6 +181,10 @@ export default class Element {
     yoga.setMargin(EDGE_RIGHT, marginRight);
     yoga.setMargin(EDGE_TOP, marginTop);
     yoga.setMargin(EDGE_BOTTOM, marginBottom);
+    yoga.setPadding(EDGE_LEFT, paddingLeft);
+    yoga.setPadding(EDGE_RIGHT, paddingRight);
+    yoga.setPadding(EDGE_TOP, paddingTop);
+    yoga.setPadding(EDGE_BOTTOM, paddingBottom);
     yoga.setFlexDirection(FLEX_DIRECTION[flexDirection]);
     yoga.setAlignItems(ALIGN[alignItems]);
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
@@ -178,22 +195,24 @@ export default class Element {
   set(key: keyof Props, value: Props[keyof Props]) {
     const { _children } = this;
     if (typeof value === 'number') {
-      this.cacheLayout();
-      this.update(key, value);
-      this.updateDisplayFromCachedLayout();
+      if (
+        key === 'paddingLeft' ||
+        key === 'paddingTop' ||
+        key === 'paddingRight' ||
+        key === 'paddingBottom'
+      ) {
+        this.updateWithChildLayoutRefresh(key, value);
+      } else {
+        this.cacheLayout();
+        this.update(key, value);
+        this.updateDisplayFromCachedLayout();
+      }
     } else if (
       key === 'alignItems' ||
       key === 'justifyContent' ||
       key === 'flexDirection'
     ) {
-      _children.forEach(child => child.cacheLayout());
-
-      this.update(key, value);
-
-      this._children.forEach(child => {
-        child.calculateLayout();
-        child.updateDisplayFromCachedLayout();
-      });
+      this.updateWithChildLayoutRefresh(key, value);
     }
   }
 
@@ -204,6 +223,7 @@ export default class Element {
   update(key: keyof Props, value: Props[keyof Props]) {
     const { _yoga: yoga, _state: state } = this;
     if (typeof value === 'number') {
+      // numeric prop
       if (key === 'left') {
         yoga.setPosition(EDGE_LEFT, value);
         state.left = value;
@@ -234,10 +254,23 @@ export default class Element {
       } else if (key === 'marginBottom') {
         yoga.setMargin(EDGE_BOTTOM, value);
         state.marginBottom = value;
+      } else if (key === 'paddingLeft') {
+        yoga.setPadding(EDGE_LEFT, value);
+        state.paddingLeft = value;
+      } else if (key === 'paddingTop') {
+        yoga.setPadding(EDGE_TOP, value);
+        state.paddingTop = value;
+      } else if (key === 'paddingRight') {
+        yoga.setPadding(EDGE_RIGHT, value);
+        state.paddingRight = value;
+      } else if (key === 'paddingBottom') {
+        yoga.setPadding(EDGE_BOTTOM, value);
+        state.paddingBottom = value;
       } else {
         throw new Error(`Property "${key}" not found`);
       }
     } else if (typeof value === 'string') {
+      // flex layout prop
       if (key === 'flexDirection') {
         const val = value as FLEX_DIRECTION_VALUE;
         yoga.setFlexDirection(FLEX_DIRECTION[val]);
@@ -259,9 +292,9 @@ export default class Element {
   }
 
   calculateLayout() {
-    const { _yoga } = this;
-    if (this._parent?._yoga.isDirty) {
-      this._parent._yoga.calculateLayout();
+    const { _yoga, _parent, _children } = this;
+    if (_parent?._yoga.isDirty) {
+      _parent._yoga.calculateLayout();
     }
     if (_yoga.isDirty()) {
       _yoga.calculateLayout();
@@ -271,6 +304,17 @@ export default class Element {
 
   cacheLayout() {
     this._cachedLayout = this.computedLayout;
+  }
+
+  updateWithChildLayoutRefresh(key: keyof Props, value: Props[keyof Props]) {
+    this._children.forEach(child => child.cacheLayout());
+
+    this.update(key, value);
+
+    this._children.forEach(child => {
+      child.calculateLayout();
+      child.updateDisplayFromCachedLayout();
+    });
   }
 
   updateDisplayFromLayout() {
@@ -333,8 +377,6 @@ export default class Element {
       _backgroundFill.width = value;
     } else if (key === 'height') {
       _backgroundFill.height = value;
-    } else {
-      // this.update(key, value);
     }
   }
 
