@@ -57,6 +57,7 @@ setInterval(() => {
   }
 }, 500);
 
-queue(() => green.set('marginLeft', 50));
-// queue(() => blue.set('alignItems', 'center'));
+queue(() => blue.set('alignItems', 'center'));
 queue(() => blue.set('justifyContent', 'center'));
+queue(() => green.set('marginLeft', 50));
+queue(() => green.set('left', 10));

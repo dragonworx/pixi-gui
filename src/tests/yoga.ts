@@ -1,45 +1,29 @@
-import { Application, Container } from 'pixi.js';
+import yoga, {
+  Node as YogaNode,
+  EDGE_LEFT,
+  EDGE_TOP,
+  EDGE_RIGHT,
+  EDGE_BOTTOM,
+  ALIGN_CENTER,
+  JUSTIFY_CENTER,
+} from 'yoga-layout-prebuilt';
 
-const main = document.getElementById('main')!;
-const app = new Application({
-  width: 500,
-  height: 500,
-  backgroundColor: 0x333333,
-});
-main.appendChild(app.renderer.view);
+const root = YogaNode.create();
+root.setAlignItems(ALIGN_CENTER);
+root.setJustifyContent(JUSTIFY_CENTER);
+root.setWidth(100);
+root.setHeight(100);
 
-interface Interface {
-  hasLayout: boolean;
-}
+const sub = YogaNode.create();
+sub.setWidth(10);
+sub.setHeight(10);
 
-export function applyRendererMixin(classToMixin: typeof Container): void {
-  const Proto = classToMixin.prototype as Container & Partial<Interface>;
+root.insertChild(sub, 0);
 
-  // Skip if mixin already applied.
-  if (Proto.hasLayout) {
-    return;
-  }
+sub.setMargin(EDGE_LEFT, 10);
+sub.setPosition(EDGE_LEFT, 10);
 
-  const proto = {
-    xyz: 123,
-    test() {
-      console.log('TEST', this);
-    },
-  };
+root.calculateLayout();
 
-  Object.assign(Proto, proto);
-
-  Object.defineProperty(Proto, 'hasLayout', {
-    set: function (value: boolean) {
-      console.log('!', this);
-      this._hasLayout = value;
-    },
-    get: function () {
-      return this._hasLayout || 123;
-    },
-  });
-}
-
-applyRendererMixin(Container);
-
-const test = ((window as any).test = new Container());
+const { left, top, width, height } = sub.getComputedLayout();
+console.log({ left, top, width, height });

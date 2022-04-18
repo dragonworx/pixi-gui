@@ -83,6 +83,7 @@ export default class Element {
   _children: Array<Element>;
   _transitions: Map<keyof NumericProps, Tween>;
   _cachedLayout?: Layout;
+  _document?: Document;
 
   constructor(readonly props: Partial<Props> = {}) {
     this._state = {
@@ -105,18 +106,25 @@ export default class Element {
   }
 
   addChild(element: Element) {
-    this._container.addChild(element._container);
     this._children.push(element);
+    element._parent = this;
+    this._container.addChild(element._container);
     this._yoga.insertChild(element._yoga, this._children.length - 1);
     this.calculateLayout();
-    element.init();
   }
 
   setAsRoot(document: Document) {
     this._yoga.setWidth(document.width);
     this._yoga.setHeight(document.height);
+    this._document = document;
     document.stage.addChild(this._container);
-    this.calculateLayout();
+  }
+
+  getDocument(): Document | undefined {
+    if (this._document) {
+      return this._document;
+    }
+    return this._parent?.getDocument();
   }
 
   init() {
@@ -165,12 +173,12 @@ export default class Element {
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
 
     this.calculateLayout();
+    this.cacheLayout();
   }
 
   set(key: keyof Props, value: Props[keyof Props]) {
-    const { _state, _children } = this;
+    const { _children } = this;
     if (typeof value === 'number') {
-      const tween = this.getTransition(key as keyof NumericProps);
       this.cacheLayout();
       this.update(key, value);
       this.updateDisplayFromParentLayoutChange();
@@ -188,6 +196,10 @@ export default class Element {
         child.updateDisplayFromParentLayoutChange();
       });
     }
+  }
+
+  get(key: keyof Props) {
+    return this._state[key];
   }
 
   update(key: keyof Props, value: Props[keyof Props]) {
@@ -249,7 +261,11 @@ export default class Element {
   }
 
   calculateLayout() {
-    this._yoga.calculateLayout();
+    const { _yoga } = this;
+    if (this._parent?._yoga.isDirty) {
+      this._parent._yoga.calculateLayout();
+    }
+    _yoga.calculateLayout();
     console.log('Calc', this.id, this.computedLayout);
     this.updateDisplayFromLayout();
   }
@@ -310,7 +326,6 @@ export default class Element {
 
   onTransitionUpdate(key: keyof NumericProps, value: number) {
     const { _container, _backgroundFill } = this;
-    console.log('trans', this.id, key, value);
     if (key === 'left') {
       _container.x = value;
     } else if (key === 'top') {
@@ -320,7 +335,7 @@ export default class Element {
     } else if (key === 'height') {
       _backgroundFill.height = value;
     } else {
-      this.update(key, value);
+      // this.update(key, value);
     }
   }
 
