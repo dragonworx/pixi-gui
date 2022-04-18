@@ -108,6 +108,8 @@ export default class Element {
     this._container.addChild(element._container);
     this._children.push(element);
     this._yoga.insertChild(element._yoga, this._children.length - 1);
+    this.calculateLayout();
+    element.init();
   }
 
   setAsRoot(document: Document) {
@@ -163,8 +165,6 @@ export default class Element {
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
 
     this.calculateLayout();
-
-    // this.cacheLayout();
   }
 
   set(key: keyof Props, value: Props[keyof Props]) {
@@ -173,19 +173,12 @@ export default class Element {
       const tween = this.getTransition(key as keyof NumericProps);
       this.cacheLayout();
       this.update(key, value);
-      // if (tween.duration > 0) {
-      //   tween.start(_state[key as keyof NumericProps], value);
-      // } else {
-
-      // }
       this.updateDisplayFromParentLayoutChange();
     } else if (
       key === 'alignItems' ||
       key === 'justifyContent' ||
       key === 'flexDirection'
     ) {
-      // this._yoga.calculateLayout();
-
       _children.forEach(child => child.cacheLayout());
 
       this.update(key, value);
@@ -327,7 +320,7 @@ export default class Element {
     } else if (key === 'height') {
       _backgroundFill.height = value;
     } else {
-      // this.update(key, value);
+      this.update(key, value);
     }
   }
 

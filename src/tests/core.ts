@@ -22,6 +22,8 @@ const blue = new Element({
   id: 'blue',
   backgroundColor: 0x0000ff,
   left: 50,
+  // alignItems: 'center',
+  // justifyContent: 'center',
 });
 blue.set('width', 200);
 blue.set('height', 200);
@@ -32,6 +34,7 @@ const green = new Element({
   width: 50,
   height: 50,
   backgroundColor: 0x00ff00,
+  // marginLeft: 50,
 });
 blue.addChild(green);
 
@@ -55,5 +58,5 @@ setInterval(() => {
 }, 500);
 
 queue(() => green.set('marginLeft', 50));
-queue(() => blue.set('alignItems', 'center'));
+// queue(() => blue.set('alignItems', 'center'));
 queue(() => blue.set('justifyContent', 'center'));
