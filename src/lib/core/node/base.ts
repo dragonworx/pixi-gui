@@ -173,7 +173,6 @@ export default class Element {
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
 
     this.calculateLayout();
-    this.cacheLayout();
   }
 
   set(key: keyof Props, value: Props[keyof Props]) {
@@ -181,7 +180,7 @@ export default class Element {
     if (typeof value === 'number') {
       this.cacheLayout();
       this.update(key, value);
-      this.updateDisplayFromParentLayoutChange();
+      this.updateDisplayFromCachedLayout();
     } else if (
       key === 'alignItems' ||
       key === 'justifyContent' ||
@@ -193,7 +192,7 @@ export default class Element {
 
       this._children.forEach(child => {
         child.calculateLayout();
-        child.updateDisplayFromParentLayoutChange();
+        child.updateDisplayFromCachedLayout();
       });
     }
   }
@@ -257,7 +256,6 @@ export default class Element {
     }
 
     this.calculateLayout();
-    this.updateDisplayFromLayout();
   }
 
   calculateLayout() {
@@ -265,26 +263,27 @@ export default class Element {
     if (this._parent?._yoga.isDirty) {
       this._parent._yoga.calculateLayout();
     }
-    _yoga.calculateLayout();
-    console.log('Calc', this.id, this.computedLayout);
-    this.updateDisplayFromLayout();
+    if (_yoga.isDirty()) {
+      _yoga.calculateLayout();
+      this.updateDisplayFromLayout();
+    }
   }
 
   cacheLayout() {
     this._cachedLayout = this.computedLayout;
-    console.log('cached', this.id, this._cachedLayout);
   }
 
   updateDisplayFromLayout() {
     const { _yoga, _container, _backgroundFill } = this;
     const { left, top, width, height } = _yoga.getComputedLayout();
+
     _container.x = left;
     _container.y = top;
     _backgroundFill.width = width;
     _backgroundFill.height = height;
   }
 
-  updateDisplayFromParentLayoutChange() {
+  updateDisplayFromCachedLayout() {
     const { _cachedLayout } = this;
     if (_cachedLayout) {
       const {
