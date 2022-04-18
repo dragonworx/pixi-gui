@@ -18,6 +18,8 @@ import {
   Layout,
 } from './yoga';
 
+export const defaultTransitionDuration = 250;
+
 /**
  * To add new prop/state:
  *  1. define in Prop type
@@ -50,6 +52,7 @@ export interface NumericProps {
 
 export interface FlexProps {
   alignItems: ALIGN_VALUE;
+  alignContent: ALIGN_VALUE;
   justifyContent: JUSTIFY_VALUE;
   flexDirection: FLEX_DIRECTION_VALUE;
 }
@@ -76,7 +79,8 @@ export const defaultProps: Props = {
   paddingRight: 0,
   backgroundColor: 0x333333,
   alpha: 0.5,
-  alignItems: 'start',
+  alignItems: 'stretch',
+  alignContent: 'stretch',
   justifyContent: 'start',
   flexDirection: 'row',
 };
@@ -157,6 +161,7 @@ export default class Element {
         paddingRight,
         paddingBottom,
         alignItems,
+        alignContent,
         justifyContent,
         flexDirection,
       },
@@ -187,13 +192,13 @@ export default class Element {
     yoga.setPadding(EDGE_BOTTOM, paddingBottom);
     yoga.setFlexDirection(FLEX_DIRECTION[flexDirection]);
     yoga.setAlignItems(ALIGN[alignItems]);
+    yoga.setAlignContent(ALIGN[alignContent]);
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
 
     this.calculateLayout();
   }
 
   set(key: keyof Props, value: Props[keyof Props]) {
-    const { _children } = this;
     if (typeof value === 'number') {
       if (
         key === 'paddingLeft' ||
@@ -209,6 +214,7 @@ export default class Element {
       }
     } else if (
       key === 'alignItems' ||
+      key === 'alignContent' ||
       key === 'justifyContent' ||
       key === 'flexDirection'
     ) {
@@ -222,8 +228,9 @@ export default class Element {
 
   update(key: keyof Props, value: Props[keyof Props]) {
     const { _yoga: yoga, _state: state } = this;
+    const propNotFoundErrorMessage = `Property "${key}" not found`;
+
     if (typeof value === 'number') {
-      // numeric prop
       if (key === 'left') {
         yoga.setPosition(EDGE_LEFT, value);
         state.left = value;
@@ -267,10 +274,11 @@ export default class Element {
         yoga.setPadding(EDGE_BOTTOM, value);
         state.paddingBottom = value;
       } else {
-        throw new Error(`Property "${key}" not found`);
+        throw new Error(propNotFoundErrorMessage);
       }
-    } else if (typeof value === 'string') {
-      // flex layout prop
+    }
+
+    if (typeof value === 'string') {
       if (key === 'flexDirection') {
         const val = value as FLEX_DIRECTION_VALUE;
         yoga.setFlexDirection(FLEX_DIRECTION[val]);
@@ -279,12 +287,16 @@ export default class Element {
         const val = value as ALIGN_VALUE;
         yoga.setAlignItems(ALIGN[val]);
         state.alignItems = val;
+      } else if (key === 'alignContent') {
+        const val = value as ALIGN_VALUE;
+        yoga.setAlignContent(ALIGN[val]);
+        state.alignContent = val;
       } else if (key === 'justifyContent') {
         const val = value as JUSTIFY_VALUE;
         yoga.setJustifyContent(JUSTIFY[val]);
         state.justifyContent = val;
       } else {
-        throw new Error(`Property "${key}" not found`);
+        throw new Error(propNotFoundErrorMessage);
       }
     }
 
@@ -292,10 +304,12 @@ export default class Element {
   }
 
   calculateLayout() {
-    const { _yoga, _parent, _children } = this;
+    const { _yoga, _parent } = this;
+
     if (_parent?._yoga.isDirty) {
       _parent._yoga.calculateLayout();
     }
+
     if (_yoga.isDirty()) {
       _yoga.calculateLayout();
       this.updateDisplayFromLayout();
@@ -329,6 +343,7 @@ export default class Element {
 
   updateDisplayFromCachedLayout() {
     const { _cachedLayout } = this;
+
     if (_cachedLayout) {
       const {
         left: oldLeft,
@@ -340,35 +355,48 @@ export default class Element {
       const { left, top, width, height } = this._yoga.getComputedLayout();
 
       if (left !== oldLeft) {
-        this.getTransition('left').start(oldLeft, left);
+        this.startTransition('left', oldLeft, left);
       }
 
       if (top !== oldTop) {
-        this.getTransition('top').start(oldTop, top);
+        this.startTransition('top', oldTop, top);
       }
 
       if (width !== oldWidth) {
-        this.getTransition('width').start(oldWidth, width);
+        this.startTransition('width', oldWidth, width);
       }
 
       if (height !== oldHeight) {
-        this.getTransition('height').start(oldHeight, height);
+        this.startTransition('height', oldHeight, height);
       }
+    }
+  }
+
+  startTransition(key: keyof NumericProps, fromValue: number, toValue: number) {
+    const tween = this.getTransition(key);
+
+    if (tween.duration === 0) {
+      this.onTransitionUpdate(key, toValue);
+    } else {
+      tween.start(fromValue, toValue);
     }
   }
 
   getTransition(key: keyof NumericProps) {
     const { _transitions } = this;
+
     if (!_transitions.has(key)) {
-      const tween = new Tween(250);
+      const tween = new Tween(defaultTransitionDuration);
       tween.onUpdate(value => this.onTransitionUpdate(key, value));
       _transitions.set(key, tween);
     }
+
     return _transitions.get(key)!;
   }
 
   onTransitionUpdate(key: keyof NumericProps, value: number) {
     const { _container, _backgroundFill } = this;
+
     if (key === 'left') {
       _container.x = value;
     } else if (key === 'top') {
@@ -382,6 +410,7 @@ export default class Element {
 
   setMargin(value: number) {
     const { _yoga, _state } = this;
+
     _yoga.setMargin(EDGE_LEFT, value);
     _yoga.setMargin(EDGE_RIGHT, value);
     _yoga.setMargin(EDGE_TOP, value);
@@ -398,6 +427,7 @@ export default class Element {
 
   setPadding(value: number) {
     const { _yoga, _state } = this;
+
     _yoga.setPadding(EDGE_LEFT, value);
     _yoga.setPadding(EDGE_RIGHT, value);
     _yoga.setPadding(EDGE_TOP, value);

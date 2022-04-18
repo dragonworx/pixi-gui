@@ -55,7 +55,9 @@ setInterval(() => {
   }
 }, 500);
 
-// queue(() => blue.set('alignItems', 'center'));
-// queue(() => blue.set('justifyContent', 'center'));
-// queue(() => green.set('marginLeft', 50));
-// queue(() => green.set('left', 10));
+queue(() => blue.set('alignItems', 'center'));
+queue(() => blue.set('justifyContent', 'center'));
+queue(() => green.set('marginLeft', 50));
+queue(() => green.set('left', 10));
+queue(() => blue.set('paddingTop', 50));
+queue(() => blue.set('top', 50));
