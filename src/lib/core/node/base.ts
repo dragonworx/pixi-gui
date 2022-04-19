@@ -18,6 +18,8 @@ import {
   JUSTIFY,
   JUSTIFY_VALUE,
   Layout,
+  POSITION_TYPE,
+  POSITION_TYPE_VALUE,
 } from './yoga';
 
 export const defaultTransitionDuration = 250;
@@ -63,6 +65,7 @@ export interface FlexProps {
   justifyContent: JUSTIFY_VALUE;
   flexDirection: FLEX_DIRECTION_VALUE;
   flexWrap: FLEX_WRAP_VALUE;
+  positionType: POSITION_TYPE_VALUE;
 }
 
 export interface Props extends NumericProps, FlexProps {
@@ -97,6 +100,7 @@ export const defaultProps: Props = {
   justifyContent: 'start',
   flexDirection: 'row',
   flexWrap: 'no-wrap',
+  positionType: 'relative',
 };
 
 export interface State extends Props {}
@@ -190,6 +194,7 @@ export default class Element {
         justifyContent,
         flexDirection,
         flexWrap,
+        positionType,
       },
       _container,
       _backgroundFill,
@@ -226,6 +231,7 @@ export default class Element {
     yoga.setAlignContent(ALIGN[alignContent]);
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
     yoga.setFlexWrap(FLEX_WRAP[flexWrap]);
+    yoga.setPositionType(POSITION_TYPE[positionType]);
 
     this.calculateLayout();
   }
@@ -257,7 +263,9 @@ export default class Element {
       key === 'alignItems' ||
       key === 'alignContent' ||
       key === 'justifyContent' ||
-      key === 'flexDirection'
+      key === 'flexDirection' ||
+      key === 'flexWrap' ||
+      key === 'positionType'
     ) {
       this.updateWithChildLayoutRefresh(key, value);
     }
@@ -349,6 +357,10 @@ export default class Element {
         const val = value as FLEX_WRAP_VALUE;
         yoga.setFlexWrap(FLEX_WRAP[val]);
         state.flexWrap = val;
+      } else if (key === 'positionType') {
+        const val = value as POSITION_TYPE_VALUE;
+        yoga.setPositionType(POSITION_TYPE[val]);
+        state.positionType = val;
       } else {
         throw new Error(propNotFoundErrorMessage);
       }

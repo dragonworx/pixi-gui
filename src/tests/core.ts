@@ -35,18 +35,18 @@ const green = new Element({
 });
 blue.addChild(green);
 
-// const red = new Element({
-//   id: 'red',
-//   width: 50,
-//   height: 50,
-//   backgroundColor: 0xff0000,
-// });
-// blue.addChild(red);
+const red = new Element({
+  id: 'red',
+  width: 50,
+  height: 50,
+  backgroundColor: 0xff0000,
+});
+blue.addChild(red);
 
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
-// (window as any).red = red;
+(window as any).red = red;
 
 const _queue: (() => void)[] = [];
 
@@ -67,12 +67,13 @@ setInterval(() => {
 // queue(() => green.set('left', 10));
 // queue(() => blue.set('paddingTop', 50));
 // queue(() => blue.set('top', 50));
-setTimeout(() => {
-  const red = new Element({
-    id: 'red',
-    width: 50,
-    height: 50,
-    backgroundColor: 0xff0000,
-  });
-  blue.addChild(red);
-}, 1000);
+
+// setTimeout(() => {
+//   const red = new Element({
+//     id: 'red',
+//     width: 50,
+//     height: 50,
+//     backgroundColor: 0xff0000,
+//   });
+//   blue.addChild(red);
+// }, 1000);
