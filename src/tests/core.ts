@@ -53,7 +53,7 @@ setInterval(() => {
     const fn = _queue.shift()!;
     fn();
   }
-}, 500);
+}, 250);
 
 queue(() => blue.set('alignItems', 'center'));
 queue(() => blue.set('justifyContent', 'center'));

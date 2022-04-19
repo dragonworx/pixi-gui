@@ -48,6 +48,10 @@ export interface NumericProps {
   paddingTop: number;
   paddingRight: number;
   paddingBottom: number;
+  borderLeft: number;
+  borderTop: number;
+  borderRight: number;
+  borderBottom: number;
 }
 
 export interface FlexProps {
@@ -77,6 +81,10 @@ export const defaultProps: Props = {
   paddingTop: 0,
   paddingBottom: 0,
   paddingRight: 0,
+  borderLeft: 0,
+  borderTop: 0,
+  borderBottom: 0,
+  borderRight: 0,
   backgroundColor: 0x333333,
   alpha: 0.5,
   alignItems: 'stretch',
@@ -160,6 +168,10 @@ export default class Element {
         paddingTop,
         paddingRight,
         paddingBottom,
+        borderLeft,
+        borderTop,
+        borderRight,
+        borderBottom,
         alignItems,
         alignContent,
         justifyContent,
@@ -170,6 +182,7 @@ export default class Element {
     } = this;
 
     _container.alpha = alpha;
+
     if (backgroundColor === -1) {
       _backgroundFill.alpha = 0.3;
     } else {
@@ -190,6 +203,10 @@ export default class Element {
     yoga.setPadding(EDGE_RIGHT, paddingRight);
     yoga.setPadding(EDGE_TOP, paddingTop);
     yoga.setPadding(EDGE_BOTTOM, paddingBottom);
+    yoga.setBorder(EDGE_LEFT, borderLeft);
+    yoga.setBorder(EDGE_RIGHT, borderRight);
+    yoga.setBorder(EDGE_TOP, borderTop);
+    yoga.setBorder(EDGE_BOTTOM, borderBottom);
     yoga.setFlexDirection(FLEX_DIRECTION[flexDirection]);
     yoga.setAlignItems(ALIGN[alignItems]);
     yoga.setAlignContent(ALIGN[alignContent]);
@@ -204,7 +221,11 @@ export default class Element {
         key === 'paddingLeft' ||
         key === 'paddingTop' ||
         key === 'paddingRight' ||
-        key === 'paddingBottom'
+        key === 'paddingBottom' ||
+        key === 'borderLeft' ||
+        key === 'borderTop' ||
+        key === 'borderRight' ||
+        key === 'borderBottom'
       ) {
         this.updateWithChildLayoutRefresh(key, value);
       } else {
@@ -273,6 +294,18 @@ export default class Element {
       } else if (key === 'paddingBottom') {
         yoga.setPadding(EDGE_BOTTOM, value);
         state.paddingBottom = value;
+      } else if (key === 'borderLeft') {
+        yoga.setBorder(EDGE_LEFT, value);
+        state.borderLeft = value;
+      } else if (key === 'borderTop') {
+        yoga.setBorder(EDGE_TOP, value);
+        state.borderTop = value;
+      } else if (key === 'borderRight') {
+        yoga.setBorder(EDGE_RIGHT, value);
+        state.borderRight = value;
+      } else if (key === 'borderBottom') {
+        yoga.setBorder(EDGE_BOTTOM, value);
+        state.borderBottom = value;
       } else {
         throw new Error(propNotFoundErrorMessage);
       }
@@ -436,6 +469,28 @@ export default class Element {
     _state.paddingTop = value;
     _state.paddingRight = value;
     _state.paddingBottom = value;
+
+    this._children.forEach(child => child.cacheLayout());
+
+    this.calculateLayout();
+
+    this._children.forEach(child => {
+      child.calculateLayout();
+      child.updateDisplayFromCachedLayout();
+    });
+  }
+
+  setBorder(value: number) {
+    const { _yoga, _state } = this;
+
+    _yoga.setBorder(EDGE_LEFT, value);
+    _yoga.setBorder(EDGE_RIGHT, value);
+    _yoga.setBorder(EDGE_TOP, value);
+    _yoga.setBorder(EDGE_BOTTOM, value);
+    _state.borderLeft = value;
+    _state.borderRight = value;
+    _state.borderBottom = value;
+    _state.borderTop = value;
 
     this._children.forEach(child => child.cacheLayout());
 
