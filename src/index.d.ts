@@ -289,7 +289,7 @@ declare namespace Yoga {
     //setAlignItems(alignItems: YogaAlign): void;
     setAlignSelf(alignSelf: YogaAlign): void;
     setAspectRatio(aspectRatio: number): void;
-    setBorder(edge: YogaEdge, borderWidth: number): void;
+    // setBorder(edge: YogaEdge, borderWidth: number): void;
     setDisplay(display: YogaDisplay): void;
     setFlex(flex: number): void;
     setFlexBasis(flexBasis: number | string): void;
@@ -297,12 +297,12 @@ declare namespace Yoga {
     //setFlexDirection(flexDirection: YogaFlexDirection): void;
     setFlexGrow(flexGrow: number): void;
     setFlexShrink(flexShrink: number): void;
-    setFlexWrap(flexWrap: YogaFlexWrap): void;
+    // setFlexWrap(flexWrap: YogaFlexWrap): void;
     //setHeight(height: number | string): void;
     setHeightAuto(): void;
     setHeightPercent(height: number): void;
     //setJustifyContent(justifyContent: YogaJustifyContent): void;
-    setMargin(edge: YogaEdge, margin: number): void;
+    // setMargin(edge: YogaEdge, margin: number): void;
     setMarginAuto(edge: YogaEdge): void;
     setMarginPercent(edge: YogaEdge, margin: number): void;
     setMaxHeight(maxHeight: number | string): void;
@@ -324,9 +324,9 @@ declare namespace Yoga {
     setOverflow(overflow: YogaOverflow): void;
     //setPadding(edge: YogaEdge, padding: number | string): void;
     setPaddingPercent(edge: YogaEdge, padding: number): void;
-    setPosition(edge: YogaEdge, position: number | string): void;
+    // setPosition(edge: YogaEdge, position: number | string): void;
     setPositionPercent(edge: YogaEdge, position: number): void;
-    setPositionType(positionType: YogaPositionType): void;
+    // setPositionType(positionType: YogaPositionType): void;
     //setWidth(width: number | string): void;
     setWidthAuto(): void;
     setWidthPercent(width: number): void;
