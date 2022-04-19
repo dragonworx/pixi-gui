@@ -37,6 +37,10 @@ import {
   EDGE_HORIZONTAL,
   EDGE_VERTICAL,
   EDGE_ALL,
+  YogaFlexWrap,
+  WRAP_NO_WRAP,
+  WRAP_WRAP,
+  WRAP_WRAP_REVERSE,
 } from 'yoga-layout-prebuilt';
 
 export type Layout = {
@@ -135,4 +139,12 @@ export const EDGE: Record<EDGE_VALUE, YogaEdge> = {
   horizontal: EDGE_HORIZONTAL,
   vertical: EDGE_VERTICAL,
   all: EDGE_ALL,
+};
+
+export type FLEX_WRAP_VALUE = 'no-wrap' | 'wrap' | 'wrap-reverse';
+
+export const FLEX_WRAP: Record<FLEX_WRAP_VALUE, YogaFlexWrap> = {
+  'no-wrap': WRAP_NO_WRAP,
+  wrap: WRAP_WRAP,
+  'wrap-reverse': WRAP_WRAP_REVERSE,
 };

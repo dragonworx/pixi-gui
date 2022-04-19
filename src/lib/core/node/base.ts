@@ -13,6 +13,8 @@ import {
   ALIGN_VALUE,
   FLEX_DIRECTION,
   FLEX_DIRECTION_VALUE,
+  FLEX_WRAP,
+  FLEX_WRAP_VALUE,
   JUSTIFY,
   JUSTIFY_VALUE,
   Layout,
@@ -31,6 +33,7 @@ export const defaultTransitionDuration = 250;
 let id = 0;
 const nextId = () => String(id++);
 
+// config
 export interface NumericProps {
   left: number;
   top: number;
@@ -59,6 +62,7 @@ export interface FlexProps {
   alignContent: ALIGN_VALUE;
   justifyContent: JUSTIFY_VALUE;
   flexDirection: FLEX_DIRECTION_VALUE;
+  flexWrap: FLEX_WRAP_VALUE;
 }
 
 export interface Props extends NumericProps, FlexProps {
@@ -66,6 +70,7 @@ export interface Props extends NumericProps, FlexProps {
   parent?: Element;
 }
 
+// config
 export const defaultProps: Props = {
   left: 0,
   top: 0,
@@ -91,6 +96,7 @@ export const defaultProps: Props = {
   alignContent: 'stretch',
   justifyContent: 'start',
   flexDirection: 'row',
+  flexWrap: 'no-wrap',
 };
 
 export interface State extends Props {}
@@ -129,9 +135,15 @@ export default class Element {
   addChild(element: Element) {
     this._children.push(element);
     element._parent = this;
-    this._container.addChild(element._container);
+
     this._yoga.insertChild(element._yoga, this._children.length - 1);
+    this._container.addChild(element._container);
+
     this.calculateLayout();
+
+    this._children.forEach(child => {
+      child.calculateLayout();
+    });
   }
 
   setAsRoot(document: Document) {
@@ -148,6 +160,7 @@ export default class Element {
     return this._parent?.getDocument();
   }
 
+  // config
   init() {
     const {
       _yoga: yoga,
@@ -176,6 +189,7 @@ export default class Element {
         alignContent,
         justifyContent,
         flexDirection,
+        flexWrap,
       },
       _container,
       _backgroundFill,
@@ -211,10 +225,16 @@ export default class Element {
     yoga.setAlignItems(ALIGN[alignItems]);
     yoga.setAlignContent(ALIGN[alignContent]);
     yoga.setJustifyContent(JUSTIFY[justifyContent]);
+    yoga.setFlexWrap(FLEX_WRAP[flexWrap]);
 
     this.calculateLayout();
   }
 
+  get(key: keyof Props) {
+    return this._state[key];
+  }
+
+  // config?
   set(key: keyof Props, value: Props[keyof Props]) {
     if (typeof value === 'number') {
       if (
@@ -243,10 +263,7 @@ export default class Element {
     }
   }
 
-  get(key: keyof Props) {
-    return this._state[key];
-  }
-
+  // config
   update(key: keyof Props, value: Props[keyof Props]) {
     const { _yoga: yoga, _state: state } = this;
     const propNotFoundErrorMessage = `Property "${key}" not found`;
@@ -328,6 +345,10 @@ export default class Element {
         const val = value as JUSTIFY_VALUE;
         yoga.setJustifyContent(JUSTIFY[val]);
         state.justifyContent = val;
+      } else if (key === 'flexWrap') {
+        const val = value as FLEX_WRAP_VALUE;
+        yoga.setFlexWrap(FLEX_WRAP[val]);
+        state.flexWrap = val;
       } else {
         throw new Error(propNotFoundErrorMessage);
       }
@@ -345,8 +366,9 @@ export default class Element {
 
     if (_yoga.isDirty()) {
       _yoga.calculateLayout();
-      this.updateDisplayFromLayout();
     }
+
+    this.updateDisplayFromLayout();
   }
 
   cacheLayout() {

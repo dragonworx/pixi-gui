@@ -22,11 +22,9 @@ const blue = new Element({
   id: 'blue',
   backgroundColor: 0x0000ff,
   left: 50,
-  // alignItems: 'center',
-  // justifyContent: 'center',
+  width: 200,
+  height: 200,
 });
-blue.set('width', 200);
-blue.set('height', 200);
 doc.root.addChild(blue);
 
 const green = new Element({
@@ -34,13 +32,21 @@ const green = new Element({
   width: 50,
   height: 50,
   backgroundColor: 0x00ff00,
-  // marginLeft: 50,
 });
 blue.addChild(green);
+
+// const red = new Element({
+//   id: 'red',
+//   width: 50,
+//   height: 50,
+//   backgroundColor: 0xff0000,
+// });
+// blue.addChild(red);
 
 (window as any).doc = doc;
 (window as any).blue = blue;
 (window as any).green = green;
+// (window as any).red = red;
 
 const _queue: (() => void)[] = [];
 
@@ -55,9 +61,18 @@ setInterval(() => {
   }
 }, 250);
 
-queue(() => blue.set('alignItems', 'center'));
-queue(() => blue.set('justifyContent', 'center'));
-queue(() => green.set('marginLeft', 50));
-queue(() => green.set('left', 10));
-queue(() => blue.set('paddingTop', 50));
-queue(() => blue.set('top', 50));
+// queue(() => blue.set('alignItems', 'center'));
+// queue(() => blue.set('justifyContent', 'center'));
+// queue(() => green.set('marginLeft', 50));
+// queue(() => green.set('left', 10));
+// queue(() => blue.set('paddingTop', 50));
+// queue(() => blue.set('top', 50));
+setTimeout(() => {
+  const red = new Element({
+    id: 'red',
+    width: 50,
+    height: 50,
+    backgroundColor: 0xff0000,
+  });
+  blue.addChild(red);
+}, 1000);
